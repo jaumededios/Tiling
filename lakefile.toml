@@ -1,0 +1,10 @@
+name = "StartALeanProjectInThis"
+version = "0.1.0"
+defaultTargets = ["startaleanprojectinthis"]
+
+[[lean_lib]]
+name = "StartALeanProjectInThis"
+
+[[lean_exe]]
+name = "startaleanprojectinthis"
+root = "Main"
