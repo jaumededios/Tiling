@@ -8,9 +8,10 @@ labelled prototile family is a function `P → Prototile E`; keeping the label t
 geometric support lets us treat each permitted orientation of a shape as a distinct prototile
 while using translations as the only placement operation.
 
-A placement is a pair `(x, p) : E × P`. A set of placements is a measurable tiling when its
-translated supports are locally finite, pairwise almost-everywhere disjoint, and cover almost
-every point. All compatibility information is encoded geometrically in the prototile supports.
+A placement is a pair `(x, p) : E × P`. A `ProtoTiling E P` is a set of placements. It is a
+measurable tiling when it is countable, its translated supports are pairwise almost-everywhere
+disjoint, and they cover almost every point. All compatibility information is encoded
+geometrically in the prototile supports.
 
 The tiling layer uses Mathlib's `[MeasureSpace E]`, so its canonical measure `volume` is implicit.
 Mathlib supplies the expected Lebesgue measure automatically on `ℝ` and finite products `Fin n → ℝ`.

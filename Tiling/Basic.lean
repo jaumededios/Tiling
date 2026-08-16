@@ -1,7 +1,6 @@
 import Mathlib.Analysis.Normed.Group.Basic
 import Mathlib.MeasureTheory.Group.Pointwise
 import Mathlib.MeasureTheory.Measure.AEDisjoint
-import Mathlib.Topology.LocallyFinite
 
 set_option linter.style.header false
 
@@ -13,8 +12,8 @@ Euclidean spaces.  A prototile is a nonempty measurable set; in particular, its 
 be bounded.  Its label is kept separate from its support, so differently oriented or decorated
 copies may have the same underlying set.
 
-A placement is a translation vector together with a prototile label.  Geometric tilings are
-locally finite, pairwise almost-everywhere disjoint, and cover almost every point.  Compatibility
+A placement is a translation vector together with a prototile label.  Measurable tilings are
+countable, pairwise almost-everywhere disjoint, and cover almost every point.  Compatibility
 conditions are encoded in the geometry of the prototile supports themselves.
 -/
 
@@ -39,6 +38,9 @@ abbrev PrototileFamily (E : Type u) (P : Type v) [MeasurableSpace E] :=
 /-- A placement consists of a translation vector and a prototile label. -/
 abbrev Placement (E : Type u) (P : Type v) := E × P
 
+/-- A candidate tiling is a set of translated, labelled prototiles. -/
+abbrev ProtoTiling (E : Type u) (P : Type v) := Set (Placement E P)
+
 section Geometry
 
 variable {E : Type u} {P : Type v}
@@ -48,25 +50,17 @@ variable [NormedAddCommGroup E] [MeasureSpace E]
 def placedTile (T : PrototileFamily E P) (i : Placement E P) : Set E :=
   i.1 +ᵥ (T i.2).support
 
-/-- The set covered by a collection of translated prototiles. -/
-def coveredSet (T : PrototileFamily E P) (A : Set (Placement E P)) : Set E :=
-  ⋃ i : A, placedTile T i
-
-/-- Only finitely many placed supports meet a sufficiently small neighborhood of each point. -/
-def IsLocallyFinite (T : PrototileFamily E P) (A : Set (Placement E P)) : Prop :=
-  LocallyFinite fun i : A ↦ placedTile T i
-
 /-- Distinct placements have almost-everywhere disjoint supports. -/
-def IsPacking (T : PrototileFamily E P) (A : Set (Placement E P)) : Prop :=
+def IsPacking (T : PrototileFamily E P) (A : ProtoTiling E P) : Prop :=
   A.Pairwise (AEDisjoint volume on placedTile T)
 
 /-- Almost every point belongs to the union of the placed supports. -/
-def IsCover (T : PrototileFamily E P) (A : Set (Placement E P)) : Prop :=
-  ∀ᵐ x, x ∈ coveredSet T A
+def IsCover (T : PrototileFamily E P) (A : ProtoTiling E P) : Prop :=
+  ∀ᵐ x, x ∈ ⋃ i : A, placedTile T i
 
-/-- A locally finite measurable translational tiling. -/
-structure IsTiling (T : PrototileFamily E P) (A : Set (Placement E P)) : Prop where
-  locallyFinite : IsLocallyFinite T A
+/-- A countable measurable translational tiling. -/
+structure IsTiling (T : PrototileFamily E P) (A : ProtoTiling E P) : Prop where
+  countable : A.Countable
   isPacking : IsPacking T A
   isCover : IsCover T A
 
