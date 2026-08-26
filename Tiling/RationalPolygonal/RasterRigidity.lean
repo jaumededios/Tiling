@@ -1287,5 +1287,26 @@ theorem exists_family_tiling_of_planarRasterTile {M : ℕ} (hM : 0 < M)
   exact planarRasterTile_translation_differences_mem_markerLattice
     hM tile hzeroTile hraster hu hbase
 
+namespace PolygonalRegion
+
+/-- A polygonal region admits an integer-translation tiling exactly when its single planar raster
+tile admits an arbitrary exact lattice tiling.  This is the tileability content of paper
+Lemma 3.1(i), with marker rigidity removing the apparent coarse-translation restriction. -/
+theorem exists_integer_tiling_iff_relevantPlanarRasterTile
+    (K : PolygonalRegion) :
+    (∃ T : Set IntegerPlane, K.Tiles (integerPoint '' T)) ↔
+      ∃ U : Set IntegerPlane, TilesUniverse K.relevantPlanarRasterTile U := by
+  constructor
+  · rintro ⟨T, hT⟩
+    refine ⟨markerTranslationSet K.relevantSignatureCount T, ?_⟩
+    exact (K.tiles_integerPoint_image_iff_relevantPlanarRasterTile T).mp hT
+  · rintro ⟨U, hU⟩
+    obtain ⟨T, hfamily⟩ := exists_family_tiling_of_planarRasterTile
+      K.relevantSignatureCount_pos K.relevantPlanarSignatureAt
+      K.relevantPlanarSignatureAt_zero_nonempty U hU
+    refine ⟨T, (K.tiles_integerPoint_image_iff_relevantSignatures T).mpr ?_⟩
+    exact (K.relevantPlanarSignatureAt_tilesUniverse_iff T).mp hfamily
+
+end PolygonalRegion
 
 end Tiling.RationalPolygonal
