@@ -8,5 +8,6 @@ import Tiling.Geometry.PackingTopology
 import Tiling.Geometry.Sliding
 import Tiling.Geometry.Connected
 import Tiling.RationalPolygonal.Basic
+import Tiling.RationalPolygonal.IntegerReduction
 import Tiling.Measure.Counting
 import Tiling.Topology.IntersectionGraph

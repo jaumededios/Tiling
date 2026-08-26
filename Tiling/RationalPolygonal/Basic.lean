@@ -122,6 +122,24 @@ theorem placedTile_eq (K : PolygonalRegion) (p : Placement Plane Unit) :
     placedTile K.prototileFamily p = p.1 +ᵥ K.support :=
   rfl
 
+/-- Unit-labelled placements are countable exactly when their translation set is countable. -/
+theorem placements_countable (K : PolygonalRegion) {T : Set Plane} (hT : T.Countable) :
+    (K.placements T).Countable := by
+  let _ : Countable T := hT.to_subtype
+  have heq : K.placements T =
+      Set.range (fun t : T ↦ ((t : Plane), ())) := by
+    ext p
+    constructor
+    · intro hp
+      refine ⟨⟨p.1, hp⟩, ?_⟩
+      apply Prod.ext
+      · rfl
+      · exact Subsingleton.elim _ _
+    · rintro ⟨t, rfl⟩
+      exact t.2
+  rw [heq]
+  exact Set.countable_range _
+
 /-- A countable almost-everywhere translational tiling by one polygonal region. -/
 def Tiles (K : PolygonalRegion) (T : Set Plane) : Prop :=
   Tiling.IsTiling K.prototileFamily (K.placements T)
