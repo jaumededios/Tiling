@@ -408,6 +408,84 @@ theorem tilesUniverse_quakeShiftedTranslations
     exact (hunique g hgrep).trans (hunique f hfrep).symm
   exact hgf
 
+/-- Shift every canonical quake plate except `C` by the same integer multiple of the quake
+direction.  This is the paper's auxiliary tiling `T^k`. -/
+noncomputable def quakeShiftExcept {F : Finset G} {T : Set G} {v : G}
+    (C : QuakePlate F T v) (k : ℤ) : QuakePlate F T v → ℤ :=
+  by
+    classical
+    exact fun D ↦ if D = C then 0 else k
+
+/-- The distinguished plate is unchanged in the auxiliary earthquake tiling. -/
+theorem mem_quakeShiftedTranslations_quakeShiftExcept_of_mem
+    {F : Finset G} {T : Set G} {v t : G}
+    {C : QuakePlate F T v} (ht : t ∈ quakePlateTranslations C) (k : ℤ) :
+    t ∈ quakeShiftedTranslations (quakeShiftExcept C k) := by
+  classical
+  obtain ⟨htT, htC⟩ := ht
+  let ts : T := ⟨t, htT⟩
+  refine ⟨ts, ?_⟩
+  change (if (quakeGraph F T v).connectedComponentMk ts = C then 0 else k) • v +
+      (ts : G) = t
+  rw [show (quakeGraph F T v).connectedComponentMk ts = C from htC]
+  simp [ts]
+
+/-- A translation belonging to a different plate occurs in `T^k` shifted by `k • v`. -/
+theorem add_mem_quakeShiftedTranslations_quakeShiftExcept_of_mem
+    {F : Finset G} {T : Set G} {v t : G}
+    {C D : QuakePlate F T v} (hDC : D ≠ C)
+    (ht : t ∈ quakePlateTranslations D) (k : ℤ) :
+    k • v + t ∈ quakeShiftedTranslations (quakeShiftExcept C k) := by
+  classical
+  obtain ⟨htT, htD⟩ := ht
+  let ts : T := ⟨t, htT⟩
+  refine ⟨ts, ?_⟩
+  change (if (quakeGraph F T v).connectedComponentMk ts = C then 0 else k) • v +
+      (ts : G) = k • v + t
+  rw [show (quakeGraph F T v).connectedComponentMk ts = D from htD]
+  simp [hDC, ts]
+
+/-- If `0 ∈ F`, a translation vector outside a fixed plate cannot lie in that plate's tile
+carrier.  Exactness is essential: the two representations would otherwise use different
+translations. -/
+theorem not_mem_quakePlateCarrier_of_not_mem
+    {F : Finset G} {T : Set G} {v t : G}
+    (hzero : 0 ∈ F) (hT : TilesUniverse F T)
+    {C : QuakePlate F T v} (htT : t ∈ T)
+    (htC : t ∉ quakePlateTranslations C) :
+    t ∉ discreteCarrier F (quakePlateTranslations C) := by
+  intro htCarrier
+  obtain ⟨f, hf, s, hsC, hrep⟩ := htCarrier
+  obtain ⟨hsT, hsComp⟩ := hsC
+  have hsC' : s ∈ quakePlateTranslations C := ⟨hsT, hsComp⟩
+  have hts : t = s :=
+    translation_eq_of_eq_representations hT hzero htT hf hsT (by simpa using hrep)
+  exact htC (hts ▸ hsC')
+
+/-- In an auxiliary tiling which fixes `C`, any translation vector lying in the carrier of `C`
+must itself belong to `C`.  This is the exactness step behind the earthquake-period transfer. -/
+theorem mem_quakePlateTranslations_of_mem_shiftExcept_of_mem_carrier
+    {F : Finset G} {T : Set G} {v x : G}
+    (hzero : 0 ∈ F) (hT : TilesUniverse F T)
+    {C : QuakePlate F T v} {k : ℤ}
+    (hxShift : x ∈ quakeShiftedTranslations (quakeShiftExcept C k))
+    (hxCarrier : x ∈ discreteCarrier F (quakePlateTranslations C)) :
+    x ∈ quakePlateTranslations C := by
+  have hxShift' := hxShift
+  obtain ⟨t, htShift⟩ := hxShift'
+  obtain ⟨f, hf, s, hsC, hcarrier⟩ := hxCarrier
+  obtain ⟨hsT, hsComp⟩ := hsC
+  have hsC' : s ∈ quakePlateTranslations C := ⟨hsT, hsComp⟩
+  have hsShift : (s : G) ∈
+      quakeShiftedTranslations (quakeShiftExcept C k) :=
+    mem_quakeShiftedTranslations_quakeShiftExcept_of_mem hsC' k
+  have hxs : x = s := by
+    apply translation_eq_of_eq_representations
+      (tilesUniverse_quakeShiftedTranslations hT (quakeShiftExcept C k))
+      hzero hxShift hf hsShift
+    simpa using hcarrier
+  exact hxs ▸ hsC'
+
 end QuakeGraph
 
 end Tiling.RationalPolygonal
