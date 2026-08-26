@@ -9221,6 +9221,15 @@ Tiling.RationalPolygonal.RasterPresentation.tileDecision_eq_true_iff : ∀
     (@Exists.{1} (Set.{0} Tiling.Plane) fun (T : Set.{0} Tiling.Plane) =>
       Tiling.RationalPolygonal.PolygonalRegion.Tiles
         (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K) T)
+Tiling.RationalPolygonal.RasterPresentation.DecidesTileability : (algorithm :
+    Tiling.RationalPolygonal.RasterPresentation → Bool) →
+  Prop
+Tiling.RationalPolygonal.RasterPresentation.tileDecision_decidesTileability : Tiling.RationalPolygonal.RasterPresentation.DecidesTileability
+  Tiling.RationalPolygonal.RasterPresentation.tileDecision
+Tiling.RationalPolygonal.RasterPresentation.exists_tileabilityAlgorithm : @Exists.{1}
+  (Tiling.RationalPolygonal.RasterPresentation → Bool)
+  fun (algorithm : Tiling.RationalPolygonal.RasterPresentation → Bool) =>
+  Tiling.RationalPolygonal.RasterPresentation.DecidesTileability algorithm
 Tiling.RationalPolygonal.RasterPresentation.tileableDecidable : (P : Tiling.RationalPolygonal.RasterPresentation) →
   (K : Tiling.RationalPolygonal.RationalPolygonalRegion) →
     (hP : Tiling.RationalPolygonal.RasterPresentation.Represents P K) →
@@ -9233,6 +9242,10 @@ Tiling.RationalPolygonal.RasterPresentation.canonical : (K : Tiling.RationalPoly
 Tiling.RationalPolygonal.RasterPresentation.canonical_represents : ∀
   (K : Tiling.RationalPolygonal.RationalPolygonalRegion),
   Tiling.RationalPolygonal.RasterPresentation.Represents (Tiling.RationalPolygonal.RasterPresentation.canonical K) K
+Tiling.RationalPolygonal.RasterPresentation.exists_representation : ∀
+  (K : Tiling.RationalPolygonal.RationalPolygonalRegion),
+  @Exists.{1} Tiling.RationalPolygonal.RasterPresentation fun (P : Tiling.RationalPolygonal.RasterPresentation) =>
+    Tiling.RationalPolygonal.RasterPresentation.Represents P K
 @Tiling.RationalPolygonal.doublyPeriodic_integerPoint_image_of_setScalarPeriodic : ∀
   {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane} {P : Nat}
   (hP : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) P)
@@ -9291,13 +9304,17 @@ Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1 : ∀ (K : Tiling.R
         (Tiling.RationalPolygonal.PolygonalRegion.Tiles
           (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K) T)
         (Tiling.RationalPolygonal.DoublyPeriodic T))
-Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1 : ∀ (P : Tiling.RationalPolygonal.RasterPresentation)
-  (K : Tiling.RationalPolygonal.RationalPolygonalRegion)
+Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1_spec : ∀
+  (P : Tiling.RationalPolygonal.RasterPresentation) (K : Tiling.RationalPolygonal.RationalPolygonalRegion)
   (hP : Tiling.RationalPolygonal.RasterPresentation.Represents P K),
   Iff (@Eq.{1} Bool (Tiling.RationalPolygonal.RasterPresentation.tileDecision P) Bool.true)
     (@Exists.{1} (Set.{0} Tiling.Plane) fun (T : Set.{0} Tiling.Plane) =>
       Tiling.RationalPolygonal.PolygonalRegion.Tiles
         (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K) T)
+Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1 : @Exists.{1}
+  (Tiling.RationalPolygonal.RasterPresentation → Bool)
+  fun (algorithm : Tiling.RationalPolygonal.RasterPresentation → Bool) =>
+  Tiling.RationalPolygonal.RasterPresentation.DecidesTileability algorithm
 @Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2 : ∀ {K : Tiling.RationalPolygonal.RationalPolygonalRegion}
   {T : Set.{0} Tiling.Plane}
   (hT :

@@ -522,14 +522,19 @@ Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	38	def	
 Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	42	theorem	Tiling.RationalPolygonal.RasterPresentation.planarTileDecisionCounted_eq	Corollary 1.1 support	proved
 Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	51	theorem	Tiling.RationalPolygonal.RasterPresentation.tileable_iff_canonicalRaster	Corollary 1.1 support	proved
 Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	76	theorem	Tiling.RationalPolygonal.RasterPresentation.tileDecision_eq_true_iff	Corollary 1.1 support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	85	def	Tiling.RationalPolygonal.RasterPresentation.tileableDecidable	Corollary 1.1 support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	94	def	Tiling.RationalPolygonal.RasterPresentation.canonical	Corollary 1.1 support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	98	theorem	Tiling.RationalPolygonal.RasterPresentation.canonical_represents	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	87	def	Tiling.RationalPolygonal.RasterPresentation.DecidesTileability	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	94	theorem	Tiling.RationalPolygonal.RasterPresentation.tileDecision_decidesTileability	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	101	theorem	Tiling.RationalPolygonal.RasterPresentation.exists_tileabilityAlgorithm	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	107	def	Tiling.RationalPolygonal.RasterPresentation.tileableDecidable	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	116	def	Tiling.RationalPolygonal.RasterPresentation.canonical	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	120	theorem	Tiling.RationalPolygonal.RasterPresentation.canonical_represents	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	125	theorem	Tiling.RationalPolygonal.RasterPresentation.exists_representation	Corollary 1.1 support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	23	theorem	Tiling.RationalPolygonal.doublyPeriodic_integerPoint_image_of_setScalarPeriodic	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	61	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_doublyPeriodic_integer_tiling_of_tileable_raster	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	88	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.doublyPeriodic_denormalizedTranslations	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	101	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.exists_doublyPeriodic_tiling	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	120	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.tileable_iff_exists_doublyPeriodic_tiling	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	132	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1	Theorem 1.1	proved
-Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	140	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1	Corollary 1.1	proved
-Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	149	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2	Theorem 1.2	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	139	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1_spec	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	148	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1	Corollary 1.1	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	155	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2	Theorem 1.2	proved

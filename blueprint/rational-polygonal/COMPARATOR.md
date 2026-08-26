@@ -32,7 +32,7 @@ Lemma 3.1(iii).
 | Definition 1.2(ii) | `Basic`: `WeakPeriodicDecomposition`, `WeaklyPeriodic` | proved |
 | Definition 1.2(iii) | `Basic`: `DoublyPeriodic` | proved |
 | Theorem 1.1 | `Main`: `RationalPolygonalRegion.theorem_1_1` | proved |
-| Corollary 1.1 | `Decision`/`Main`: `RasterPresentation.tileDecision_eq_true_iff`, `RationalPolygonalRegion.corollary_1_1` | proved for a finite compiled raster presentation; the raw finite rational-vertex-to-raster compiler described below remains outside the executable API |
+| Corollary 1.1 | `Decision`/`Main`: `RasterPresentation.tileDecision_decidesTileability`, `RationalPolygonalRegion.corollary_1_1` | one executable Boolean algorithm is proved correct for every valid finite compiled raster presentation; the raw finite rational-vertex-to-raster compiler described below remains outside the executable API |
 | Theorem 1.2 | `WeakPeriodicity`/`Main`: `RationalPolygonalRegion.Tiles.weaklyPeriodic`, `RationalPolygonalRegion.theorem_1_2` | proved for every given tiling |
 | Definition 2.1 | `IntegerReduction`: `PolygonalRegion.IsIntegerTiling` | proved definition |
 | Lemma 2.2 | `IntegerReduction`: `PolygonalRegion.exists_integer_tiling` | proved |
@@ -99,11 +99,14 @@ RasterPresentation.Represents P K
 RasterPresentation.tileDecision P : Bool
 ```
 
-`corollary_1_1` proves that this Boolean decides tileability whenever `P` is the canonical compiled
-raster of `K`; the search and its counted cost are executable.  The paper, however, starts from a
+`DecidesTileability` is the universal correctness contract,
+`tileDecision_decidesTileability` supplies its executable witness, and paper-facing
+`corollary_1_1` states the literal existence of that algorithm.  Every semantic region has a valid
+code by `exists_representation`; the search and its counted cost are executable on the code.  The
+paper, however, starts from a
 finite rational polygon description and says to compute the normalization, cell signatures, and
 raster.  A fully literal computational formalization of that sentence still requires an
 executable finite rational-polygon input type and a verified compiler from its vertices/edges to
 `RasterPresentation`.  Until that compiler is implemented or an independent review accepts the
-compiled raster as the formal input representation, Corollary 1.1 is recorded as complete only
-from the post-raster finite boundary, not as a bit-level decision procedure on raw vertex lists.
+compiled raster as the formal input representation, Corollary 1.1 is recorded as complete from
+the post-raster finite boundary, not as a bit-level decision procedure on raw vertex lists.

@@ -28,8 +28,11 @@ RasterPresentation.tileDecisionCost : RasterPresentation → ℕ
 
 It invokes the bounded exhaustive `planarTileDecision` on the finite raster tile.  The counted
 implementation theorem gives the exact cost, and `tileDecision_eq_true_iff` proves the Boolean is
-true exactly when the represented rational polygonal region tiles the plane.  The terminal alias
-is `RationalPolygonalRegion.corollary_1_1`.
+true exactly when the represented rational polygonal region tiles the plane.
+`DecidesTileability` packages the universal correctness contract and
+`tileDecision_decidesTileability` proves it for the single executable function.  The terminal
+`RationalPolygonalRegion.corollary_1_1` is the literal existential statement that such an
+algorithm exists; `corollary_1_1_spec` is its pointwise specialization.
 
 This is an executable decision procedure from the finite raster stage onward.  The semantic
 `RationalPolygonalRegion` is not executable data, and the current `canonical` presentation is
@@ -64,4 +67,3 @@ not an existence theorem about a replacement tiling.
 - `RationalPolygonalRegion.theorem_1_2`.
 
 All geometric, raster, earthquake, and executable proof bodies live in their owning lower modules.
-

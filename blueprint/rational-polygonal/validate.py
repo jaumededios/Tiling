@@ -76,6 +76,7 @@ def paper_item(name: str) -> str:
     exact = {
         "Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1": "Theorem 1.1",
         "Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1": "Corollary 1.1",
+        "Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1_spec": "Corollary 1.1 support",
         "Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2": "Theorem 1.2",
         "Tiling.RationalPolygonal.PolygonalRegion.exists_integer_tiling": "Lemma 2.2",
         "Tiling.RationalPolygonal.PolygonalRegion.samePlate_translation_sub_mem_integerLattice": "Lemma 2.4",

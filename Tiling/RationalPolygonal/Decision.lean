@@ -81,6 +81,28 @@ theorem tileDecision_eq_true_iff
   rw [tileDecision, planarTileDecision_eq_true_iff, hP]
   exact (tileable_iff_canonicalRaster K).symm
 
+/-- Correctness contract for a Boolean algorithm on finite rational-polygon raster
+presentations.  The contract is extensional in the represented semantic region: every valid code
+must return the real-plane tileability answer. -/
+def DecidesTileability
+    (algorithm : RasterPresentation → Bool) : Prop :=
+  ∀ P K, P.Represents K →
+    (algorithm P = true ↔
+      ∃ T : Set Plane, K.toPolygonalRegion.Tiles T)
+
+/-- The executable bounded raster search decides tileability on every valid presentation. -/
+theorem tileDecision_decidesTileability :
+    DecidesTileability tileDecision := by
+  intro P K hP
+  exact P.tileDecision_eq_true_iff K hP
+
+/-- There is a single executable Boolean algorithm deciding every valid finite raster
+presentation of a rational polygonal region. -/
+theorem exists_tileabilityAlgorithm :
+    ∃ algorithm : RasterPresentation → Bool,
+      DecidesTileability algorithm :=
+  ⟨tileDecision, tileDecision_decidesTileability⟩
+
 /-- A compiled presentation yields a constructive decidable instance for semantic tileability. -/
 def tileableDecidable
     (P : RasterPresentation) (K : RationalPolygonalRegion)
@@ -98,6 +120,11 @@ noncomputable def canonical (K : RationalPolygonalRegion) : RasterPresentation w
 theorem canonical_represents (K : RationalPolygonalRegion) :
     (canonical K).Represents K :=
   rfl
+
+/-- Every semantic rational polygonal region has at least one finite raster presentation. -/
+theorem exists_representation (K : RationalPolygonalRegion) :
+    ∃ P : RasterPresentation, P.Represents K :=
+  ⟨canonical K, canonical_represents K⟩
 
 end RasterPresentation
 

@@ -135,14 +135,20 @@ theorem theorem_1_1 (K : RationalPolygonalRegion) :
         K.toPolygonalRegion.Tiles T ∧ DoublyPeriodic T :=
   K.tileable_iff_exists_doublyPeriodic_tiling
 
-/-- **Paper Corollary 1.1.** The executable bounded search on a compiled raster presentation is
-true exactly when the represented rational polygonal region tiles the plane. -/
-theorem corollary_1_1
+/-- Pointwise specification of the executable algorithm in paper Corollary 1.1. -/
+theorem corollary_1_1_spec
     (P : RasterPresentation) (K : RationalPolygonalRegion)
     (hP : P.Represents K) :
     P.tileDecision = true ↔
       ∃ T : Set Plane, K.toPolygonalRegion.Tiles T :=
   P.tileDecision_eq_true_iff K hP
+
+/-- **Paper Corollary 1.1.** There is one executable Boolean algorithm which decides whether the
+rational polygonal region represented by any valid finite raster presentation tiles the plane. -/
+theorem corollary_1_1 :
+    ∃ algorithm : RasterPresentation → Bool,
+      RasterPresentation.DecidesTileability algorithm :=
+  RasterPresentation.exists_tileabilityAlgorithm
 
 /-- **Paper Theorem 1.2.** Every translation set tiling by a rational polygonal region is weakly
 periodic. -/

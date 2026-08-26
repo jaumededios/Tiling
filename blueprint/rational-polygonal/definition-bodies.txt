@@ -3967,6 +3967,16 @@ def Tiling.RationalPolygonal.RasterPresentation.tileDecisionCost : (P : Tiling.R
   Nat :=
 fun (P : Tiling.RationalPolygonal.RasterPresentation) =>
   TranslationalTilings.planarTileSearchCost (Tiling.RationalPolygonal.RasterPresentation.rasterTile P)
+def Tiling.RationalPolygonal.RasterPresentation.DecidesTileability : (algorithm :
+    Tiling.RationalPolygonal.RasterPresentation → Bool) →
+  Prop :=
+fun (algorithm : Tiling.RationalPolygonal.RasterPresentation → Bool) =>
+  ∀ (P : Tiling.RationalPolygonal.RasterPresentation) (K : Tiling.RationalPolygonal.RationalPolygonalRegion),
+    Tiling.RationalPolygonal.RasterPresentation.Represents P K →
+      Iff (@Eq.{1} Bool (algorithm P) Bool.true)
+        (@Exists.{1} (Set.{0} Tiling.Plane) fun (T : Set.{0} Tiling.Plane) =>
+          Tiling.RationalPolygonal.PolygonalRegion.Tiles
+            (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K) T)
 def Tiling.RationalPolygonal.RasterPresentation.tileableDecidable : (P : Tiling.RationalPolygonal.RasterPresentation) →
   (K : Tiling.RationalPolygonal.RationalPolygonalRegion) →
     (hP : Tiling.RationalPolygonal.RasterPresentation.Represents P K) →
