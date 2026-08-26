@@ -206,7 +206,8 @@ theorem chooseBetween_sound {ls us : List ℚ} {x : ℚ}
           have hus : us = [] := List.min?_eq_none_iff.mp hmin
           simp [hls, hus] at h ⊢
       | some u =>
-          simp [hmax, hmin] at h
+          have hx : u - 1 = x := by
+            simpa only [hmax, hmin, Option.some.injEq] using h
           subst x
           refine ⟨by simp [hls], ?_⟩
           intro v hv
@@ -216,7 +217,8 @@ theorem chooseBetween_sound {ls us : List ℚ} {x : ℚ}
       cases hmin : us.min? with
       | none =>
           have hus : us = [] := List.min?_eq_none_iff.mp hmin
-          simp [hmax, hmin] at h
+          have hx : l + 1 = x := by
+            simpa only [hmax, hmin, Option.some.injEq] using h
           subst x
           refine ⟨?_, by simp [hus]⟩
           intro v hv
@@ -224,7 +226,8 @@ theorem chooseBetween_sound {ls us : List ℚ} {x : ℚ}
           linarith
       | some u =>
           by_cases hlu : l < u
-          · simp [hmax, hmin, hlu] at h
+          · have hx : (l + u) / 2 = x := by
+              simpa only [hmax, hmin, if_pos hlu, Option.some.injEq] using h
             subst x
             refine ⟨?_, ?_⟩
             · intro v hv
@@ -497,12 +500,17 @@ theorem solve_sound {qs : List StrictInequality} {p : ℚ × ℚ}
     (h : solve qs = some p) : SatisfiesAll qs p := by
   unfold solve at h
   cases hx : solve1D (eliminateY qs) with
-  | none => simp [hx] at h
+  | none =>
+      simp only [hx] at h
+      contradiction
   | some x =>
       cases hy : solveY qs x with
-      | none => simp [hx, hy] at h
+      | none =>
+          simp only [hx, hy, Option.map_none] at h
+          contradiction
       | some y =>
-          simp [hx, hy] at h
+          have hp : (x, y) = p := by
+            simpa only [hx, hy, Option.map_some, Option.some.injEq] using h
           subst p
           exact solveY_sound (solve1D_sound hx) hy
 
