@@ -687,11 +687,37 @@ theorem markerScale_injective (M : ℕ) : Function.Injective (markerScale M) := 
 def markerTranslationSet (M : ℕ) (T : Set IntegerPlane) : Set IntegerPlane :=
   markerScale M '' T
 
+/-- Pull a translation set on the fine lattice back through marker scaling. -/
+def markerPreimage (M : ℕ) (U : Set IntegerPlane) : Set IntegerPlane :=
+  {q | markerScale M q ∈ U}
+
 @[simp]
 theorem mem_markerTranslationSet_iff {M : ℕ} {T : Set IntegerPlane}
     {x : IntegerPlane} :
     x ∈ markerTranslationSet M T ↔ ∃ t ∈ T, markerScale M t = x :=
   Iff.rfl
+
+@[simp]
+theorem mem_markerPreimage_iff {M : ℕ} {U : Set IntegerPlane}
+    {q : IntegerPlane} :
+    q ∈ markerPreimage M U ↔ markerScale M q ∈ U :=
+  Iff.rfl
+
+/-- Scaling the pullback recovers any translation set contained in the coarse marker lattice. -/
+theorem markerTranslationSet_markerPreimage_eq_of_subset {M : ℕ}
+    {U : Set IntegerPlane} (hU : U ⊆ markerLattice M) :
+    markerTranslationSet M (markerPreimage M U) = U := by
+  ext x
+  constructor
+  · rintro ⟨q, hq, rfl⟩
+    exact hq
+  · intro hx
+    obtain ⟨q, hq⟩ := mem_markerLattice_iff.mp (hU hx)
+    have hq' : markerScale M q = x := hq
+    refine ⟨q, ?_, hq'⟩
+    change markerScale M q ∈ U
+    rw [hq']
+    exact hx
 
 /-- Replace each point of color tile `i` by a scaled copy of its marker block. -/
 noncomputable def planarRasterTile {M : ℕ}
@@ -869,6 +895,34 @@ theorem planarRasterTile_tilesUniverse_iff_family {M : ℕ} (hM : 0 < M)
       ∀ i, TilesUniverse (tile i) T :=
   ⟨family_tilesUniverse_of_planarRasterTile hM tile T,
     planarRasterTile_tilesUniverse_of_family hM tile T⟩
+
+/-- If the translations of a planar raster tiling lie in one coarse-lattice coset, translating
+that coset to the origin and dividing by the marker scale decodes a common tiling by every color.
+This packages the formal output needed from marker rigidity. -/
+theorem exists_family_tiling_of_planarRasterTile_coset {M : ℕ} (hM : 0 < M)
+    (tile : Fin M → Finset IntegerPlane) (U : Set IntegerPlane)
+    (hraster : TilesUniverse (planarRasterTile tile) U)
+    (base : IntegerPlane)
+    (hcoset : ∀ u ∈ U, u - base ∈ markerLattice M) :
+    ∃ T : Set IntegerPlane, ∀ i, TilesUniverse (tile i) T := by
+  let U₀ : Set IntegerPlane := -base +ᵥ U
+  have hU₀ : U₀ ⊆ markerLattice M := by
+    intro x hx
+    have hxU : base + x ∈ U := by
+      simpa only [U₀, Set.mem_vadd_set_iff_neg_vadd_mem, neg_neg,
+        vadd_eq_add] using hx
+    have hmem := hcoset (base + x) hxU
+    have heq : base + x - base = x := by abel
+    rw [heq] at hmem
+    exact hmem
+  let T : Set IntegerPlane := markerPreimage M U₀
+  have hscaled : markerTranslationSet M T = U₀ :=
+    markerTranslationSet_markerPreimage_eq_of_subset hU₀
+  have hraster₀ : TilesUniverse (planarRasterTile tile) U₀ := by
+    exact (tilesUniverse_vadd_translationSet_iff
+      (-base) (planarRasterTile tile) U).mpr hraster
+  rw [← hscaled] at hraster₀
+  exact ⟨T, family_tilesUniverse_of_planarRasterTile hM tile T hraster₀⟩
 
 section ColoredRaster
 

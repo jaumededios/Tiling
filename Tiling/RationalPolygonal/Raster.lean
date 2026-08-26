@@ -160,6 +160,49 @@ theorem tilesUniverse_shiftFinset_iff {G : Type*} [AddCommGroup G]
       rw [← heq]
       abel
 
+/-- Translating every vector in a translation set does not change whether a finite tile tiles the
+whole ambient group. -/
+theorem tilesUniverse_vadd_translationSet_iff {G : Type*} [AddCommGroup G]
+    (a : G) (F : Finset G) (T : Set G) :
+    TilesUniverse F (a +ᵥ T) ↔ TilesUniverse F T := by
+  constructor
+  · intro hshift
+    apply tilesUniverse_of_existsUnique
+    intro x
+    obtain ⟨f, hf, hfunique⟩ :=
+      existsUnique_tile_representation hshift (a + x)
+    refine ⟨f, ?_, ?_⟩
+    · refine ⟨hf.1, ?_⟩
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hf
+      convert hf.2 using 1
+      simp only [vadd_eq_add]
+      abel
+    · intro g hg
+      apply hfunique g
+      refine ⟨hg.1, ?_⟩
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+      convert hg.2 using 1
+      simp only [vadd_eq_add]
+      abel
+  · intro hT
+    apply tilesUniverse_of_existsUnique
+    intro x
+    obtain ⟨f, hf, hfunique⟩ :=
+      existsUnique_tile_representation hT (-a + x)
+    refine ⟨f, ?_, ?_⟩
+    · refine ⟨hf.1, ?_⟩
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+      convert hf.2 using 1
+      simp only [vadd_eq_add]
+      abel
+    · intro g hg
+      apply hfunique g
+      refine ⟨hg.1, ?_⟩
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hg
+      convert hg.2 using 1
+      simp only [vadd_eq_add]
+      abel
+
 namespace PolygonalRegion
 
 /-- Almost every point of a monotile tiling belongs to exactly one translated copy. -/
