@@ -654,6 +654,128 @@ theorem modifiedMarkerSquare_tiles_markerLattice (M : ℕ) :
     (fun f hf ↦ markerSquareReplacement_sub_mem_markerLattice M hf)
     (markerSquare_tiles_markerLattice M)
 
+/-- Scale a lattice vector by the marker side length. -/
+def markerScale (M : ℕ) (x : IntegerPlane) : IntegerPlane :=
+  (markerSide M : ℤ) • x
+
+@[simp]
+theorem markerScale_zero (M : ℕ) : markerScale M 0 = 0 := by
+  simp [markerScale]
+
+@[simp]
+theorem markerScale_add (M : ℕ) (x y : IntegerPlane) :
+    markerScale M (x + y) = markerScale M x + markerScale M y := by
+  simp only [markerScale, smul_add]
+
+@[simp]
+theorem markerScale_sub (M : ℕ) (x y : IntegerPlane) :
+    markerScale M (x - y) = markerScale M x - markerScale M y := by
+  simp only [markerScale, smul_sub]
+
+/-- Scaling by a marker side length is injective. -/
+theorem markerScale_injective (M : ℕ) : Function.Injective (markerScale M) := by
+  intro x y hxy
+  funext i
+  have hi := congrFun hxy i
+  simp only [markerScale, Pi.smul_apply, smul_eq_mul] at hi
+  apply mul_left_cancel₀ (show (markerSide M : ℤ) ≠ 0 by
+    simp only [markerSide]
+    omega)
+  exact hi
+
+/-- Scale a translation set to the coarse marker lattice. -/
+def markerTranslationSet (M : ℕ) (T : Set IntegerPlane) : Set IntegerPlane :=
+  markerScale M '' T
+
+@[simp]
+theorem mem_markerTranslationSet_iff {M : ℕ} {T : Set IntegerPlane}
+    {x : IntegerPlane} :
+    x ∈ markerTranslationSet M T ↔ ∃ t ∈ T, markerScale M t = x :=
+  Iff.rfl
+
+/-- Replace each point of color tile `i` by a scaled copy of its marker block. -/
+noncomputable def planarRasterTile {M : ℕ}
+    (tile : Fin M → Finset IntegerPlane) : Finset IntegerPlane :=
+  Finset.univ.biUnion fun i ↦
+    (tile i).biUnion fun f ↦
+      (markerBlock i).image fun s ↦ markerScale M f + s
+
+@[simp]
+theorem mem_planarRasterTile_iff {M : ℕ}
+    {tile : Fin M → Finset IntegerPlane} {x : IntegerPlane} :
+    x ∈ planarRasterTile tile ↔
+      ∃ i : Fin M, ∃ f ∈ tile i, ∃ s ∈ markerBlock i,
+        markerScale M f + s = x := by
+  classical
+  simp only [planarRasterTile, Finset.mem_biUnion, Finset.mem_univ, true_and,
+    Finset.mem_image]
+
+private theorem existsUnique_markerBlock {M : ℕ} (hM : 0 < M)
+    {s : IntegerPlane} (hs : s ∈ modifiedMarkerSquare M) :
+    ∃! i : Fin M, s ∈ markerBlock i := by
+  have hsUnion : s ∈ markerUnion M := by
+    rw [markerUnion_eq_modifiedMarkerSquare hM]
+    exact hs
+  rw [markerUnion, Finset.mem_biUnion] at hsUnion
+  obtain ⟨i, -, hsi⟩ := hsUnion
+  refine ⟨i, hsi, ?_⟩
+  intro j hsj
+  by_contra hij
+  have hij' : i ≠ j := Ne.symm hij
+  have hnot : s ∉ markerBlock j :=
+    (Finset.disjoint_left.mp (markerBlock_disjoint hij')) hsi
+  exact hnot hsj
+
+/-- A common tiling by all colors produces a tiling by the single planar raster tile, with the
+translation set scaled to the coarse marker lattice. -/
+theorem planarRasterTile_tilesUniverse_of_family {M : ℕ} (hM : 0 < M)
+    (tile : Fin M → Finset IntegerPlane) (T : Set IntegerPlane)
+    (hfamily : ∀ i, TilesUniverse (tile i) T) :
+    TilesUniverse (planarRasterTile tile) (markerTranslationSet M T) := by
+  apply tilesUniverse_of_existsUnique
+  intro x
+  obtain ⟨s, hs, hsUnique⟩ :=
+    existsUnique_tile_representation (modifiedMarkerSquare_tiles_markerLattice M) x
+  obtain ⟨q, hq⟩ := mem_markerLattice_iff.mp hs.2
+  change markerScale M q = x - s at hq
+  obtain ⟨i, hsi, hiUnique⟩ := existsUnique_markerBlock hM hs.1
+  obtain ⟨f, hf, hfUnique⟩ := existsUnique_tile_representation (hfamily i) q
+  let r : IntegerPlane := markerScale M f + s
+  refine ⟨r, ?_, ?_⟩
+  · constructor
+    · exact mem_planarRasterTile_iff.mpr ⟨i, f, hf.1, s, hsi, rfl⟩
+    · rw [mem_markerTranslationSet_iff]
+      refine ⟨q - f, hf.2, ?_⟩
+      rw [markerScale_sub, hq]
+      dsimp only [r]
+      abel
+  · intro r' hr'
+    obtain ⟨j, g, hgj, s', hs'j, hr'Eq⟩ := mem_planarRasterTile_iff.mp hr'.1
+    obtain ⟨t, htT, htEq⟩ := mem_markerTranslationSet_iff.mp hr'.2
+    have hs'Modified : s' ∈ modifiedMarkerSquare M := by
+      rw [← markerUnion_eq_modifiedMarkerSquare hM, markerUnion,
+        Finset.mem_biUnion]
+      exact ⟨j, Finset.mem_univ j, hs'j⟩
+    have hxSubS' : x - s' ∈ markerLattice M := by
+      rw [mem_markerLattice_iff]
+      refine ⟨g + t, ?_⟩
+      change markerScale M (g + t) = x - s'
+      rw [markerScale_add, htEq, ← hr'Eq]
+      abel
+    have hs's : s' = s := hsUnique s' ⟨hs'Modified, hxSubS'⟩
+    have hji : j = i := by
+      apply hiUnique j
+      rwa [hs's] at hs'j
+    subst j
+    have hqg : q - g ∈ T := by
+      have hscaled : markerScale M (q - g) = markerScale M t := by
+        rw [markerScale_sub, hq, htEq, ← hr'Eq, hs's]
+        abel
+      have : q - g = t := markerScale_injective M hscaled
+      rwa [this]
+    have hgf : g = f := hfUnique g ⟨hgj, hqg⟩
+    rw [← hr'Eq, hgf, hs's]
+
 section ColoredRaster
 
 /-- Package a finite family of lattice tiles as one tile in `ℤ² × ZMod M`, with the second
