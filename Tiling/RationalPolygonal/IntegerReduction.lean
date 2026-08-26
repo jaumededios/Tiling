@@ -39,11 +39,208 @@ theorem polygonalProtoTiling_placements (K : PolygonalRegion) (T : Set Plane) :
 def HasIntegerVertices (K : PolygonalRegion) : Prop :=
   ∀ v ∈ vertexSet K.support, IsIntegerPoint v
 
+end PolygonalRegion
+
+namespace RationalPolygonalRegion
+
 /-- Clearing the denominator in a rational presentation produces an integer-vertex region. -/
-theorem RationalPolygonalRegion.normalizedRegion_hasIntegerVertices
-    (K : RationalPolygonalRegion) :
-    K.normalizedRegion.HasIntegerVertices :=
+theorem normalizedRegion_hasIntegerVertices (K : RationalPolygonalRegion) :
+    PolygonalRegion.HasIntegerVertices K.normalizedRegion :=
   K.normalized_vertex_integral
+
+/-- A normalized placed tile is the common-denominator dilation of the original placed tile. -/
+theorem normalized_placedTile (K : RationalPolygonalRegion) (t : Plane) :
+    placedTile K.normalizedRegion.prototileFamily
+        (K.normalizedTranslation t, ()) =
+      (K.denominator : ℝ) •
+        placedTile K.toPolygonalRegion.prototileFamily (t, ()) := by
+  ext x
+  constructor
+  · intro hx
+    change x ∈ K.normalizedTranslation t +ᵥ K.normalizedSupport at hx
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hx
+    change -K.normalizedTranslation t +ᵥ x ∈
+      (K.denominator : ℝ) • (-K.anchor +ᵥ K.support) at hx
+    obtain ⟨y, hy, hyx⟩ := hx
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hy
+    refine ⟨t + K.anchor + y, ?_, ?_⟩
+    · change t + K.anchor + y ∈ t +ᵥ K.support
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+      convert hy using 1
+      simp only [vadd_eq_add]
+      abel
+    · have hx_eq : x = K.normalizedTranslation t +
+          (K.denominator : ℝ) • y := by
+        change (K.denominator : ℝ) • y =
+          -K.normalizedTranslation t + x at hyx
+        rw [hyx]
+        abel
+      rw [hx_eq]
+      simp only [RationalPolygonalRegion.normalizedTranslation, smul_add]
+      module
+  · rintro ⟨y, hy, rfl⟩
+    change (K.denominator : ℝ) • y ∈
+      K.normalizedTranslation t +ᵥ K.normalizedSupport
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+    change y ∈ t +ᵥ K.support at hy
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hy
+    refine ⟨-K.anchor + y - t, ?_, ?_⟩
+    · rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+      convert hy using 1
+      simp only [vadd_eq_add]
+      abel
+    · simp only [RationalPolygonalRegion.normalizedTranslation, vadd_eq_add,
+        smul_add, smul_sub]
+      module
+
+/-- Rational affine normalization transports an almost-everywhere tiling to the normalized
+integer-vertex region. -/
+theorem normalizedRegion_tiles (K : RationalPolygonalRegion) {T : Set Plane}
+    (hT : K.toPolygonalRegion.Tiles T) :
+    K.normalizedRegion.Tiles (K.normalizedTranslations T) := by
+  have hnormalized_countable : (K.normalizedTranslations T).Countable :=
+    hT.countable.image K.normalizedTranslation
+  refine ⟨PolygonalRegion.placements_countable K.normalizedRegion
+    hnormalized_countable, ?_, ?_⟩
+  · rintro p hp q hq hpq
+    change p.1 ∈ K.normalizedTranslations T at hp
+    change q.1 ∈ K.normalizedTranslations T at hq
+    obtain ⟨t, ht, htp⟩ := hp
+    obtain ⟨s, hs, hsq⟩ := hq
+    let p₀ : Placement Plane Unit := (t, ())
+    let q₀ : Placement Plane Unit := (s, ())
+    have hp₀ : p₀ ∈ K.toPolygonalRegion.placements T := ht
+    have hq₀ : q₀ ∈ K.toPolygonalRegion.placements T := hs
+    have hts : t ≠ s := by
+      intro hts
+      apply hpq
+      apply Prod.ext
+      · rw [← htp, ← hsq, hts]
+      · exact Subsingleton.elim _ _
+    have hpq₀ : p₀ ≠ q₀ := by
+      intro hpq₀
+      apply hts
+      exact congrArg Prod.fst hpq₀
+    have had := hT.isPacking hp₀ hq₀ hpq₀
+    change AEDisjoint volume
+      (placedTile K.normalizedRegion.prototileFamily p)
+      (placedTile K.normalizedRegion.prototileFamily q)
+    have hpTile : placedTile K.normalizedRegion.prototileFamily p =
+        (K.denominator : ℝ) •
+          placedTile K.toPolygonalRegion.prototileFamily p₀ := by
+      change p.1 +ᵥ K.normalizedSupport =
+        (K.denominator : ℝ) • (t +ᵥ K.support)
+      rw [← htp]
+      exact K.normalized_placedTile t
+    have hqTile : placedTile K.normalizedRegion.prototileFamily q =
+        (K.denominator : ℝ) •
+          placedTile K.toPolygonalRegion.prototileFamily q₀ := by
+      change q.1 +ᵥ K.normalizedSupport =
+        (K.denominator : ℝ) • (s +ᵥ K.support)
+      rw [← hsq]
+      exact K.normalized_placedTile s
+    rw [hpTile, hqTile]
+    exact aedisjoint_smul K.denominator K.denominator_cast_ne_zero had
+  · have hcover :=
+      (volume.quasiMeasurePreserving_smul
+        (inv_ne_zero K.denominator_cast_ne_zero)).ae hT.isCover
+    filter_upwards [hcover] with x hx
+    obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hx
+    let j : Placement Plane Unit := (K.normalizedTranslation i.1.1, ())
+    have hj : j ∈ K.normalizedRegion.placements (K.normalizedTranslations T) := by
+      exact ⟨i.1.1, i.2, rfl⟩
+    refine Set.mem_iUnion.mpr ⟨⟨j, hj⟩, ?_⟩
+    change x ∈ placedTile K.normalizedRegion.prototileFamily j
+    rw [show placedTile K.normalizedRegion.prototileFamily j =
+        (K.denominator : ℝ) •
+          placedTile K.toPolygonalRegion.prototileFamily i.1 by
+      simpa only [j] using K.normalized_placedTile i.1.1]
+    refine ⟨(K.denominator : ℝ)⁻¹ • x, hxi, ?_⟩
+    change (K.denominator : ℝ) • ((K.denominator : ℝ)⁻¹ • x) = x
+    rw [← mul_smul, mul_inv_cancel₀ K.denominator_cast_ne_zero, one_smul]
+
+/-- A placed original tile is the inverse dilation of its normalized counterpart. -/
+theorem denormalized_placedTile (K : RationalPolygonalRegion) (t : Plane) :
+    placedTile K.toPolygonalRegion.prototileFamily
+        (K.denormalizedTranslation t, ()) =
+      (K.denominator : ℝ)⁻¹ •
+        placedTile K.normalizedRegion.prototileFamily (t, ()) := by
+  have h := K.normalized_placedTile (K.denormalizedTranslation t)
+  rw [K.normalizedTranslation_denormalizedTranslation] at h
+  have hscaled := congrArg
+    (fun A : Set Plane ↦ (K.denominator : ℝ)⁻¹ • A) h
+  simpa [smul_smul, K.denominator_cast_ne_zero] using hscaled.symm
+
+/-- Inverse rational normalization transports a normalized tiling back to the original region. -/
+theorem tiles_of_normalizedRegion_tiles
+    (K : RationalPolygonalRegion) {T : Set Plane}
+    (hT : K.normalizedRegion.Tiles T) :
+    K.toPolygonalRegion.Tiles (K.denormalizedTranslations T) := by
+  have hdenormalized_countable : (K.denormalizedTranslations T).Countable :=
+    hT.countable.image K.denormalizedTranslation
+  refine ⟨PolygonalRegion.placements_countable K.toPolygonalRegion
+    hdenormalized_countable, ?_, ?_⟩
+  · rintro p hp q hq hpq
+    change p.1 ∈ K.denormalizedTranslations T at hp
+    change q.1 ∈ K.denormalizedTranslations T at hq
+    obtain ⟨t, ht, htp⟩ := hp
+    obtain ⟨s, hs, hsq⟩ := hq
+    let p₀ : Placement Plane Unit := (t, ())
+    let q₀ : Placement Plane Unit := (s, ())
+    have hp₀ : p₀ ∈ K.normalizedRegion.placements T := ht
+    have hq₀ : q₀ ∈ K.normalizedRegion.placements T := hs
+    have hts : t ≠ s := by
+      intro hts
+      apply hpq
+      apply Prod.ext
+      · rw [← htp, ← hsq, hts]
+      · exact Subsingleton.elim _ _
+    have hpq₀ : p₀ ≠ q₀ := by
+      intro hpq₀
+      apply hts
+      exact congrArg Prod.fst hpq₀
+    have had := hT.isPacking hp₀ hq₀ hpq₀
+    change AEDisjoint volume
+      (placedTile K.toPolygonalRegion.prototileFamily p)
+      (placedTile K.toPolygonalRegion.prototileFamily q)
+    have hpTile : placedTile K.toPolygonalRegion.prototileFamily p =
+        (K.denominator : ℝ)⁻¹ •
+          placedTile K.normalizedRegion.prototileFamily p₀ := by
+      change p.1 +ᵥ K.support =
+        (K.denominator : ℝ)⁻¹ • (t +ᵥ K.normalizedSupport)
+      rw [← htp]
+      exact K.denormalized_placedTile t
+    have hqTile : placedTile K.toPolygonalRegion.prototileFamily q =
+        (K.denominator : ℝ)⁻¹ •
+          placedTile K.normalizedRegion.prototileFamily q₀ := by
+      change q.1 +ᵥ K.support =
+        (K.denominator : ℝ)⁻¹ • (s +ᵥ K.normalizedSupport)
+      rw [← hsq]
+      exact K.denormalized_placedTile s
+    rw [hpTile, hqTile]
+    exact aedisjoint_smul (K.denominator : ℝ)⁻¹
+      (inv_ne_zero K.denominator_cast_ne_zero) had
+  · have hcover :=
+      (volume.quasiMeasurePreserving_smul K.denominator_cast_ne_zero).ae hT.isCover
+    filter_upwards [hcover] with x hx
+    obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hx
+    let j : Placement Plane Unit := (K.denormalizedTranslation i.1.1, ())
+    have hj : j ∈ K.toPolygonalRegion.placements
+        (K.denormalizedTranslations T) := by
+      exact ⟨i.1.1, i.2, rfl⟩
+    refine Set.mem_iUnion.mpr ⟨⟨j, hj⟩, ?_⟩
+    change x ∈ placedTile K.toPolygonalRegion.prototileFamily j
+    rw [show placedTile K.toPolygonalRegion.prototileFamily j =
+        (K.denominator : ℝ)⁻¹ •
+          placedTile K.normalizedRegion.prototileFamily i.1 by
+      simpa only [j] using K.denormalized_placedTile i.1.1]
+    refine ⟨(K.denominator : ℝ) • x, hxi, ?_⟩
+    change (K.denominator : ℝ)⁻¹ • ((K.denominator : ℝ) • x) = x
+    rw [← mul_smul, inv_mul_cancel₀ K.denominator_cast_ne_zero, one_smul]
+
+end RationalPolygonalRegion
+
+namespace PolygonalRegion
 
 /-- The paper's integer-tiling condition: every placed intrinsic vertex is integral. -/
 def IsIntegerTiling (K : PolygonalRegion) (T : Set Plane) : Prop :=

@@ -231,6 +231,11 @@ structure RationalPolygonalRegion extends PolygonalRegion where
 
 namespace RationalPolygonalRegion
 
+/-- The common denominator, viewed as a nonzero real scalar. -/
+theorem denominator_cast_ne_zero (K : RationalPolygonalRegion) :
+    (K.denominator : ℝ) ≠ 0 := by
+  exact_mod_cast K.denominator_pos.ne'
+
 /-- Translate the chosen anchor to the origin and clear the common vertex denominator. -/
 def normalizedSupport (K : RationalPolygonalRegion) : Set Plane :=
   (K.denominator : ℝ) • (-K.anchor +ᵥ K.support)
@@ -240,7 +245,7 @@ def normalizedRegion (K : RationalPolygonalRegion) : PolygonalRegion where
   support := K.normalizedSupport
   isPolygonal := by
     apply IsPolygonal.smul (K.isPolygonal.vadd (-K.anchor))
-    exact_mod_cast K.denominator_pos.ne'
+    exact K.denominator_cast_ne_zero
   nonempty := by
     obtain ⟨x, hx⟩ := K.nonempty
     have hxtranslated : -K.anchor +ᵥ x ∈ -K.anchor +ᵥ K.support := by
@@ -257,13 +262,76 @@ theorem normalizedRegion_support (K : RationalPolygonalRegion) :
     K.normalizedRegion.support = K.normalizedSupport :=
   rfl
 
+/-- Translation vectors corresponding to normalized copies of the tile. -/
+noncomputable def normalizedTranslation (K : RationalPolygonalRegion) (t : Plane) : Plane :=
+  (K.denominator : ℝ) • (K.anchor + t)
+
+/-- Normalize every translation vector in a candidate tiling. -/
+noncomputable def normalizedTranslations (K : RationalPolygonalRegion)
+    (T : Set Plane) : Set Plane :=
+  K.normalizedTranslation '' T
+
+@[simp]
+theorem mem_normalizedTranslations_iff {K : RationalPolygonalRegion}
+    {T : Set Plane} {x : Plane} :
+    x ∈ K.normalizedTranslations T ↔
+      ∃ t ∈ T, K.normalizedTranslation t = x :=
+  Iff.rfl
+
+/-- Rational normalization is injective on translation vectors. -/
+theorem normalizedTranslation_injective (K : RationalPolygonalRegion) :
+    Function.Injective K.normalizedTranslation := by
+  intro x y hxy
+  apply add_left_cancel (a := K.anchor)
+  exact (smul_right_injective Plane K.denominator_cast_ne_zero) hxy
+
+/-- Inverse affine change of coordinates on translation vectors. -/
+noncomputable def denormalizedTranslation (K : RationalPolygonalRegion)
+    (t : Plane) : Plane :=
+  (K.denominator : ℝ)⁻¹ • t - K.anchor
+
+/-- Apply the inverse normalization to every translation vector. -/
+noncomputable def denormalizedTranslations (K : RationalPolygonalRegion)
+    (T : Set Plane) : Set Plane :=
+  K.denormalizedTranslation '' T
+
+@[simp]
+theorem mem_denormalizedTranslations_iff {K : RationalPolygonalRegion}
+    {T : Set Plane} {x : Plane} :
+    x ∈ K.denormalizedTranslations T ↔
+      ∃ t ∈ T, K.denormalizedTranslation t = x :=
+  Iff.rfl
+
+@[simp]
+theorem denormalizedTranslation_normalizedTranslation
+    (K : RationalPolygonalRegion) (t : Plane) :
+    K.denormalizedTranslation (K.normalizedTranslation t) = t := by
+  simp only [denormalizedTranslation, normalizedTranslation, ← mul_smul,
+    inv_mul_cancel₀ K.denominator_cast_ne_zero, one_smul]
+  abel
+
+@[simp]
+theorem normalizedTranslation_denormalizedTranslation
+    (K : RationalPolygonalRegion) (t : Plane) :
+    K.normalizedTranslation (K.denormalizedTranslation t) = t := by
+  simp only [normalizedTranslation, denormalizedTranslation]
+  rw [show K.anchor + ((K.denominator : ℝ)⁻¹ • t - K.anchor) =
+      (K.denominator : ℝ)⁻¹ • t by abel]
+  rw [← mul_smul, mul_inv_cancel₀ K.denominator_cast_ne_zero, one_smul]
+
+/-- Inverse normalization is injective on translation vectors. -/
+theorem denormalizedTranslation_injective (K : RationalPolygonalRegion) :
+    Function.Injective K.denormalizedTranslation := by
+  intro x y hxy
+  have := congrArg K.normalizedTranslation hxy
+  simpa only [K.normalizedTranslation_denormalizedTranslation] using this
+
 /-- Every intrinsic vertex of the normalized region is an integer point. -/
 theorem normalized_vertex_integral (K : RationalPolygonalRegion) :
     ∀ w ∈ vertexSet K.normalizedSupport, IsIntegerPoint w := by
   intro w hw
-  have hn : (K.denominator : ℝ) ≠ 0 := by
-    exact_mod_cast K.denominator_pos.ne'
-  rw [normalizedSupport, vertexSet_smul _ hn, vertexSet_vadd] at hw
+  rw [normalizedSupport, vertexSet_smul _ K.denominator_cast_ne_zero,
+    vertexSet_vadd] at hw
   obtain ⟨u, hu, rfl⟩ := hw
   rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hu
   have hu' := K.vertex_integral (-(-K.anchor) +ᵥ u) hu
