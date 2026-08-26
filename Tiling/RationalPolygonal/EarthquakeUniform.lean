@@ -361,6 +361,56 @@ structure UniformQuakePeriodicDecomposition
   /-- The labeled pieces cover exactly the corresponding quake plate. -/
   iUnion_parts : ∀ C, (⋃ j, part C j) = quakePlateTranslations C
 
+private noncomputable def quakeGraphIsoOfEq
+    {F F' : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (h : quakeGraph F T v = quakeGraph F' T v) :
+    quakeGraph F T v ≃g quakeGraph F' T v where
+  toEquiv := Equiv.refl T
+  map_rel_iff' := by
+    intro a b
+    change (quakeGraph F' T v).Adj a b ↔ (quakeGraph F T v).Adj a b
+    rw [← h]
+
+private theorem mem_quakePlateTranslations_isoOfEq
+    {F F' : Finset IntegerPlane} {T : Set IntegerPlane} {v t : IntegerPlane}
+    (h : quakeGraph F T v = quakeGraph F' T v)
+    (C : QuakePlate F T v) :
+    t ∈ quakePlateTranslations ((quakeGraphIsoOfEq h).connectedComponentEquiv C) ↔
+      t ∈ quakePlateTranslations C := by
+  constructor
+  · rintro ⟨ht, hcomp⟩
+    refine ⟨ht, ?_⟩
+    change (quakeGraph F' T v).connectedComponentMk
+        ((quakeGraphIsoOfEq h) (⟨t, ht⟩ : T)) =
+      C.map (quakeGraphIsoOfEq h).toHom at hcomp
+    exact SimpleGraph.ConnectedComponent.iso_image_comp_eq_map_iff_eq_comp.mp hcomp
+  · rintro ⟨ht, hcomp⟩
+    refine ⟨ht, ?_⟩
+    change (quakeGraph F' T v).connectedComponentMk
+        ((quakeGraphIsoOfEq h) (⟨t, ht⟩ : T)) =
+      C.map (quakeGraphIsoOfEq h).toHom
+    exact SimpleGraph.ConnectedComponent.iso_image_comp_eq_map_iff_eq_comp.mpr hcomp
+
+/-- Transport a uniform plate decomposition across an equality of earthquake graphs on the same
+translation set. -/
+noncomputable def UniformQuakePeriodicDecomposition.transportGraph
+    {F F' : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (D : UniformQuakePeriodicDecomposition F T v)
+    (h : quakeGraph F T v = quakeGraph F' T v) :
+    UniformQuakePeriodicDecomposition F' T v where
+  numberOfParts := D.numberOfParts
+  number_pos := D.number_pos
+  part C j := D.part ((quakeGraphIsoOfEq h).connectedComponentEquiv.symm C) j
+  period := D.period
+  period_ne_zero := D.period_ne_zero
+  pairwise_incommensurable := D.pairwise_incommensurable
+  periodic_part C j := D.periodic_part _ j
+  pairwiseDisjoint C := D.pairwiseDisjoint _
+  iUnion_parts C := by
+    rw [D.iUnion_parts]
+    ext t
+    exact mem_quakePlateTranslations_isoOfEq h.symm C
+
 private noncomputable def rawQuakePart
     {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
     (D : QuantitativeWeakPeriodData F 1) (C : QuakePlate F T v)
@@ -832,5 +882,25 @@ theorem exists_uniformQuakePeriodicDecomposition_of_zero_mem
     subst F
     exact exists_uniformQuakePeriodicDecomposition_singleton_zero hv hT
   · exact exists_uniformQuakePeriodicDecomposition_normalized hzero (by omega) hv hT
+
+/-- **Paper Lemma 4.2.** Every exact planar lattice tiling by a nonempty finite tile has one
+common finite list of pairwise incommensurable nonzero periods which partitions every canonical
+earthquake plate.  A chosen tile point is subtracted to reduce to the normalized theorem; this
+does not change the earthquake graph. -/
+theorem exists_uniformQuakePeriodicDecomposition
+    {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (hF : F.Nonempty) (hv : v ≠ 0) (hT : TilesUniverse F T) :
+    Nonempty (UniformQuakePeriodicDecomposition F T v) := by
+  classical
+  obtain ⟨q, hq⟩ := hF
+  let F' := shiftFinset q F
+  have hzero : 0 ∈ F' := by
+    rw [mem_shiftFinset_iff]
+    simpa only [zero_add] using hq
+  have hT' : TilesUniverse F' T :=
+    (tilesUniverse_shiftFinset_iff q F T).mpr hT
+  obtain ⟨D⟩ :=
+    exists_uniformQuakePeriodicDecomposition_of_zero_mem hzero hv hT'
+  exact ⟨D.transportGraph (quakeGraph_shiftFinset q F T v)⟩
 
 end Tiling.RationalPolygonal
