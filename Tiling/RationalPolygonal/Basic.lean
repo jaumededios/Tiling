@@ -368,6 +368,86 @@ theorem denormalizedTranslation_injective (K : RationalPolygonalRegion) :
   have := congrArg K.normalizedTranslation hxy
   simpa only [K.normalizedTranslation_denormalizedTranslation] using this
 
+/-- Membership in an inverse-normalized image is detected by the forward normalization. -/
+theorem mem_denormalizedTranslations_iff_normalizedTranslation_mem
+    (K : RationalPolygonalRegion) {A : Set Plane} {x : Plane} :
+    x ∈ K.denormalizedTranslations A ↔ K.normalizedTranslation x ∈ A := by
+  constructor
+  · rintro ⟨t, ht, rfl⟩
+    simpa only [K.normalizedTranslation_denormalizedTranslation] using ht
+  · intro hx
+    exact ⟨K.normalizedTranslation x, hx,
+      K.denormalizedTranslation_normalizedTranslation x⟩
+
+/-- Forward normalization turns an inverse-scaled period into the original period. -/
+theorem normalizedTranslation_add_denormalizedPeriod
+    (K : RationalPolygonalRegion) (x h : Plane) :
+    K.normalizedTranslation (x + (K.denominator : ℝ)⁻¹ • h) =
+      K.normalizedTranslation x + h := by
+  simp only [normalizedTranslation, smul_add]
+  rw [← mul_smul, mul_inv_cancel₀ K.denominator_cast_ne_zero, one_smul]
+  abel
+
+/-- Inverse affine normalization preserves membership periodicity. -/
+theorem setPeriodicBy_denormalizedTranslations
+    (K : RationalPolygonalRegion) {A : Set Plane} {h : Plane}
+    (hA : SetPeriodicBy A h) :
+    SetPeriodicBy (K.denormalizedTranslations A)
+      ((K.denominator : ℝ)⁻¹ • h) := by
+  intro x
+  rw [K.mem_denormalizedTranslations_iff_normalizedTranslation_mem,
+    K.mem_denormalizedTranslations_iff_normalizedTranslation_mem,
+    K.normalizedTranslation_add_denormalizedPeriod]
+  exact hA (K.normalizedTranslation x)
+
+/-- Transport a finite weak-periodic decomposition through inverse affine normalization. -/
+noncomputable def denormalizedWeakPeriodicDecomposition
+    (K : RationalPolygonalRegion) {A : Set Plane}
+    (D : WeakPeriodicDecomposition A) :
+    WeakPeriodicDecomposition (K.denormalizedTranslations A) where
+  numberOfParts := D.numberOfParts
+  part i := K.denormalizedTranslations (D.part i)
+  period i := (K.denominator : ℝ)⁻¹ • D.period i
+  period_ne_zero i hzero := by
+    apply D.period_ne_zero i
+    apply smul_right_injective Plane
+      (inv_ne_zero K.denominator_cast_ne_zero)
+    simpa only [smul_zero] using hzero
+  periodic_part i := K.setPeriodicBy_denormalizedTranslations (D.periodic_part i)
+  pairwiseDisjoint := by
+    intro i _ j _ hij
+    change Disjoint (K.denormalizedTranslations (D.part i))
+      (K.denormalizedTranslations (D.part j))
+    rw [Set.disjoint_left]
+    intro x hxi hxj
+    obtain ⟨a, ha, hax⟩ := hxi
+    obtain ⟨b, hb, hbx⟩ := hxj
+    have hab : a = b := K.denormalizedTranslation_injective (hax.trans hbx.symm)
+    subst b
+    exact (Set.disjoint_left.mp
+      (D.pairwiseDisjoint (Set.mem_univ i) (Set.mem_univ j) hij)) ha hb
+  iUnion_parts := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hx
+      obtain ⟨a, hai, rfl⟩ := hxi
+      refine ⟨a, ?_, rfl⟩
+      rw [← D.iUnion_parts]
+      exact Set.mem_iUnion.mpr ⟨i, hai⟩
+    · rintro ⟨a, ha, rfl⟩
+      rw [← D.iUnion_parts] at ha
+      obtain ⟨i, hai⟩ := Set.mem_iUnion.mp ha
+      exact Set.mem_iUnion.mpr ⟨i, ⟨a, hai, rfl⟩⟩
+
+/-- Inverse affine normalization preserves weak periodicity. -/
+theorem weaklyPeriodic_denormalizedTranslations
+    (K : RationalPolygonalRegion) {A : Set Plane}
+    (hA : WeaklyPeriodic A) :
+    WeaklyPeriodic (K.denormalizedTranslations A) := by
+  obtain ⟨D⟩ := hA
+  exact ⟨K.denormalizedWeakPeriodicDecomposition D⟩
+
 /-- Every intrinsic vertex of the normalized region is an integer point. -/
 theorem normalized_vertex_integral (K : RationalPolygonalRegion) :
     ∀ w ∈ vertexSet K.normalizedSupport, IsIntegerPoint w := by

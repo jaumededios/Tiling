@@ -1,5 +1,6 @@
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 import Tiling.RationalPolygonal.Basic
+import TranslationalTilings.WeakPeriodicity
 
 set_option linter.style.header false
 
@@ -19,6 +20,19 @@ open TranslationalTilings
 namespace Tiling.RationalPolygonal
 
 universe u
+
+/-- **Greenfeld--Tao weak periodicity (paper Theorem 4.1).** Every exact planar lattice tiling by
+a nonempty finite tile has a finite periodic decomposition of its translation set. -/
+theorem tilesUniverse_weaklyPeriodic {F : Finset IntegerPlane}
+    {T : Set IntegerPlane} (hF : F.Nonempty) (hT : TilesUniverse F T) :
+    TranslationalTilings.WeaklyPeriodic T := by
+  apply TranslationalTilings.level_one_plane_weaklyPeriodic hF
+  · refine ⟨(⊤ : AddSubgroup IntegerPlane), inferInstance, ?_⟩
+    change SetPeriodicOn (⊤ : AddSubgroup IntegerPlane)
+      (Set.univ : Set IntegerPlane)
+    intro h hh x
+    simp only [Set.mem_univ]
+  · exact hT
 
 section DiscreteCarrier
 

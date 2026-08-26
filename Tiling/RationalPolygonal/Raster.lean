@@ -348,4 +348,101 @@ theorem exists_integer_signature_tiling {K : PolygonalRegion}
 
 end PolygonalRegion
 
+/-- Embed a discrete weak-periodic decomposition into the real plane. -/
+noncomputable def integerPointWeakPeriodicDecomposition {A : Set IntegerPlane}
+    (D : TranslationalTilings.WeakPeriodicDecomposition A) :
+    WeakPeriodicDecomposition (integerPoint '' A) where
+  numberOfParts := D.numberOfParts
+  part i := integerPoint '' D.part i
+  period i := integerPoint (D.period i)
+  period_ne_zero i hzero :=
+    D.period_ne_zero i (integerPoint_injective (hzero.trans integerPoint_zero.symm))
+  periodic_part i := by
+    intro x
+    constructor
+    · rintro ⟨a, ha, hax⟩
+      have ha' : a - D.period i ∈ D.part i := by
+        apply (D.periodic_part i (a - D.period i)).mp
+        simpa only [sub_add_cancel] using ha
+      refine ⟨a - D.period i, ha', ?_⟩
+      rw [integerPoint_sub, hax]
+      abel
+    · rintro ⟨a, ha, rfl⟩
+      have ha' : a + D.period i ∈ D.part i :=
+        (D.periodic_part i a).mpr ha
+      exact ⟨a + D.period i, ha', integerPoint_add a (D.period i)⟩
+  pairwiseDisjoint := by
+    intro i _ j _ hij
+    change Disjoint (integerPoint '' D.part i) (integerPoint '' D.part j)
+    rw [Set.disjoint_left]
+    intro x hxi hxj
+    obtain ⟨a, ha, hax⟩ := hxi
+    obtain ⟨b, hb, hbx⟩ := hxj
+    have hab : a = b := integerPoint_injective (hax.trans hbx.symm)
+    subst b
+    exact (Set.disjoint_left.mp
+      (D.pairwiseDisjoint (Set.mem_univ i) (Set.mem_univ j) hij)) ha hb
+  iUnion_parts := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hx
+      obtain ⟨a, hai, rfl⟩ := hxi
+      refine ⟨a, ?_, rfl⟩
+      rw [← D.iUnion_parts]
+      exact Set.mem_iUnion.mpr ⟨i, hai⟩
+    · rintro ⟨a, ha, rfl⟩
+      rw [← D.iUnion_parts] at ha
+      obtain ⟨i, hai⟩ := Set.mem_iUnion.mp ha
+      exact Set.mem_iUnion.mpr ⟨i, ⟨a, hai, rfl⟩⟩
+
+/-- Discrete weak periodicity becomes weak periodicity by real translation vectors. -/
+theorem weaklyPeriodic_integerPoint_image {A : Set IntegerPlane}
+    (hA : TranslationalTilings.WeaklyPeriodic A) :
+    WeaklyPeriodic (integerPoint '' A) := by
+  obtain ⟨D⟩ := hA
+  exact ⟨integerPointWeakPeriodicDecomposition D⟩
+
+namespace PolygonalRegion
+
+/-- Every continuous tiling by integer translations is weakly periodic.  This is the immediate
+consequence of the raster lemma and Greenfeld--Tao noted before the earthquake argument. -/
+theorem Tiles.weaklyPeriodic_of_integerPoint_image
+    {K : PolygonalRegion} {T : Set IntegerPlane}
+    (hT : K.Tiles (integerPoint '' T)) :
+    WeaklyPeriodic (integerPoint '' T) := by
+  have hsignatures := hT.ae_signature_tilesUniverse
+  obtain ⟨u, hu⟩ := hsignatures.exists
+  obtain ⟨f, hf, -⟩ := existsUnique_tile_representation hu 0
+  exact weaklyPeriodic_integerPoint_image
+    (tilesUniverse_weaklyPeriodic ⟨f, hf.1⟩ hu)
+
+end PolygonalRegion
+
+namespace RationalPolygonalRegion
+
+/-- Every rational polygonal region which tiles admits a weakly periodic tiling.  This endpoint
+uses rational normalization, connected integer reduction, the raster bridge, and Greenfeld--Tao,
+then transports the resulting decomposition back to the original scale. -/
+theorem exists_weaklyPeriodic_tiling (K : RationalPolygonalRegion)
+    {T : Set Plane} (hT : K.toPolygonalRegion.Tiles T) :
+    ∃ S : Set Plane, K.toPolygonalRegion.Tiles S ∧ WeaklyPeriodic S := by
+  have hnormalized := K.normalizedRegion_tiles hT
+  obtain ⟨T', hT'tiles, -, hT'integer⟩ :=
+    K.normalizedRegion.exists_integer_tiling
+      K.normalizedRegion_hasIntegerVertices hnormalized
+  let Z := PolygonalRegion.integerTranslationSet T'
+  have himage : integerPoint '' Z = T' :=
+    PolygonalRegion.integerPoint_image_integerTranslationSet hT'integer
+  have hT'image : K.normalizedRegion.Tiles (integerPoint '' Z) := by
+    rwa [himage]
+  have hweakImage := hT'image.weaklyPeriodic_of_integerPoint_image
+  have hweakT' : WeaklyPeriodic T' := by
+    rwa [himage] at hweakImage
+  refine ⟨K.denormalizedTranslations T',
+    K.tiles_of_normalizedRegion_tiles hT'tiles, ?_⟩
+  exact K.weaklyPeriodic_denormalizedTranslations hweakT'
+
+end RationalPolygonalRegion
+
 end Tiling.RationalPolygonal
