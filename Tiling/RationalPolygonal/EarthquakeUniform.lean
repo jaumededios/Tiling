@@ -338,6 +338,29 @@ structure UniformQuakePeriodicCover
   /-- The labeled pieces cover exactly the corresponding quake plate. -/
   iUnion_parts : ∀ C, (⋃ j, part C j) = quakePlateTranslations C
 
+/-- The exact output of paper Lemma 4.2: every quake plate is partitioned using one common finite
+family of pairwise incommensurable nonzero periods. -/
+structure UniformQuakePeriodicDecomposition
+    (F : Finset IntegerPlane) (T : Set IntegerPlane) (v : IntegerPlane) where
+  /-- Number of common, pairwise-incommensurable period labels. -/
+  numberOfParts : ℕ
+  /-- At least one period label is available. -/
+  number_pos : 0 < numberOfParts
+  /-- The piece with a given common label inside each quake plate. -/
+  part : QuakePlate F T v → Fin numberOfParts → Set IntegerPlane
+  /-- The common period attached to each label. -/
+  period : Fin numberOfParts → IntegerPlane
+  /-- Every common period is nonzero. -/
+  period_ne_zero : ∀ j, period j ≠ 0
+  /-- Distinct common period labels are incommensurable. -/
+  pairwise_incommensurable : PairwiseIncommensurable period
+  /-- Every labeled piece is invariant under its common period. -/
+  periodic_part : ∀ C j, DiscretePeriodicBy (part C j) (period j)
+  /-- The labeled pieces of each fixed plate are pairwise disjoint. -/
+  pairwiseDisjoint : ∀ C, Set.PairwiseDisjoint Set.univ (part C)
+  /-- The labeled pieces cover exactly the corresponding quake plate. -/
+  iUnion_parts : ∀ C, (⋃ j, part C j) = quakePlateTranslations C
+
 private noncomputable def rawQuakePart
     {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
     (D : QuantitativeWeakPeriodData F 1) (C : QuakePlate F T v)
@@ -419,6 +442,296 @@ private theorem rawQuakePart_iUnion
       exact Set.mem_iUnion.mpr ⟨Fin.succ j, hxj⟩
     · exact Set.mem_iUnion.mpr ⟨0, hxC, hxComplete⟩
 
+private noncomputable def rawUniformQuakePeriodicCover
+    {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (hzero : 0 ∈ F) (hv : v ≠ 0) (hT : TilesUniverse F T)
+    (D : QuantitativeWeakPeriodData F 1)
+    (hvalid : ∀ C : QuakePlate F T v,
+      ∀ k : Fin (D.numberOfDirections + 1),
+        D.ValidFor (quakeIndexedShift D C k)) :
+    UniformQuakePeriodicCover F T v where
+  numberOfParts := D.numberOfDirections + 1
+  number_pos := Nat.succ_pos _
+  part := fun C ↦ rawQuakePart D C (hvalid C)
+  period := rawQuakePeriod D v
+  period_ne_zero := by
+    intro j
+    refine Fin.cases (quakeUniformPeriod_ne_zero D hv) (fun i ↦ ?_) j
+    exact quantitative_period_ne_zero_local D i
+  periodic_part := by
+    intro C j
+    refine Fin.cases (quakeResidualPart_periodic hzero hT D C (hvalid C))
+      (fun i ↦ quakeCompletePart_periodic D C (hvalid C) i) j
+  pairwiseDisjoint := by
+    intro C
+    exact rawQuakePart_pairwiseDisjoint D C (hvalid C)
+  iUnion_parts := by
+    intro C
+    exact rawQuakePart_iUnion D C (hvalid C)
+
+private theorem quantitative_period_pairwise_incommensurable
+    {F : Finset IntegerPlane} (D : QuantitativeWeakPeriodData F 1) :
+    PairwiseIncommensurable
+      (fun j ↦ (D.multiplier : ℤ) • D.direction j) := by
+  intro i j hij hcomm
+  have hi0 := quantitative_period_ne_zero_local D i
+  have hj0 := quantitative_period_ne_zero_local D j
+  have hw := (commensurable_iff_wedge_eq_zero hi0 hj0).mp hcomm
+  rw [wedge_zsmul_left, wedge_zsmul_right] at hw
+  have hm : (D.multiplier : ℤ) ≠ 0 :=
+    Int.ofNat_ne_zero.mpr (Nat.ne_of_gt D.arithmetic.multiplier_pos)
+  have hwdirection : wedge (D.direction i) (D.direction j) = 0 := by
+    exact (mul_eq_zero.mp ((mul_eq_zero.mp hw).resolve_left hm)).resolve_left hm
+  exact D.pairwise_incommensurable i j hij
+    ((commensurable_iff_wedge_eq_zero (D.direction_ne_zero i)
+      (D.direction_ne_zero j)).mpr hwdirection)
+
+private theorem commensurable_symm_local {u w : IntegerPlane} :
+    Commensurable u w → Commensurable w u := by
+  rintro ⟨a, b, ha, hb, hab⟩
+  exact ⟨b, a, hb, ha, hab.symm⟩
+
+private theorem commensurable_trans_local {u w z : IntegerPlane} :
+    Commensurable u w → Commensurable w z → Commensurable u z := by
+  rintro ⟨a, b, ha, hb, hab⟩ ⟨c, d, hc, hd, hcd⟩
+  refine ⟨c * a, b * d, mul_ne_zero hc ha, mul_ne_zero hb hd, ?_⟩
+  calc
+    (c * a) • u = c • (a • u) := by rw [mul_smul]
+    _ = c • (b • w) := by rw [hab]
+    _ = b • (c • w) := by rw [smul_smul, smul_smul, mul_comm]
+    _ = b • (d • z) := by rw [hcd]
+    _ = (b * d) • z := by rw [mul_smul]
+
+private theorem commensurable_period_quake_of_uniformPeriod
+    {F : Finset IntegerPlane} (D : QuantitativeWeakPeriodData F 1)
+    {v p : IntegerPlane} (hv : v ≠ 0) (hp : p ≠ 0)
+    (hcomm : Commensurable (quakeUniformPeriod D v) p) :
+    Commensurable p v := by
+  have hH0 := quakeUniformPeriod_ne_zero D hv
+  have hw := (commensurable_iff_wedge_eq_zero hH0 hp).mp hcomm
+  rw [quakeUniformPeriod, wedge_zsmul_left] at hw
+  have hc : ((D.lattice.index * D.numberOfDirections.factorial : ℕ) : ℤ) ≠ 0 :=
+    Int.ofNat_ne_zero.mpr (Nat.mul_ne_zero
+      (quantitative_lattice_index_ne_zero_local D) (Nat.factorial_ne_zero _))
+  have hvp : wedge v p = 0 := (mul_eq_zero.mp hw).resolve_left hc
+  have hpv : wedge p v = 0 := by rw [wedge_swap, hvp, neg_zero]
+  exact (commensurable_iff_wedge_eq_zero hp hv).mpr hpv
+
+private noncomputable def uniformQuakePeriodicDecomposition_of_no_parallel
+    {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (hzero : 0 ∈ F) (hv : v ≠ 0) (hT : TilesUniverse F T)
+    (D : QuantitativeWeakPeriodData F 1)
+    (hvalid : ∀ C : QuakePlate F T v,
+      ∀ k : Fin (D.numberOfDirections + 1),
+        D.ValidFor (quakeIndexedShift D C k))
+    (hnone : ∀ j : Fin D.numberOfDirections,
+      ¬ Commensurable ((D.multiplier : ℤ) • D.direction j) v) :
+    UniformQuakePeriodicDecomposition F T v := by
+  let R := rawUniformQuakePeriodicCover hzero hv hT D hvalid
+  have hpair : PairwiseIncommensurable (rawQuakePeriod D v) := by
+    intro i
+    refine Fin.cases (motive := fun i ↦ ∀ j, i ≠ j →
+      ¬ Commensurable (rawQuakePeriod D v i) (rawQuakePeriod D v j)) ?_ ?_ i
+    · intro j
+      refine Fin.cases ?_ (fun j _ hcomm ↦ ?_) j
+      · intro hij
+        exact (hij rfl).elim
+      · exact hnone j (commensurable_period_quake_of_uniformPeriod D hv
+          (quantitative_period_ne_zero_local D j) hcomm)
+    · intro i j
+      refine Fin.cases ?_ (fun j hij hcomm ↦ ?_) j
+      · intro _ hcomm
+        exact hnone i (commensurable_period_quake_of_uniformPeriod D hv
+          (quantitative_period_ne_zero_local D i) (commensurable_symm_local hcomm))
+      · apply quantitative_period_pairwise_incommensurable D i j
+        · intro hij'
+          exact hij (congrArg Fin.succ hij')
+        · exact hcomm
+  exact {
+    numberOfParts := R.numberOfParts
+    number_pos := R.number_pos
+    part := R.part
+    period := R.period
+    period_ne_zero := R.period_ne_zero
+    pairwise_incommensurable := hpair
+    periodic_part := R.periodic_part
+    pairwiseDisjoint := R.pairwiseDisjoint
+    iUnion_parts := R.iUnion_parts
+  }
+
+private noncomputable def uniformQuakePeriodicDecomposition_of_parallel
+    {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (hzero : 0 ∈ F) (hv : v ≠ 0) (hT : TilesUniverse F T)
+    (D : QuantitativeWeakPeriodData F 1)
+    (hvalid : ∀ C : QuakePlate F T v,
+      ∀ k : Fin (D.numberOfDirections + 1),
+        D.ValidFor (quakeIndexedShift D C k))
+    (j₀ : Fin D.numberOfDirections)
+    (hj₀ : Commensurable ((D.multiplier : ℤ) • D.direction j₀) v) :
+    UniformQuakePeriodicDecomposition F T v := by
+  classical
+  apply Classical.choice
+  let p : Fin D.numberOfDirections → IntegerPlane :=
+    fun j ↦ (D.multiplier : ℤ) • D.direction j
+  let H₀ := quakeUniformPeriod D v
+  let c : ℤ := ((D.lattice.index * D.numberOfDirections.factorial : ℕ) : ℤ)
+  have hj₀copy := hj₀
+  obtain ⟨a, b, ha, hb, hab⟩ := hj₀
+  let H₁ : IntegerPlane := b • H₀
+  have hc : c ≠ 0 := by
+    exact Int.ofNat_ne_zero.mpr (Nat.mul_ne_zero
+      (quantitative_lattice_index_ne_zero_local D) (Nat.factorial_ne_zero _))
+  have hH₀ : H₀ ≠ 0 := quakeUniformPeriod_ne_zero D hv
+  have hH₁ : H₁ ≠ 0 := smul_ne_zero hb hH₀
+  have hH₁eq : H₁ = (c * a) • p j₀ := by
+    dsimp [H₁, H₀, quakeUniformPeriod, c, p]
+    calc
+      b • ((D.lattice.index * D.numberOfDirections.factorial : ℕ) : ℤ) • v =
+          c • (b • v) := by rw [smul_smul, smul_smul, mul_comm]
+      _ = c • (a • ((D.multiplier : ℤ) • D.direction j₀)) := by rw [hab]
+      _ = (c * a) • ((D.multiplier : ℤ) • D.direction j₀) := by rw [mul_smul]
+  have hH₁v : Commensurable H₁ v := by
+    refine ⟨1, b * c, one_ne_zero, mul_ne_zero hb hc, ?_⟩
+    rw [one_smul]
+    change b • (c • v) = (b * c) • v
+    rw [smul_smul]
+  have hparallel_unique (j : Fin D.numberOfDirections)
+      (hj : Commensurable (p j) v) : j = j₀ := by
+    by_contra hne
+    exact quantitative_period_pairwise_incommensurable D j j₀ hne
+      (commensurable_trans_local hj (commensurable_symm_local hj₀copy))
+  let newPart : QuakePlate F T v → Fin D.numberOfDirections → Set IntegerPlane :=
+    fun C j ↦ if j = j₀ then
+      rawQuakePart D C (hvalid C) 0 ∪ rawQuakePart D C (hvalid C) (Fin.succ j₀)
+    else rawQuakePart D C (hvalid C) (Fin.succ j)
+  let newPeriod : Fin D.numberOfDirections → IntegerPlane :=
+    fun j ↦ if j = j₀ then H₁ else p j
+  have hperiod_ne_zero (j : Fin D.numberOfDirections) : newPeriod j ≠ 0 := by
+    by_cases hj : j = j₀
+    · simpa [newPeriod, hj] using hH₁
+    · simpa [newPeriod, hj, p] using quantitative_period_ne_zero_local D j
+  have hperiodic (C : QuakePlate F T v) (j : Fin D.numberOfDirections) :
+      DiscretePeriodicBy (newPart C j) (newPeriod j) := by
+    by_cases hj : j = j₀
+    · subst j
+      have hresidual := quakeResidualPart_periodic hzero hT D C (hvalid C)
+      have hcomplete := quakeCompletePart_periodic D C (hvalid C) j₀
+      have hresidualH₁ : DiscretePeriodicBy
+          (rawQuakePart D C (hvalid C) 0) H₁ := by
+        simpa [rawQuakePart, H₁, H₀] using hresidual.zsmul b
+      have hcompleteH₁ : DiscretePeriodicBy
+          (rawQuakePart D C (hvalid C) (Fin.succ j₀)) H₁ := by
+        rw [hH₁eq]
+        simpa [rawQuakePart, p] using hcomplete.zsmul (c * a)
+      intro x
+      simp only [newPart, newPeriod, if_pos]
+      constructor
+      · rintro (hx | hx)
+        · exact Or.inl ((hresidualH₁ x).mp hx)
+        · exact Or.inr ((hcompleteH₁ x).mp hx)
+      · rintro (hx | hx)
+        · exact Or.inl ((hresidualH₁ x).mpr hx)
+        · exact Or.inr ((hcompleteH₁ x).mpr hx)
+    · simpa [newPart, newPeriod, hj, rawQuakePart, p] using
+        quakeCompletePart_periodic D C (hvalid C) j
+  have hpair : PairwiseIncommensurable newPeriod := by
+    intro i j hij hcomm
+    by_cases hi : i = j₀
+    · subst i
+      have hj : j ≠ j₀ := by intro hj; exact hij hj.symm
+      have hcomm' : Commensurable H₁ (p j) := by
+        simpa [newPeriod, hj] using hcomm
+      have hpjv := commensurable_trans_local (commensurable_symm_local hcomm') hH₁v
+      exact hj (hparallel_unique j hpjv)
+    · by_cases hj : j = j₀
+      · subst j
+        have hcomm' : Commensurable (p i) H₁ := by
+          simpa [newPeriod, hi] using hcomm
+        have hpiv := commensurable_trans_local hcomm' hH₁v
+        exact hi (hparallel_unique i hpiv)
+      · exact quantitative_period_pairwise_incommensurable D i j hij
+          (by simpa [newPeriod, hi, hj, p] using hcomm)
+  have hdisjoint (C : QuakePlate F T v) :
+      Set.PairwiseDisjoint Set.univ (newPart C) := by
+    have hraw := rawQuakePart_pairwiseDisjoint D C (hvalid C)
+    intro i _ j _ hij
+    change Disjoint (newPart C i) (newPart C j)
+    rw [Set.disjoint_left]
+    intro x hxi hxj
+    by_cases hi : i = j₀
+    · subst i
+      have hj : j ≠ j₀ := by intro hj; exact hij hj.symm
+      simp only [newPart, if_pos, hj, if_false] at hxi hxj
+      rcases hxi with hxi | hxi
+      · exact (Set.disjoint_left.mp
+          (hraw (Set.mem_univ 0) (Set.mem_univ (Fin.succ j))
+            (Ne.symm (Fin.succ_ne_zero j)))) hxi hxj
+      · exact (Set.disjoint_left.mp
+          (hraw (Set.mem_univ (Fin.succ j₀)) (Set.mem_univ (Fin.succ j))
+            (by simpa using hj.symm))) hxi hxj
+    · by_cases hj : j = j₀
+      · subst j
+        simp only [newPart, hi, if_false, if_pos] at hxi hxj
+        rcases hxj with hxj | hxj
+        · exact (Set.disjoint_left.mp
+            (hraw (Set.mem_univ (Fin.succ i)) (Set.mem_univ 0)
+              (Fin.succ_ne_zero i))) hxi hxj
+        · exact (Set.disjoint_left.mp
+            (hraw (Set.mem_univ (Fin.succ i)) (Set.mem_univ (Fin.succ j₀))
+              (by simpa using hi))) hxi hxj
+      · simp only [newPart, hi, hj, if_false] at hxi hxj
+        exact (Set.disjoint_left.mp
+          (hraw (Set.mem_univ (Fin.succ i)) (Set.mem_univ (Fin.succ j))
+            (by simpa using hij))) hxi hxj
+  have hunion (C : QuakePlate F T v) :
+      (⋃ j, newPart C j) = quakePlateTranslations C := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨j, hxj⟩ := Set.mem_iUnion.mp hx
+      by_cases hj : j = j₀
+      · subst j
+        simp only [newPart, if_pos] at hxj
+        rcases hxj with hxj | hxj
+        · have hall := rawQuakePart_iUnion D C (hvalid C)
+          rw [← hall]
+          exact Set.mem_iUnion.mpr ⟨0, hxj⟩
+        · have hall := rawQuakePart_iUnion D C (hvalid C)
+          rw [← hall]
+          exact Set.mem_iUnion.mpr ⟨Fin.succ j₀, hxj⟩
+      · have hall := rawQuakePart_iUnion D C (hvalid C)
+        rw [← hall]
+        exact Set.mem_iUnion.mpr ⟨Fin.succ j, by simpa [newPart, hj] using hxj⟩
+    · intro hx
+      have hall := rawQuakePart_iUnion D C (hvalid C)
+      rw [← hall] at hx
+      obtain ⟨j, hxj⟩ := Set.mem_iUnion.mp hx
+      refine Fin.cases (motive := fun j ↦ x ∈ rawQuakePart D C (hvalid C) j →
+        x ∈ ⋃ j, newPart C j) ?_ (fun j hxj ↦ ?_) j hxj
+      · intro hxzero
+        apply Set.mem_iUnion.mpr
+        refine ⟨j₀, ?_⟩
+        simp only [newPart, if_pos]
+        exact Or.inl hxzero
+      · by_cases hj : j = j₀
+        · subst j
+          apply Set.mem_iUnion.mpr
+          refine ⟨j₀, ?_⟩
+          simp only [newPart, if_pos]
+          exact Or.inr hxj
+        · exact Set.mem_iUnion.mpr ⟨j, by simpa [newPart, hj] using hxj⟩
+  exact ⟨{
+    numberOfParts := D.numberOfDirections
+    number_pos := D.number_pos
+    part := newPart
+    period := newPeriod
+    period_ne_zero := hperiod_ne_zero
+    pairwise_incommensurable := hpair
+    periodic_part := hperiodic
+    pairwiseDisjoint := hdisjoint
+    iUnion_parts := hunion
+  }⟩
+
 /-- Uniform periodic plate cover for normalized nonsingleton lattice tiles.  The common first
 period is the factorial quake period; the remaining periods are the uniform Greenfeld--Tao
 directions. -/
@@ -438,25 +751,37 @@ theorem exists_uniformQuakePeriodicCover_normalized
     intro C k
     apply hD Set.univ (quakeIndexedShift D C k) huniv
     exact tilesUniverse_quakeShiftedTranslations hT _
-  refine ⟨{
-    numberOfParts := D.numberOfDirections + 1
-    number_pos := Nat.succ_pos _
-    part := fun C ↦ rawQuakePart D C (hvalid C)
-    period := rawQuakePeriod D v
-    period_ne_zero := ?_
-    periodic_part := ?_
-    pairwiseDisjoint := ?_
-    iUnion_parts := ?_
-  }⟩
-  · intro j
-    refine Fin.cases (quakeUniformPeriod_ne_zero D hv) (fun i ↦ ?_) j
-    exact quantitative_period_ne_zero_local D i
-  · intro C j
-    refine Fin.cases (quakeResidualPart_periodic hzero hT D C (hvalid C))
-      (fun i ↦ quakeCompletePart_periodic D C (hvalid C) i) j
-  · intro C
-    exact rawQuakePart_pairwiseDisjoint D C (hvalid C)
-  · intro C
-    exact rawQuakePart_iUnion D C (hvalid C)
+  exact ⟨rawUniformQuakePeriodicCover hzero hv hT D hvalid⟩
+
+/-- **Paper Lemma 4.2, normalized nonsingleton form.**  For a tile containing the origin, every
+canonical quake plate admits a partition using the same finite family of pairwise
+incommensurable nonzero lattice periods. -/
+theorem exists_uniformQuakePeriodicDecomposition_normalized
+    {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (hzero : 0 ∈ F) (hcard : 1 < F.card) (hv : v ≠ 0)
+    (hT : TilesUniverse F T) :
+    Nonempty (UniformQuakePeriodicDecomposition F T v) := by
+  classical
+  obtain ⟨D, hD⟩ := exists_quantitativeWeakPeriodData
+    (F := F) (ell := 1) Nat.one_pos hzero hcard
+  have huniv : SetScalarPeriodic 1 (Set.univ : Set IntegerPlane) := by
+    intro x z
+    simp
+  let hvalid : ∀ C : QuakePlate F T v,
+      ∀ k : Fin (D.numberOfDirections + 1),
+        D.ValidFor (quakeIndexedShift D C k) := by
+    intro C k
+    apply hD Set.univ (quakeIndexedShift D C k) huniv
+    exact tilesUniverse_quakeShiftedTranslations hT _
+  by_cases hparallel : ∃ j : Fin D.numberOfDirections,
+      Commensurable ((D.multiplier : ℤ) • D.direction j) v
+  · obtain ⟨j₀, hj₀⟩ := hparallel
+    exact ⟨uniformQuakePeriodicDecomposition_of_parallel
+      hzero hv hT D hvalid j₀ hj₀⟩
+  · have hnone : ∀ j : Fin D.numberOfDirections,
+        ¬ Commensurable ((D.multiplier : ℤ) • D.direction j) v :=
+      not_exists.mp hparallel
+    exact ⟨uniformQuakePeriodicDecomposition_of_no_parallel
+      hzero hv hT D hvalid hnone⟩
 
 end Tiling.RationalPolygonal
