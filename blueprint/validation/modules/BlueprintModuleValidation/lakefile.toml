@@ -1,0 +1,16 @@
+name = "BlueprintModuleValidation"
+version = "0.0.0"
+defaultTargets = ["TranslationalTilings"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+path = "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/mathlib"
+
+[[lean_lib]]
+name = "TranslationalTilings"
