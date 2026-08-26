@@ -11,5 +11,6 @@ import Tiling.RationalPolygonal.Basic
 import Tiling.RationalPolygonal.IntegerReduction
 import Tiling.RationalPolygonal.Earthquake
 import Tiling.RationalPolygonal.Raster
+import Tiling.RationalPolygonal.RasterMarker
 import Tiling.Measure.Counting
 import Tiling.Topology.IntersectionGraph
