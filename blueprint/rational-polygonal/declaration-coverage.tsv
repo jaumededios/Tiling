@@ -263,36 +263,39 @@ Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	222	def	Til
 Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	226	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_signature_iff	Lemma 3.1 / raster support	proved
 Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	232	def	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier	model / geometric support	proved
 Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	237	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	245	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	271	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_add_integerPoint	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	283	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_subset_signatureWindow	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	290	def	Tiling.RationalPolygonal.PolygonalRegion.candidateSignatures	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	295	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_mem_candidateSignatures	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	304	def	Tiling.RationalPolygonal.PolygonalRegion.signatureFiber	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	308	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_signatureFiber_iff	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	326	theorem	Tiling.RationalPolygonal.PolygonalRegion.measurableSet_signatureFiber	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	377	def	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	382	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_relevantSignatures_iff	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	390	theorem	Tiling.RationalPolygonal.PolygonalRegion.tilesUniverse_relevantSignatures_of_ae	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	403	theorem	Tiling.RationalPolygonal.PolygonalRegion.ae_signature_mem_relevantSignatures	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	427	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures_nonempty	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	436	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_nonempty_relevantSignature	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	490	theorem	Tiling.RationalPolygonal.PolygonalRegion.ae_signature_tilesUniverse_of_relevantSignatures	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	526	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_relevantSignatures	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	573	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_placedTile_integerPoint_iff_signature	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	591	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_tilesUniverse_iff_unique_translation	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	638	def	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationSet	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	642	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationSet_iff	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	647	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerPoint_image_integerTranslationSet	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	663	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	692	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_of_ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	748	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	757	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantSignatures	model / geometric support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	771	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_integer_signature_tiling	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	787	def	Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition	Theorem 1.2 support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	835	theorem	Tiling.RationalPolygonal.weaklyPeriodic_integerPoint_image	Theorem 1.2 support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	845	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerPoint_image	Theorem 1.2 support	proved
-Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	862	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.exists_weaklyPeriodic_tiling	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	245	theorem	Tiling.RationalPolygonal.PolygonalRegion.locallyFinite_integerTranslates	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	285	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_closure_interior	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	350	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_eq_of_ae_eq	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	361	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	387	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_add_integerPoint	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	399	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_subset_signatureWindow	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	406	def	Tiling.RationalPolygonal.PolygonalRegion.candidateSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	411	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_mem_candidateSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	420	def	Tiling.RationalPolygonal.PolygonalRegion.signatureFiber	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	424	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_signatureFiber_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	442	theorem	Tiling.RationalPolygonal.PolygonalRegion.measurableSet_signatureFiber	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	493	def	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	498	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_relevantSignatures_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	506	theorem	Tiling.RationalPolygonal.PolygonalRegion.tilesUniverse_relevantSignatures_of_ae	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	519	theorem	Tiling.RationalPolygonal.PolygonalRegion.ae_signature_mem_relevantSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	543	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures_nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	552	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_nonempty_relevantSignature	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	606	theorem	Tiling.RationalPolygonal.PolygonalRegion.ae_signature_tilesUniverse_of_relevantSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	642	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	689	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_placedTile_integerPoint_iff_signature	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	707	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_tilesUniverse_iff_unique_translation	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	754	def	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationSet	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	758	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationSet_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	763	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerPoint_image_integerTranslationSet	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	779	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	808	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_of_ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	864	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	873	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	887	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_integer_signature_tiling	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	903	def	Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	951	theorem	Tiling.RationalPolygonal.weaklyPeriodic_integerPoint_image	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	961	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerPoint_image	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	978	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.exists_weaklyPeriodic_tiling	Theorem 1.2 support	proved
 Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	21	def	Tiling.RationalPolygonal.latticePoint	model / geometric support	proved
 Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	24	theorem	Tiling.RationalPolygonal.latticePoint_apply_zero	model / geometric support	proved
 Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	28	theorem	Tiling.RationalPolygonal.latticePoint_apply_one	model / geometric support	proved
@@ -384,6 +387,7 @@ Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean
 Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1530	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantColoredRasterTile	Lemma 3.1 / raster support	proved
 Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1540	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantPlanarRasterTile	Lemma 3.1 / raster support	proved
 Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1550	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1566	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_carrier_eq_iff	Lemma 3.1 / raster support	proved
 Tiling.RationalPolygonal.RigidFrame	Tiling/RationalPolygonal/RigidFrame.lean	18	def	Tiling.RationalPolygonal.rigidFrame	model / geometric support	proved
 Tiling.RationalPolygonal.RigidFrame	Tiling/RationalPolygonal/RigidFrame.lean	487	theorem	Tiling.RationalPolygonal.rigidFrame_translation_differences_mem_lattice	model / geometric support	proved
 Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	390	theorem	Tiling.RationalPolygonal.markerBlock_west_filler	Lemma 3.1 / raster support	proved

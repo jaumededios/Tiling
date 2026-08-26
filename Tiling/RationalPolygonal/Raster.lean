@@ -240,6 +240,122 @@ theorem mem_integerTranslationCarrier_iff {K : PolygonalRegion}
       ∃ y ∈ K.support, ∃ t ∈ T, x = y + integerPoint t :=
   Iff.rfl
 
+/-- Integer translates of a compact polygonal support form a locally finite family, even when
+the selected translation set is not assumed to tile or pack the plane. -/
+theorem locallyFinite_integerTranslates
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    LocallyFinite fun t : T ↦ integerPoint (t : IntegerPlane) +ᵥ K.support := by
+  obtain ⟨R, hR⟩ := K.isPolygonal.isBounded.subset_closedBall (0 : Plane)
+  intro x
+  refine ⟨Metric.ball x 1, Metric.ball_mem_nhds x one_pos, ?_⟩
+  let H : Set T :=
+    {t | ((integerPoint (t : IntegerPlane) +ᵥ K.support) ∩ Metric.ball x 1).Nonempty}
+  have himage_subset : ((fun t : T ↦ (t : IntegerPlane)) '' H) ⊆
+      {z : IntegerPlane | integerPoint z ∈ Metric.closedBall x (R + 1)} := by
+    rintro z ⟨t, ht, rfl⟩
+    obtain ⟨y, hytranslate, hyball⟩ := ht
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hytranslate
+    have hsupport := hR hytranslate
+    change integerPoint (t : IntegerPlane) ∈ Metric.closedBall x (R + 1)
+    rw [Metric.mem_closedBall] at hsupport ⊢
+    rw [Metric.mem_ball] at hyball
+    have hdistance :
+        dist (integerPoint (t : IntegerPlane)) y =
+          dist (-integerPoint (t : IntegerPlane) + y) 0 := by
+      rw [dist_comm]
+      simp only [dist_eq_norm, sub_zero]
+      congr 1
+      abel
+    calc
+      dist (integerPoint (t : IntegerPlane)) x ≤
+          dist (integerPoint (t : IntegerPlane)) y + dist y x :=
+        dist_triangle _ _ _
+      _ = dist (-integerPoint (t : IntegerPlane) + y) 0 + dist y x := by
+        rw [hdistance]
+      _ ≤ R + 1 := add_le_add hsupport hyball.le
+  have hfinite :
+      {z : IntegerPlane | integerPoint z ∈ Metric.closedBall x (R + 1)}.Finite :=
+    finite_integerPoint_preimage_of_isCompact (isCompact_closedBall x (R + 1))
+  have himage_finite : ((fun t : T ↦ (t : IntegerPlane)) '' H).Finite :=
+    hfinite.subset himage_subset
+  change H.Finite
+  exact himage_finite.of_finite_image (Set.injOn_of_injective Subtype.val_injective)
+
+/-- Every carrier formed from integer translates of a polygonal region is regular closed. -/
+theorem integerTranslationCarrier_closure_interior
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    closure (interior (K.integerTranslationCarrier T)) =
+      K.integerTranslationCarrier T := by
+  have hunion :
+      (⋃ t : T, integerPoint (t : IntegerPlane) +ᵥ K.support) =
+        K.integerTranslationCarrier T := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨t, hxt⟩ := Set.mem_iUnion.mp hx
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hxt
+      exact ⟨-integerPoint (t : IntegerPlane) + x, hxt,
+        (t : IntegerPlane), t.2, by abel⟩
+    · rintro ⟨y, hy, t, ht, rfl⟩
+      apply Set.mem_iUnion.mpr
+      refine ⟨⟨t, ht⟩, ?_⟩
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+      convert hy using 1
+      simp only [vadd_eq_add]
+      abel
+  rw [← hunion]
+  exact (K.locallyFinite_integerTranslates T).closure_interior_iUnion_eq fun t ↦
+    (K.isPolygonal.vadd (integerPoint (t : IntegerPlane))).closure_interior
+
+private theorem regularClosed_eq_of_ae_eq
+    {A B : Set Plane}
+    (hA : closure (interior A) = A)
+    (hB : closure (interior B) = B)
+    (hAB : A =ᵐ[volume] B) : A = B := by
+  have hAclosed : IsClosed A := by
+    rw [← hA]
+    exact isClosed_closure
+  have hBclosed : IsClosed B := by
+    rw [← hB]
+    exact isClosed_closure
+  have hzeroAB : volume (A \ B) = 0 := (ae_eq_set.mp hAB).1
+  have hzeroBA : volume (B \ A) = 0 := (ae_eq_set.mp hAB).2
+  apply Set.Subset.antisymm
+  · rw [← hA]
+    apply closure_minimal _ hBclosed
+    intro x hxA
+    by_contra hxB
+    let U := interior A ∩ Bᶜ
+    have hUopen : IsOpen U := isOpen_interior.inter hBclosed.isOpen_compl
+    have hxU : x ∈ U := ⟨hxA, hxB⟩
+    have hUzero : volume U = 0 := by
+      apply measure_mono_null _ hzeroAB
+      intro y hy
+      exact ⟨interior_subset hy.1, hy.2⟩
+    exact hUopen.measure_ne_zero volume ⟨x, hxU⟩ hUzero
+  · rw [← hB]
+    apply closure_minimal _ hAclosed
+    intro x hxB
+    by_contra hxA
+    let U := interior B ∩ Aᶜ
+    have hUopen : IsOpen U := isOpen_interior.inter hAclosed.isOpen_compl
+    have hxU : x ∈ U := ⟨hxB, hxA⟩
+    have hUzero : volume U = 0 := by
+      apply measure_mono_null _ hzeroBA
+      intro y hy
+      exact ⟨interior_subset hy.1, hy.2⟩
+    exact hUopen.measure_ne_zero volume ⟨x, hxU⟩ hUzero
+
+/-- Almost-everywhere equality of two integer-translation carriers upgrades to literal equality. -/
+theorem integerTranslationCarrier_eq_of_ae_eq
+    (K : PolygonalRegion) {T₀ T₁ : Set IntegerPlane}
+    (h : K.integerTranslationCarrier T₀ =ᵐ[volume]
+      K.integerTranslationCarrier T₁) :
+    K.integerTranslationCarrier T₀ = K.integerTranslationCarrier T₁ := by
+  exact regularClosed_eq_of_ae_eq
+    (K.integerTranslationCarrier_closure_interior T₀)
+    (K.integerTranslationCarrier_closure_interior T₁) h
+
 /-- Pointwise carrier membership is exactly discrete signature-carrier membership in lattice
 coordinates. -/
 theorem mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature

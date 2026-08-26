@@ -53,9 +53,10 @@ It is a genuine definition, not a structure field whose specification is assumed
   the equivalence for the explicitly scaled marker translation set; rigidity supplies the converse
   for an arbitrary raster tiling.
 - Part (iii), carriers: `relevantPlanarRasterTile_discreteCarrier_eq_iff` gives exact equality for
-  every relevant discrete carrier, and
-  `integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile` transports this to the continuous
-  carrier at the a.e. strength of `PolygonalRegion.Tiles`.
+  every relevant discrete carrier.  The initial continuous comparison is a.e.;
+  `locallyFinite_integerTranslates` and `integerTranslationCarrier_closure_interior` prove that
+  both carriers are regular closed, and `relevantPlanarRasterTile_carrier_eq_iff` concludes the
+  literal continuous-carrier equivalence stated by the paper.
 
 The construction has no empty-color escape hatch: `relevantSignatures_nonempty` and
 `distinguishedRelevantSignature_nonempty` provide a genuine nonempty zero marker layer.
@@ -67,4 +68,3 @@ that it is definitionally the canonical normalized raster.  `tileDecision` and i
 cost are executable on this finite data.  Constructing the raster from the semantic real-set
 structure is noncomputable, so a raw rational-coordinate compiler is tracked separately in the
 comparator rather than being silently identified with this stage.
-

@@ -304,6 +304,9 @@ def main() -> int:
     if args.update == args.check:
         parser.error("choose exactly one of --update or --check")
 
+    # Refresh the production oleans before asking Lean for elaborated types or bodies.  This is
+    # required after an upstream source change because later imports otherwise see a stale API.
+    lake_build()
     decls = declarations()
     ledger = render_ledger(decls)
     validator = render_validator(decls)
@@ -328,7 +331,6 @@ def main() -> int:
     stale = [path for path, text in expected.items() if not path.exists() or path.read_text() != text]
     if stale:
         raise RuntimeError("stale generated artifacts: " + ", ".join(str(path) for path in stale))
-    lake_build()
     strict_compile()
     documentation_check()
     # Compile the committed validator as its own source gate.

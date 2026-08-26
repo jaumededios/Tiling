@@ -5622,6 +5622,73 @@ Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier : (K : Tiling
             (@Eq.{1} Tiling.Plane x
               (@HAdd.hAdd.{0, 0, 0} Tiling.Plane Tiling.Plane Tiling.Plane (@instHAdd.{0} Tiling.Plane Complex.instAdd)
                 y (Tiling.RationalPolygonal.integerPoint t)))))
+Tiling.RationalPolygonal.PolygonalRegion.locallyFinite_integerTranslates : ∀
+  (K : Tiling.RationalPolygonal.PolygonalRegion) (T : Set.{0} Tiling.RationalPolygonal.IntegerPlane),
+  @LocallyFinite.{0, 0} (@Set.Elem.{0} Tiling.RationalPolygonal.IntegerPlane T) Tiling.Plane
+    (@UniformSpace.toTopologicalSpace.{0} Tiling.Plane
+      (@PseudoMetricSpace.toUniformSpace.{0} Tiling.Plane
+        (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
+          (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
+            (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+              (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+    fun (t : @Set.Elem.{0} Tiling.RationalPolygonal.IntegerPlane T) =>
+    @HVAdd.hVAdd.{0, 0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (Set.{0} Tiling.Plane)
+      (@instHVAdd.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane)
+        (@Set.vaddSet.{0, 0} Tiling.Plane Tiling.Plane (@instVAddOfAdd.{0} Tiling.Plane Complex.instAdd)))
+      (Tiling.RationalPolygonal.integerPoint
+        (@Subtype.val.{1} Tiling.RationalPolygonal.IntegerPlane
+          (fun (x : Tiling.RationalPolygonal.IntegerPlane) =>
+            @Membership.mem.{0, 0} Tiling.RationalPolygonal.IntegerPlane (Set.{0} Tiling.RationalPolygonal.IntegerPlane)
+              (@Set.instMembership.{0} Tiling.RationalPolygonal.IntegerPlane) T x)
+          t))
+      (Tiling.RationalPolygonal.PolygonalRegion.support K)
+Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_closure_interior : ∀
+  (K : Tiling.RationalPolygonal.PolygonalRegion) (T : Set.{0} Tiling.RationalPolygonal.IntegerPlane),
+  @Eq.{1} (Set.{0} Tiling.Plane)
+    (@closure.{0} Tiling.Plane
+      (@UniformSpace.toTopologicalSpace.{0} Tiling.Plane
+        (@PseudoMetricSpace.toUniformSpace.{0} Tiling.Plane
+          (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
+            (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
+              (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+      (@interior.{0} Tiling.Plane
+        (@UniformSpace.toTopologicalSpace.{0} Tiling.Plane
+          (@PseudoMetricSpace.toUniformSpace.{0} Tiling.Plane
+            (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
+              (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+        (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T)))
+    (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T)
+Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_eq_of_ae_eq : ∀
+  (K : Tiling.RationalPolygonal.PolygonalRegion) {T₀ T₁ : Set.{0} Tiling.RationalPolygonal.IntegerPlane}
+  (h :
+    @Filter.EventuallyEq.{0, 0} Tiling.Plane Prop
+      (@MeasureTheory.ae.{0, 0} Tiling.Plane
+        (@MeasureTheory.Measure.{0} Tiling.Plane
+          (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Tiling.Plane
+            (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+              instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+              Complex.borelSpace)))
+        (@MeasureTheory.Measure.instFunLike.{0} Tiling.Plane
+          (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Tiling.Plane
+            (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+              instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+              Complex.borelSpace)))
+        (@MeasureTheory.Measure.instOuterMeasureClass.{0} Tiling.Plane
+          (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Tiling.Plane
+            (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+              instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+              Complex.borelSpace)))
+        (@MeasureTheory.MeasureSpace.volume.{0} Tiling.Plane
+          (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+            instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+            Complex.borelSpace)))
+      (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₀)
+      (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₁)),
+  @Eq.{1} (Set.{0} Tiling.Plane) (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₀)
+    (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₁)
 Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature : ∀
   (K : Tiling.RationalPolygonal.PolygonalRegion) (T : Set.{0} Tiling.RationalPolygonal.IntegerPlane)
   {u x : Tiling.Plane} {q : Tiling.RationalPolygonal.IntegerPlane}
@@ -7181,6 +7248,26 @@ Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_rele
           Complex.borelSpace)))
     (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₀)
     (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₁)
+Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_carrier_eq_iff : ∀
+  (K : Tiling.RationalPolygonal.PolygonalRegion) (T₀ T₁ : Set.{0} Tiling.RationalPolygonal.IntegerPlane),
+  Iff
+    (@Eq.{1} (Set.{0} Tiling.RationalPolygonal.IntegerPlane)
+      (@Tiling.RationalPolygonal.discreteCarrier.{0} Tiling.RationalPolygonal.IntegerPlane
+        (@Pi.addCommGroup.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+          fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddCommGroup)
+        (Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile K)
+        (Tiling.RationalPolygonal.markerTranslationSet
+          (Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount K) T₀))
+      (@Tiling.RationalPolygonal.discreteCarrier.{0} Tiling.RationalPolygonal.IntegerPlane
+        (@Pi.addCommGroup.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+          fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddCommGroup)
+        (Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile K)
+        (Tiling.RationalPolygonal.markerTranslationSet
+          (Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount K) T₁)))
+    (@Eq.{1} (Set.{0} Tiling.Plane) (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₀)
+      (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₁))
 Tiling.RationalPolygonal.rigidFrame : Finset.{0} Tiling.RationalPolygonal.IntegerPlane
 @Tiling.RationalPolygonal.rigidFrame_translation_differences_mem_lattice : ∀
   {T : Set.{0} Tiling.RationalPolygonal.IntegerPlane}

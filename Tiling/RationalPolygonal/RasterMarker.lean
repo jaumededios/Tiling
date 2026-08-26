@@ -1559,6 +1559,37 @@ theorem integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile
   apply K.integerTranslationCarrier_ae_eq_of_relevantSignatures
   exact (K.relevantPlanarRasterTile_discreteCarrier_eq_iff T₀ T₁).mp hcarrier
 
+/-- **Paper Lemma 3.1(iii).** Equality of the two planar raster carriers along coarse marker
+translations is equivalent to literal equality of the corresponding continuous polygonal
+carriers.  The forward implication first gives almost-everywhere equality and then uses local
+finiteness and regular closedness of arbitrary integer-translation carriers. -/
+theorem relevantPlanarRasterTile_carrier_eq_iff
+    (K : PolygonalRegion) (T₀ T₁ : Set IntegerPlane) :
+    discreteCarrier K.relevantPlanarRasterTile
+        (markerTranslationSet K.relevantSignatureCount T₀) =
+      discreteCarrier K.relevantPlanarRasterTile
+        (markerTranslationSet K.relevantSignatureCount T₁) ↔
+      K.integerTranslationCarrier T₀ = K.integerTranslationCarrier T₁ := by
+  constructor
+  · intro hraster
+    apply K.integerTranslationCarrier_eq_of_ae_eq
+    exact K.integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile hraster
+  · intro hcontinuous
+    apply (K.relevantPlanarRasterTile_discreteCarrier_eq_iff T₀ T₁).mpr
+    intro F hF
+    have hmeasure : volume (K.signatureFiber F) ≠ 0 :=
+      (K.mem_relevantSignatures_iff.mp hF).2
+    obtain ⟨u, hu⟩ := nonempty_of_measure_ne_zero hmeasure
+    have husignature : K.signature u = F :=
+      (K.mem_signatureFiber_iff.mp hu).2
+    rw [← husignature]
+    ext q
+    rw [← K.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature
+          T₀ (x := u + integerPoint q) (q := q) rfl,
+      ← K.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature
+          T₁ (x := u + integerPoint q) (q := q) rfl,
+      hcontinuous]
+
 end PolygonalRegion
 
 end Tiling.RationalPolygonal

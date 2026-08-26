@@ -288,6 +288,9 @@ set_option pp.universes true
 #check @Tiling.RationalPolygonal.PolygonalRegion.mem_signature_iff
 #check @Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier
 #check @Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff
+#check @Tiling.RationalPolygonal.PolygonalRegion.locallyFinite_integerTranslates
+#check @Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_closure_interior
+#check @Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_eq_of_ae_eq
 #check @Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature
 #check @Tiling.RationalPolygonal.PolygonalRegion.signature_add_integerPoint
 #check @Tiling.RationalPolygonal.PolygonalRegion.signature_subset_signatureWindow
@@ -409,6 +412,7 @@ set_option pp.universes true
 #check @Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantColoredRasterTile
 #check @Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantPlanarRasterTile
 #check @Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile
+#check @Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_carrier_eq_iff
 #check @Tiling.RationalPolygonal.rigidFrame
 #check @Tiling.RationalPolygonal.rigidFrame_translation_differences_mem_lattice
 #check @Tiling.RationalPolygonal.markerBlock_west_filler

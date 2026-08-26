@@ -18,9 +18,11 @@ remaining effective-input boundary.
 | singly/weakly/doubly periodic real set | `SinglyPeriodic`, `WeakPeriodicDecomposition`/`WeaklyPeriodic`, `DoublyPeriodic` | These use genuine real periods; integer-period embeddings and inverse affine transport are proved, not definitional identifications. |
 | periodic structure in `ℤ²` | `SetScalarPeriodic`, `QuantitativeWeakPeriodData`, and related Greenfeld--Tao declarations | The imported project results are genuine production theorems; no generated validator is imported. |
 
-The carrier comparison in the raster argument is deliberately almost-everywhere on continuous
-sets, matching the repository's `IsTiling` semantics.  Exact equality is retained on every
-discrete raster/signature carrier.
+The raster argument first obtains an almost-everywhere continuous carrier comparison, matching
+the repository's `IsTiling` semantics.  `integerTranslationCarrier_closure_interior` proves that
+arbitrary lattice-translation carriers are locally finite regular-closed unions, so
+`relevantPlanarRasterTile_carrier_eq_iff` upgrades this to the literal equality stated in paper
+Lemma 3.1(iii).
 
 ## Numbered results
 
@@ -42,7 +44,7 @@ discrete raster/signature carrier.
 | Section 3 discrete tiling | `TranslationalTilings.TilesUniverse` | proved upstream |
 | Lemma 3.1(i) | `RasterRigidity`: `PolygonalRegion.exists_integer_tiling_iff_relevantPlanarRasterTile` | proved |
 | Lemma 3.1(ii) | `RasterMarker`: `tiles_integerPoint_image_iff_relevantPlanarRasterTile` plus exact family decoding | proved |
-| Lemma 3.1(iii) | `RasterMarker`: `relevantPlanarRasterTile_discreteCarrier_eq_iff`, `integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile` | proved at exact discrete / a.e. continuous strength |
+| Lemma 3.1(iii) | `RasterMarker`: `relevantPlanarRasterTile_carrier_eq_iff` | proved with literal equality on both raster and continuous carriers |
 | Theorem 4.1 used by the paper | `TranslationalTilings.exists_quantitativeWeakPeriodData` and its validity API | proved upstream and consumed in `EarthquakeUniform` |
 | Definition 4.1 | `Earthquake`: `quakeTransfer`, `quakeGraph`, `QuakePlate`, carrier periodicity and minimality | proved |
 | Lemma 4.2 | `EarthquakeUniform`: `exists_uniformQuakePeriodicDecomposition` | proved, including singleton and normalization cases |
@@ -105,4 +107,3 @@ executable finite rational-polygon input type and a verified compiler from its v
 `RasterPresentation`.  Until that compiler is implemented or an independent review accepts the
 compiled raster as the formal input representation, Corollary 1.1 is recorded as complete only
 from the post-raster finite boundary, not as a bit-level decision procedure on raw vertex lists.
-
