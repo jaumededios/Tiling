@@ -924,6 +924,111 @@ theorem exists_family_tiling_of_planarRasterTile_coset {M : ℕ} (hM : 0 < M)
   rw [← hscaled] at hraster₀
   exact ⟨T, family_tilesUniverse_of_planarRasterTile hM tile T hraster₀⟩
 
+/-- On coarse translations, equality of carriers for the one planar raster tile is equivalent to
+equality of carriers for every member of the encoded color family.  This is the discrete carrier
+content of paper Lemma 3.1(iii). -/
+theorem discreteCarrier_planarRaster_eq_iff {M : ℕ} (hM : 0 < M)
+    (tile : Fin M → Finset IntegerPlane) (T₀ T₁ : Set IntegerPlane) :
+    discreteCarrier (planarRasterTile tile) (markerTranslationSet M T₀) =
+        discreteCarrier (planarRasterTile tile) (markerTranslationSet M T₁) ↔
+      ∀ i, discreteCarrier (tile i) T₀ = discreteCarrier (tile i) T₁ := by
+  have decode (A B : Set IntegerPlane)
+      (hcarrier : discreteCarrier (planarRasterTile tile) (markerTranslationSet M A) ⊆
+        discreteCarrier (planarRasterTile tile) (markerTranslationSet M B)) :
+      ∀ i, discreteCarrier (tile i) A ⊆ discreteCarrier (tile i) B := by
+    intro i x hx
+    obtain ⟨g, hg, t, ht, hxEq⟩ := mem_discreteCarrier_iff.mp hx
+    obtain ⟨s, hsi⟩ := markerBlock_nonempty hM i
+    let X : IntegerPlane := markerScale M x + s
+    have hX₀ : X ∈
+        discreteCarrier (planarRasterTile tile) (markerTranslationSet M A) := by
+      refine ⟨markerScale M g + s,
+        mem_planarRasterTile_iff.mpr ⟨i, g, hg, s, hsi, rfl⟩,
+        markerScale M t, ⟨t, ht, rfl⟩, ?_⟩
+      dsimp only [X]
+      rw [hxEq, markerScale_add]
+      abel
+    obtain ⟨r, hr, u, hu, hXEq⟩ :=
+      mem_discreteCarrier_iff.mp (hcarrier hX₀)
+    obtain ⟨j, g', hg', s', hs'j, hrEq⟩ :=
+      mem_planarRasterTile_iff.mp hr
+    obtain ⟨t', ht', ht'Eq⟩ := mem_markerTranslationSet_iff.mp hu
+    have hsModified : s ∈ modifiedMarkerSquare M := by
+      rw [← markerUnion_eq_modifiedMarkerSquare hM, markerUnion,
+        Finset.mem_biUnion]
+      exact ⟨i, Finset.mem_univ i, hsi⟩
+    have hs'Modified : s' ∈ modifiedMarkerSquare M := by
+      rw [← markerUnion_eq_modifiedMarkerSquare hM, markerUnion,
+        Finset.mem_biUnion]
+      exact ⟨j, Finset.mem_univ j, hs'j⟩
+    have hXSubS : X - s ∈ markerLattice M := by
+      rw [mem_markerLattice_iff]
+      exact ⟨x, by dsimp only [X]; abel⟩
+    have hXSubS' : X - s' ∈ markerLattice M := by
+      rw [mem_markerLattice_iff]
+      refine ⟨g' + t', ?_⟩
+      change markerScale M (g' + t') = X - s'
+      rw [markerScale_add, ht'Eq]
+      calc
+        markerScale M g' + u = (markerScale M g' + s') + u - s' := by abel
+        _ = r + u - s' := by rw [hrEq]
+        _ = X - s' := by rw [← hXEq]
+    obtain ⟨chosen, hchosen, hchosenUnique⟩ :=
+      existsUnique_tile_representation (modifiedMarkerSquare_tiles_markerLattice M) X
+    have hss' : s = s' :=
+      (hchosenUnique s ⟨hsModified, hXSubS⟩).trans
+        (hchosenUnique s' ⟨hs'Modified, hXSubS'⟩).symm
+    have hij : i = j := by
+      by_contra hij
+      have hnot : s ∉ markerBlock j :=
+        Finset.disjoint_left.mp (markerBlock_disjoint hij) hsi
+      exact hnot (hss' ▸ hs'j)
+    subst j
+    have hxEq' : x = g' + t' := by
+      apply markerScale_injective M
+      calc
+        markerScale M x = X - s := by dsimp only [X]; abel
+        _ = X - s' := by rw [hss']
+        _ = markerScale M (g' + t') := by
+          rw [markerScale_add, ht'Eq]
+          calc
+            X - s' = r + u - s' := by rw [hXEq]
+            _ = (markerScale M g' + s') + u - s' := by rw [hrEq]
+            _ = markerScale M g' + u := by abel
+    exact mem_discreteCarrier_iff.mpr ⟨g', hg', t', ht', hxEq'⟩
+  have encode (A B : Set IntegerPlane)
+      (hfamily : ∀ i, discreteCarrier (tile i) A ⊆ discreteCarrier (tile i) B) :
+      discreteCarrier (planarRasterTile tile) (markerTranslationSet M A) ⊆
+        discreteCarrier (planarRasterTile tile) (markerTranslationSet M B) := by
+    intro X hX
+    obtain ⟨r, hr, u, hu, hXEq⟩ := mem_discreteCarrier_iff.mp hX
+    obtain ⟨i, g, hg, s, hsi, hrEq⟩ := mem_planarRasterTile_iff.mp hr
+    obtain ⟨t, ht, htEq⟩ := mem_markerTranslationSet_iff.mp hu
+    have hgt₀ : g + t ∈ discreteCarrier (tile i) A :=
+      ⟨g, hg, t, ht, rfl⟩
+    obtain ⟨g', hg', t', ht', hgtEq⟩ :=
+      mem_discreteCarrier_iff.mp (hfamily i hgt₀)
+    refine ⟨markerScale M g' + s,
+      mem_planarRasterTile_iff.mpr ⟨i, g', hg', s, hsi, rfl⟩,
+      markerScale M t', ⟨t', ht', rfl⟩, ?_⟩
+    calc
+      X = r + u := hXEq
+      _ = (markerScale M g + s) + markerScale M t := by rw [hrEq, htEq]
+      _ = markerScale M (g + t) + s := by rw [markerScale_add]; abel
+      _ = markerScale M (g' + t') + s := by rw [hgtEq]
+      _ = (markerScale M g' + s) + markerScale M t' := by
+        rw [markerScale_add]
+        abel
+  constructor
+  · intro hcarrier i
+    apply Set.Subset.antisymm
+    · exact decode T₀ T₁ (by rw [hcarrier]) i
+    · exact decode T₁ T₀ (by rw [hcarrier]) i
+  · intro hfamily
+    apply Set.Subset.antisymm
+    · exact encode T₀ T₁ (fun i ↦ by rw [hfamily i])
+    · exact encode T₁ T₀ (fun i ↦ by rw [hfamily i])
+
 section ColoredRaster
 
 /-- Package a finite family of lattice tiles as one tile in `ℤ² × ZMod M`, with the second
