@@ -2,58 +2,69 @@
 
 ## Fundamental-cell signatures
 
-For a bounded measurable region `K` and a fundamental-cell point `u`, define the finite signature
+For a bounded polygonal region `K` and `u : Plane`, production defines
 
-```text
-signature K u = {z ∈ ℤ² | u + z ∈ K}.
+```lean
+K.signature u : Finset IntegerPlane
 ```
 
-Boundedness supplies one finite box containing every possible signature.  Hence the set of
-signatures is finite without constructing the planar line arrangement from the exposition.
+whose members are exactly the lattice points `z` for which `u + integerPoint z ∈ K.support`.
+Compactness bounds every signature by the finite `signatureWindow`.  `candidateSignatures` is the
+finite powerset of that window, `signatureFiber K F` is the corresponding measurable unit-cell
+fiber, and `relevantSignatures` retains precisely the fibers of nonzero volume.
 
-The relevant colors are precisely the signatures whose fibers inside the half-open unit cell have
-positive volume.  Every other fiber is null, and there are only finitely many of them.  This gives:
+The key measure-theoretic chain proves:
 
 ```text
-K tiles by an integer translation set T
-  ↔ every positive-measure signature tiles ℤ² by the same T.
+K tiles by integerPoint '' T
+  ↔ almost every signature tiles ℤ² by T
+  ↔ every relevant signature tiles ℤ² by T.
 ```
 
-This is the measure-theoretic form of the paper's partition into `P₀, …, Pₘ₋₁`.  For a polygonal
-region the positive-measure fibers are unions of the paper's open cells, so it has the same tiling
-content.
+The last equivalence is `tiles_integerPoint_image_iff_relevantSignatures`.  The family is
+nonempty, and one member is explicitly chosen nonempty for marker rigidity.
 
-## Marker family
+## Marker family and single raster tile
 
-For `M` colors choose the least `k > 0` with `M ≤ k²` and put `N = 3k + 4`.  Production implements
-the paper's sets exactly:
+`RasterMarker` enumerates the relevant signatures and constructs a planar marker block for each
+color.  Its square has side `3M + 4`; nonzero colors use separated eight-point rings, while the
+zero color is the square remainder with two protrusions and two matching holes.  The module proves
+block disjointness, the exact modified-square union, marker-lattice tiling, and the forward
+simultaneous-family encoding.
 
-- for `1 ≤ i < M`, `Sᵢ` is the eight-point ring around `(3aᵢ,3bᵢ)`;
-- `S₀` is the remaining `N × N` square, with protrusions `(N,1),(1,N)` and holes
-  `(0,1),(1,0)`.
+`RigidFrame` proves that the modified-square frame has no relative placement freedom modulo the
+marker lattice.  `RasterRigidity` combines the frame and fillers to show that every exact tiling by
+the raster tile lies in one marker-lattice coset, then decodes that coset to one common translation
+set for all source signatures.
 
-The marker proof is split into:
+The canonical finite tile is
 
-1. disjointness and the exact modified-square union;
-2. rigidity: every tiling by a raster tile containing a nonempty `S₀` layer has all translation
-   vectors in one coset of `Nℤ²`;
-3. residue decoding: after normalization to that coset, residue `Sᵢ` reads exactly the tiling
-   equation for color `i`; and
-4. carrier decoding for arbitrary subsets, used by Lemma 3.1(iii).
+```lean
+K.relevantPlanarRasterTile : Finset IntegerPlane.
+```
 
-## Canonical raster data
+It is a genuine definition, not a structure field whose specification is assumed.
 
-`RasterEncoding K` records only constructed data and proved specifications:
+## Paper Lemma 3.1
 
-- positive `N`;
-- a finite integer tile `F`;
-- the finite positive-measure signature family; and
-- exact proofs of Lemma 3.1(i)--(iii).
+- Part (i), existence: `exists_integer_tiling_iff_relevantPlanarRasterTile` proves that `K` has an
+  integer-translation tiling iff its single raster tile has an arbitrary exact lattice tiling.
+- Part (ii), same translation data: `tiles_integerPoint_image_iff_relevantPlanarRasterTile` proves
+  the equivalence for the explicitly scaled marker translation set; rigidity supplies the converse
+  for an arbitrary raster tiling.
+- Part (iii), carriers: `relevantPlanarRasterTile_discreteCarrier_eq_iff` gives exact equality for
+  every relevant discrete carrier, and
+  `integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile` transports this to the continuous
+  carrier at the a.e. strength of `PolygonalRegion.Tiles`.
 
-The structure itself is not an assumption to the paper-facing theorems.  Production proves
-`exists_rasterEncoding` from bounded polygonality and integer normalization, then the three public
-lemmas project its fields.
+The construction has no empty-color escape hatch: `relevantSignatures_nonempty` and
+`distinguishedRelevantSignature_nonempty` provide a genuine nonempty zero marker layer.
 
-The empty-signature case is explicit: it certifies that no integer translation tiling exists and
-the raster tile is chosen to be nontiling.  No proof relies on an unspoken nonempty color.
+## Executable boundary
+
+`Decision.RasterPresentation` stores the resulting `Finset IntegerPlane`; `Represents P K` states
+that it is definitionally the canonical normalized raster.  `tileDecision` and its exact counted
+cost are executable on this finite data.  Constructing the raster from the semantic real-set
+structure is noncomputable, so a raw rational-coordinate compiler is tracked separately in the
+comparator rather than being silently identified with this stage.
 

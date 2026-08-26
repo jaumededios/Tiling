@@ -15,32 +15,34 @@ regular-closed/local-finite bridge.
 
 ## Monotile placement sets
 
-For `T : Set Plane`, the corresponding `ProtoTiling Plane Unit` is
+For `T : Set Plane`, `PolygonalRegion.placements T` is the corresponding
+`ProtoTiling Plane Unit`:
 
 ```lean
 {p | p.1 ∈ T}
 ```
 
-with the sole unit label.  The API exposes both directions between membership in `T` and membership
-of `(t, ())` in this placement set.  `IsMonotileTiling K T` abbreviates `Tiling.IsTiling` for this
-family, while a separate theorem gives its countable, unique-representation-a.e. characterization.
+with the sole unit label.  `PolygonalRegion.Tiles K T` abbreviates `Tiling.IsTiling` for this
+family.  `Tiles.countable` proves countability, while `Tiles.ae_existsUnique_translation` supplies
+the unique-representation-a.e. form used by rasterization.
 
 ## Relative rationality
 
-The source definition is not “all vertices are absolutely rational”.  The correct predicate is
+The source notion is not “all vertices are absolutely rational”.  The predicate
+`IsRelativelyRational` is
 
 ```text
 there is v in vertexSet K such that every w in vertexSet K has w - v in ℚ².
 ```
 
-Finiteness of `vertexSet K` supplies a common positive denominator `n`.  Translation by `-v` and
-dilation by `n` produce an integer-vertex polygonal region.  The normalization certificate records
-the forward and inverse affine maps and proves transport of:
+The paper-facing structure `RationalPolygonalRegion` stores the selected anchor, one positive
+common denominator, and the proof that every normalized intrinsic vertex is integral.  Translation
+by the anchor and dilation by that denominator produce `normalizedRegion`.  The API defines the
+forward and inverse translation maps and proves transport of:
 
-- the tiling relation;
-- emptiness/nonemptiness of the tiling space;
-- single, weak, and double periodicity; and
-- the finite input presentation used by the decision procedure.
+- the tiling relation in both directions;
+- weak periodicity under inverse normalization; and
+- double periodicity under inverse normalization.
 
 The normalizing linear factor is nonzero and positive.  Every use of the inverse map cites that
 fact explicitly.
@@ -54,7 +56,6 @@ additive map
 z ↦ (z 0 : ℝ) + (z 1 : ℝ) I.
 ```
 
-The image is packaged as an additive subgroup of `ℂ`, with an additive equivalence from the
-discrete plane.  Scaled lattices use a positive natural denominator and never divide by an
-unproved nonzero scalar.
-
+The image is packaged as `integerLattice : AddSubgroup Plane`; `mem_integerLattice_iff` and
+`integerPoint_injective` provide the exact bridge used in the arithmetic and period proofs.
+Inverse normalization always cites `denominator_pos` before dividing.

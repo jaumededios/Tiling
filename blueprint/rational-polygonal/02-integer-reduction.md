@@ -21,7 +21,7 @@ all translation coordinates are uniformly discrete.
 
 ## Lemmas 2.5 and 2.7
 
-The following stronger results are already proved:
+The following stronger finite-family results are proved in the geometry layer:
 
 ```lean
 PolygonalProtoTiling.exists_isSlidingDirection
@@ -30,18 +30,19 @@ PolygonalProtoTiling.exists_connected_shift
 PolygonalProtoTiling.exists_connected_tiling
 ```
 
-The new monotile wrappers retain the constructed direction and shift, then project the shifted
-unit-labelled placement set back to a set of translation vectors.
+`PolygonalRegion.exists_connected_tiling` projects the shifted unit-labelled placement set back
+to translation vectors.  For Theorem 1.2, `ContinuousEarthquake` additionally retains the actual
+direction, component shift, and old plate partition rather than discarding those witnesses.
 
 ## Lemma 2.2
 
 Starting from any tiling by an integer polygonal region:
 
-1. use `exists_connected_shift` to obtain a connected replacement tiling;
+1. use the connected-shift theorem to obtain a connected replacement tiling;
 2. translate the replacement so that one placement is at the origin;
 3. apply Lemma 2.4 to put every translation in `ℤ²`; and
-4. transport the set through the integer-plane additive equivalence.
+4. state integrality through the explicit `integerPoint`/`integerLattice` embedding.
 
-The output includes both the continuous integer translation set and the corresponding discrete
-set, because rasterization and the earthquake argument consume different views.
-
+`exists_integer_tiling` returns the continuous translation set with an integrality proof.
+`exists_integer_signature_tiling` and `IntegerSlidingReduction` subsequently package the discrete
+coordinates required, respectively, by rasterization and the earthquake compatibility argument.

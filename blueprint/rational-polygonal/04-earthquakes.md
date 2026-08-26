@@ -1,51 +1,62 @@
-# 4. Discrete earthquakes
+# 4. Discrete earthquakes and continuous compatibility
 
 ## Canonical decomposition
 
-Let `F` tile `ℤ²` with translation set `T`, and let `v ≠ 0`.  Translation by `v` sends each point
-`f+t` to a uniquely represented point `f'+t'`.  The quake graph joins translation vertices `t,t'`
-when such a one-step transfer occurs (and uses the symmetric closure).  Tectonic plates are the
-connected components of this graph.
+Let `F` tile `ℤ²` with translation set `T`, and let `v ≠ 0`.  `quakeTransfer F T v t t'` records
+one transfer forced by moving a represented lattice point by `v`; `quakeGraph` is its symmetric
+simple graph on the subtype `T`.  A `QuakePlate` is a connected component of this graph and
+`quakePlateTranslations` forgets the subtype witness.
 
-This construction proves the paper's footnote rather than assuming it:
+`Earthquake.lean` proves the clauses needed for paper Definition 4.1:
 
-- components partition `T`;
-- the carrier `F + P` of every component is `ℤv`-periodic;
-- any subset of a component with `ℤv`-periodic carrier is empty or the whole component; and
-- any decomposition satisfying the two clauses of Definition 4.1 has exactly these components.
+- the plate translation sets partition `T` and are pairwise disjoint;
+- `discreteCarrier F (quakePlateTranslations C)` is invariant under `v`;
+- a periodic carrier subset containing one point of `C` contains the whole component
+  (`quakePlateTranslations_subset_of_mem_periodic`); and
+- independent integer multiples of `v` assigned to the components preserve exact tiling
+  (`tilesUniverse_quakeShiftedTranslations`).
 
-## Earthquake shifts
+Thus the tectonic plates are constructed canonically; their defining properties are not assumed.
 
-Assign an integer displacement along `v` to every tectonic plate.  Because each plate carrier is
-invariant and the carriers partition the exactly tiled universe, independent shifts preserve the
-tiling.  The special family `Tᵏ` fixes one plate and shifts every other plate by `k v`.
+## Uniform decomposition (Lemma 4.2)
 
-## Lemma 4.2
+`EarthquakeUniform` applies `exists_quantitativeWeakPeriodData` to the first `m + 1` indexed quake
+shifts.  On every lattice coset two indices select the same one of `m` directions.  Complete
+orbits inherit that selected period; the residual incomplete orbits receive the nonzero factorial
+multiple of the quake direction.
 
-Apply the proved uniform Greenfeld--Tao structure theorem to every `Tᵏ`, using one common lattice
-and one common finite list of pairwise incommensurable periods.  On each lattice coset, pigeonhole
-two of the first `m+1` quake shifts which select the same period.
+`UniformQuakePeriodicDecomposition` records one finite family of nonzero, pairwise
+incommensurable periods, and for every quake plate a pairwise-disjoint partition by subsets with
+those periods.  The proof handles:
 
-For each non-quake-parallel period `hⱼ`, split a fixed plate into:
+- the case where no Greenfeld--Tao direction is parallel to the quake direction;
+- the parallel case, where the two commensurable parts are merged and the unique parallel period
+  is replaced by a common multiple;
+- singleton finite tiles directly; and
+- arbitrary nonempty tiles by translating a chosen tile point to the origin.
 
-- the complete `hⱼ`-orbits, already `hⱼ`-periodic; and
-- the incomplete orbits.
+The terminal declaration is `exists_uniformQuakePeriodicDecomposition`.
 
-The two equal period selections move every incomplete orbit by a nonzero multiple of the quake
-direction.  Multiplying the finitely many coset-specific displacements gives one common nonzero
-quake-parallel period.  The residual part of the plate has that period.  Thus every plate is a
-disjoint union using the same finite list of period directions.
+## Compatibility with the original continuous tiling
 
-All signs and zero cases in the paper's product
-`∏Γ (kΓ-k'Γ)` are normalized in Lean by using the positive differences `k'Γ-kΓ`; nonzeroness is
-proved before forming the product.
+Theorem 1.2 requires periodicity of the *given* translation set, not merely existence of a nicer
+tiling.  Three modules retain this information:
 
-## Continuous compatibility
+1. `ContinuousEarthquake` defines the original continuous plate translation sets, proves their
+   exact partition and pairwise disjointness, chooses a nonzero integer vector parallel to their
+   common sliding direction, and proves component shifts preserve the tiling and the plate
+   partition.
+2. `IntegerSlidingReduction` packages a connected based integer realization while retaining, for
+   every old continuous plate, its exact lattice image and the common period of all signature
+   carriers.  `quakePlateTranslations_subset_owner` then proves each canonical quake plate lies
+   in one old plate.
+3. `WeakPeriodicity` applies the uniform decomposition on every relevant signature, unshifts each
+   periodic part by its old plate's displacement, and unions all pieces carrying the same period.
+   `assembledQuakePart_periodic`, `assembledQuakePart_pairwiseDisjoint`, and
+   `iUnion_assembledQuakePart` prove that the result is a finite disjoint decomposition of the
+   original translation set.
 
-After sliding a rational polygonal tiling to an integer tiling, every old continuous plate becomes
-a subset of the integer translation set.  A rational sliding-direction theorem supplies a nonzero
-integer vector parallel to the real sliding line.  Lemma 3.1(iii) then makes its raster carrier
-periodic, so the continuous plate is a union of canonical discrete quake components.  Lemma 4.2
-decomposes those components using one finite period list.  Translating the plates back preserves
-their periods.
+Finally `Tiles.weaklyPeriodic_of_integerVertices` proves the integer-vertex theorem and
+`RationalPolygonalRegion.Tiles.weaklyPeriodic` transports it through inverse rational
+normalization.
 
