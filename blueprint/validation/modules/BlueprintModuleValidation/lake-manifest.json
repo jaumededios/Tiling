@@ -1,0 +1,90 @@
+{
+ "version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages": [
+  {
+   "type": "path",
+   "scope": "",
+   "name": "mathlib",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/mathlib",
+   "configFile": "lakefile.lean"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "plausible",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/plausible",
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "LeanSearchClient",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/LeanSearchClient",
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "importGraph",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/importGraph",
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "proofwidgets",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/proofwidgets",
+   "configFile": "lakefile.lean"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "aesop",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/aesop",
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "Qq",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/Qq",
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover-community",
+   "name": "batteries",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/batteries",
+   "configFile": "lakefile.toml"
+  },
+  {
+   "type": "path",
+   "scope": "leanprover",
+   "name": "Cli",
+   "manifestFile": "lake-manifest.json",
+   "inherited": true,
+   "dir": "/home/codex/Documents/Codex/2026-08-14/Tiling/.lake/packages/Cli",
+   "configFile": "lakefile.toml"
+  }
+ ],
+ "name": "BlueprintModuleValidation",
+ "lakeDir": ".lake",
+ "fixedToolchain": false
+}

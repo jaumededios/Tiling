@@ -1,7 +1,7 @@
 name = "Tiling"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Tiling"]
+defaultTargets = ["Tiling", "TranslationalTilings"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -16,3 +16,6 @@ rev = "v4.33.0"
 
 [[lean_lib]]
 name = "Tiling"
+
+[[lean_lib]]
+name = "TranslationalTilings"
