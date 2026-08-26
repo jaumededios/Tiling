@@ -28,6 +28,36 @@ theorem isCompact_closedUnitCell : IsCompact closedUnitCell := by
   exact Complex.equivRealProdCLM.toHomeomorph.isCompact_preimage.2
     (isCompact_Icc.prod isCompact_Icc)
 
+/-- The fundamental cell has positive planar volume. -/
+theorem volume_closedUnitCell_ne_zero : volume closedUnitCell ≠ 0 := by
+  let c : Plane := (2 : ℝ)⁻¹ + (2 : ℝ)⁻¹ * Complex.I
+  let ball : Set Plane := Metric.ball c (4 : ℝ)⁻¹
+  have hballNonempty : ball.Nonempty := by
+    exact ⟨c, Metric.mem_ball_self (by norm_num)⟩
+  have hballMeasure : volume ball ≠ 0 :=
+    Metric.isOpen_ball.measure_ne_zero volume hballNonempty
+  have hballSubset : ball ⊆ closedUnitCell := by
+    intro z hz
+    have hnorm : ‖z - c‖ < (4 : ℝ)⁻¹ := by
+      simpa only [ball, Metric.mem_ball, Complex.dist_eq] using hz
+    have hre : |z.re - (2 : ℝ)⁻¹| < (4 : ℝ)⁻¹ := by
+      apply lt_of_le_of_lt _ hnorm
+      simpa only [c, Complex.add_re, Complex.ofReal_re, Complex.mul_re,
+        Complex.I_re, Complex.I_im, mul_zero, Complex.ofReal_im, zero_mul,
+        sub_zero, add_zero, Complex.sub_re] using Complex.abs_re_le_norm (z - c)
+    have him : |z.im - (2 : ℝ)⁻¹| < (4 : ℝ)⁻¹ := by
+      apply lt_of_le_of_lt _ hnorm
+      simpa only [c, Complex.add_im, Complex.ofReal_im, Complex.mul_im,
+        Complex.I_re, Complex.I_im, mul_one, Complex.ofReal_re, zero_mul,
+        zero_add, add_zero, Complex.sub_im] using Complex.abs_im_le_norm (z - c)
+    rw [closedUnitCell]
+    change (z.re, z.im) ∈ Set.Icc (0 : ℝ) 1 ×ˢ Set.Icc (0 : ℝ) 1
+    rw [Set.mem_prod, Set.mem_Icc, Set.mem_Icc]
+    rw [abs_lt] at hre him
+    constructor <;> constructor <;> norm_num at hre him ⊢ <;> linarith
+  intro hcellZero
+  exact hballMeasure (MeasureTheory.measure_mono_null hballSubset hcellZero)
+
 namespace PolygonalRegion
 
 /-- Almost every point of a monotile tiling belongs to exactly one translated copy. -/
@@ -147,6 +177,137 @@ theorem signature_mem_candidateSignatures (K : PolygonalRegion) {u : Plane}
   intro z hz
   simpa only [Set.Finite.mem_toFinset] using
     K.signature_subset_signatureWindow hu hz
+
+/-- Points of the fundamental cell which have one specified finite signature. -/
+def signatureFiber (K : PolygonalRegion) (F : Finset IntegerPlane) : Set Plane :=
+  closedUnitCell ∩ {u | K.signature u = F}
+
+@[simp]
+theorem mem_signatureFiber_iff {K : PolygonalRegion} {F : Finset IntegerPlane}
+    {u : Plane} :
+    u ∈ K.signatureFiber F ↔ u ∈ closedUnitCell ∧ K.signature u = F :=
+  Iff.rfl
+
+private theorem measurableSet_signature_membership
+    (K : PolygonalRegion) (z : IntegerPlane) :
+    MeasurableSet {u : Plane | z ∈ K.signature u} := by
+  have hcontinuous : Continuous (fun u : Plane ↦ u + integerPoint z) :=
+    continuous_id.add continuous_const
+  have heq : {u : Plane | z ∈ K.signature u} =
+      (fun u : Plane ↦ u + integerPoint z) ⁻¹' K.support := by
+    ext u
+    exact mem_signature_iff
+  rw [heq]
+  exact K.isPolygonal.isClosed.measurableSet.preimage hcontinuous.measurable
+
+/-- Every signature fiber is measurable. -/
+theorem measurableSet_signatureFiber (K : PolygonalRegion)
+    (F : Finset IntegerPlane) :
+    MeasurableSet (K.signatureFiber F) := by
+  let condition : IntegerPlane → Set Plane := fun z ↦
+    if z ∈ F then {u | z ∈ K.signature u} else {u | z ∉ K.signature u}
+  have hcondition : ∀ z, MeasurableSet (condition z) := by
+    intro z
+    by_cases hz : z ∈ F
+    · simpa only [condition, if_pos hz] using measurableSet_signature_membership K z
+    · dsimp only [condition]
+      rw [if_neg hz]
+      change MeasurableSet ({u : Plane | z ∈ K.signature u}ᶜ)
+      exact (measurableSet_signature_membership K z).compl
+  have heq : {u : Plane | K.signature u = F} = ⋂ z, condition z := by
+    ext u
+    simp only [Set.mem_iInter]
+    constructor
+    · intro h z
+      by_cases hz : z ∈ F
+      · have hzsig : z ∈ K.signature u := by
+          rw [h]
+          exact hz
+        dsimp only [condition]
+        rw [if_pos hz]
+        exact hzsig
+      · have hzsig : z ∉ K.signature u := by
+          rw [h]
+          exact hz
+        dsimp only [condition]
+        rw [if_neg hz]
+        exact hzsig
+    · intro h
+      apply Finset.ext
+      intro z
+      specialize h z
+      by_cases hz : z ∈ F
+      · have hzsig : z ∈ K.signature u := by
+          dsimp only [condition] at h
+          rw [if_pos hz] at h
+          exact h
+        exact iff_of_true hzsig hz
+      · have hzsig : z ∉ K.signature u := by
+          dsimp only [condition] at h
+          rw [if_neg hz] at h
+          exact h
+        exact iff_of_false hzsig hz
+  rw [signatureFiber, heq]
+  exact isCompact_closedUnitCell.isClosed.measurableSet.inter
+    (MeasurableSet.iInter hcondition)
+
+/-- The signatures occurring on a positive-measure subset of the fundamental cell. -/
+noncomputable def relevantSignatures (K : PolygonalRegion) :
+    Finset (Finset IntegerPlane) :=
+  K.candidateSignatures.filter fun F ↦ volume (K.signatureFiber F) ≠ 0
+
+@[simp]
+theorem mem_relevantSignatures_iff {K : PolygonalRegion}
+    {F : Finset IntegerPlane} :
+    F ∈ K.relevantSignatures ↔
+      F ∈ K.candidateSignatures ∧ volume (K.signatureFiber F) ≠ 0 := by
+  classical
+  simp only [relevantSignatures, Finset.mem_filter]
+
+/-- A conull simultaneous signature tiling tiles each positive-measure signature exactly. -/
+theorem tilesUniverse_relevantSignatures_of_ae
+    (K : PolygonalRegion) {T : Set IntegerPlane}
+    (hT : ∀ᵐ u, TilesUniverse (K.signature u) T) :
+    ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
+  intro F hF
+  have hmeasure : volume (K.signatureFiber F) ≠ 0 :=
+    (mem_relevantSignatures_iff.mp hF).2
+  obtain ⟨u, huFiber, huTiles⟩ :=
+    Measure.exists_mem_of_measure_ne_zero_of_ae hmeasure (ae_restrict_of_ae hT)
+  rw [mem_signatureFiber_iff] at huFiber
+  rwa [huFiber.2] at huTiles
+
+/-- Almost every point of the fundamental cell has a positive-measure signature. -/
+theorem ae_signature_mem_relevantSignatures (K : PolygonalRegion) :
+    ∀ᵐ u ∂volume.restrict closedUnitCell,
+      K.signature u ∈ K.relevantSignatures := by
+  classical
+  have havoid : ∀ᵐ u ∂volume,
+      ∀ F ∈ K.candidateSignatures,
+        volume (K.signatureFiber F) = 0 → u ∉ K.signatureFiber F := by
+    rw [eventually_all_finset]
+    intro F hF
+    by_cases hzero : volume (K.signatureFiber F) = 0
+    · filter_upwards [measure_eq_zero_iff_ae_notMem.mp hzero] with u hu
+      exact fun _ ↦ hu
+    · exact Filter.Eventually.of_forall fun _ h ↦ (hzero h).elim
+  have hcell : MeasurableSet closedUnitCell :=
+    isCompact_closedUnitCell.isClosed.measurableSet
+  filter_upwards [ae_restrict_of_ae havoid, ae_restrict_mem hcell]
+    with u huAvoid huCell
+  rw [mem_relevantSignatures_iff]
+  have hcandidate := K.signature_mem_candidateSignatures huCell
+  refine ⟨hcandidate, ?_⟩
+  intro hzero
+  exact huAvoid (K.signature u) hcandidate hzero ⟨huCell, rfl⟩
+
+/-- Every polygonal region has at least one positive-measure fundamental-cell signature. -/
+theorem relevantSignatures_nonempty (K : PolygonalRegion) :
+    K.relevantSignatures.Nonempty := by
+  let _ : (ae (volume.restrict closedUnitCell)).NeBot :=
+    ae_restrict_neBot.mpr volume_closedUnitCell_ne_zero
+  obtain ⟨u, hu⟩ := K.ae_signature_mem_relevantSignatures.exists
+  exact ⟨K.signature u, hu⟩
 
 /-- Membership in a continuously placed tile is the corresponding raster-signature membership. -/
 theorem mem_placedTile_integerPoint_iff_signature
