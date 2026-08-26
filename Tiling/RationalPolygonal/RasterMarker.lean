@@ -1194,11 +1194,75 @@ noncomputable def relevantColoredRasterTile (K : PolygonalRegion) :
     Finset (IntegerPlane × ZMod K.relevantSignatureCount) :=
   coloredRasterTile K.relevantSignatureAt
 
+/-- A canonical positive-measure signature containing a lattice point. -/
+noncomputable def distinguishedRelevantSignature (K : PolygonalRegion) :
+    {F // F ∈ K.relevantSignatures} :=
+  ⟨Classical.choose K.exists_nonempty_relevantSignature,
+    (Classical.choose_spec K.exists_nonempty_relevantSignature).1⟩
+
+/-- The distinguished signature is nonempty. -/
+theorem distinguishedRelevantSignature_nonempty (K : PolygonalRegion) :
+    (K.distinguishedRelevantSignature : Finset IntegerPlane).Nonempty :=
+  (Classical.choose_spec K.exists_nonempty_relevantSignature).2
+
+/-- The zero index in the nonempty relevant-signature enumeration. -/
+def relevantSignatureZero (K : PolygonalRegion) : Fin K.relevantSignatureCount :=
+  ⟨0, K.relevantSignatureCount_pos⟩
+
+/-- Index of the distinguished nonempty signature in the original enumeration. -/
+noncomputable def distinguishedRelevantIndex (K : PolygonalRegion) :
+    Fin K.relevantSignatureCount :=
+  Classical.choose
+    (K.exists_relevantSignatureAt_eq K.distinguishedRelevantSignature.property)
+
+/-- The distinguished index enumerates the distinguished signature. -/
+theorem relevantSignatureAt_distinguishedRelevantIndex (K : PolygonalRegion) :
+    K.relevantSignatureAt K.distinguishedRelevantIndex =
+      K.distinguishedRelevantSignature :=
+  Classical.choose_spec
+    (K.exists_relevantSignatureAt_eq K.distinguishedRelevantSignature.property)
+
+/-- Reorder the arbitrary finite enumeration so that the distinguished nonempty signature has
+color zero. -/
+noncomputable def relevantPlanarSignaturePermutation (K : PolygonalRegion) :
+    Equiv.Perm (Fin K.relevantSignatureCount) :=
+  Equiv.swap K.relevantSignatureZero K.distinguishedRelevantIndex
+
+/-- Canonical signature enumeration used by the planar rigid marker, with a nonempty zero layer. -/
+noncomputable def relevantPlanarSignatureAt (K : PolygonalRegion)
+    (i : Fin K.relevantSignatureCount) : Finset IntegerPlane :=
+  K.relevantSignatureAt (K.relevantPlanarSignaturePermutation i)
+
+/-- The zero color of the planar signature enumeration is nonempty. -/
+theorem relevantPlanarSignatureAt_zero_nonempty (K : PolygonalRegion) :
+    (K.relevantPlanarSignatureAt K.relevantSignatureZero).Nonempty := by
+  rw [relevantPlanarSignatureAt, relevantPlanarSignaturePermutation]
+  simp only [Equiv.swap_apply_left]
+  rw [K.relevantSignatureAt_distinguishedRelevantIndex]
+  exact K.distinguishedRelevantSignature_nonempty
+
+/-- The reordered planar enumeration still lists exactly the relevant signatures. -/
+theorem relevantPlanarSignatureAt_tilesUniverse_iff
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    (∀ i, TilesUniverse (K.relevantPlanarSignatureAt i) T) ↔
+      ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
+  constructor
+  · intro h F hF
+    obtain ⟨j, hj⟩ := K.exists_relevantSignatureAt_eq hF
+    let i := K.relevantPlanarSignaturePermutation.symm j
+    have hperm : K.relevantPlanarSignaturePermutation i = j := by
+      exact K.relevantPlanarSignaturePermutation.apply_symm_apply j
+    rw [← hj, ← hperm]
+    exact h i
+  · intro h i
+    exact h (K.relevantPlanarSignatureAt i)
+      (K.relevantSignatureAt_mem (K.relevantPlanarSignaturePermutation i))
+
 /-- The single planar lattice tile obtained by replacing each relevant signature point with its
 color marker. -/
 noncomputable def relevantPlanarRasterTile (K : PolygonalRegion) :
     Finset IntegerPlane :=
-  planarRasterTile K.relevantSignatureAt
+  planarRasterTile K.relevantPlanarSignatureAt
 
 /-- Simultaneous tiling by the canonical signature enumeration is the same as simultaneous tiling
 by the underlying finite set of relevant signatures. -/
@@ -1235,7 +1299,7 @@ theorem relevantPlanarRasterTile_tilesUniverse_iff
       ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
   rw [relevantPlanarRasterTile,
     planarRasterTile_tilesUniverse_iff_family K.relevantSignatureCount_pos]
-  exact K.relevantSignatureAt_tilesUniverse_iff T
+  exact K.relevantPlanarSignatureAt_tilesUniverse_iff T
 
 /-- Continuous integer-translation tiling is equivalent to tiling by the single colored raster
 tile in the product group. -/

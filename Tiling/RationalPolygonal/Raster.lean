@@ -467,6 +467,60 @@ theorem relevantSignatures_nonempty (K : PolygonalRegion) :
   obtain ⟨u, hu⟩ := K.ae_signature_mem_relevantSignatures.exists
   exact ⟨K.signature u, hu⟩
 
+/-- A nonempty polygonal region has a positive-measure signature containing at least one lattice
+point.  This supplies the distinguished nonempty color needed by the rigid marker construction. -/
+theorem exists_nonempty_relevantSignature (K : PolygonalRegion) :
+    ∃ F ∈ K.relevantSignatures, F.Nonempty := by
+  have hsupport : volume K.support ≠ 0 :=
+    ne_of_gt (K.isPolygonal.volume_pos K.nonempty)
+  have hunion :
+      (⋃ q : IntegerPlane, K.support ∩ translatedClosedUnitCell q) = K.support := by
+    rw [← Set.inter_iUnion]
+    rw [iUnion_translatedClosedUnitCell]
+    simp
+  have hexists : ∃ q : IntegerPlane,
+      volume (K.support ∩ translatedClosedUnitCell q) ≠ 0 := by
+    by_contra hnone
+    push Not at hnone
+    have hzero : volume (⋃ q : IntegerPlane,
+        K.support ∩ translatedClosedUnitCell q) = 0 :=
+      measure_iUnion_null hnone
+    rw [hunion] at hzero
+    exact hsupport hzero
+  obtain ⟨q, hq⟩ := hexists
+  let basePart : Set Plane :=
+    -integerPoint q +ᵥ (K.support ∩ translatedClosedUnitCell q)
+  have hbaseMeasure : volume basePart ≠ 0 := by
+    change volume (-integerPoint q +ᵥ
+      (K.support ∩ translatedClosedUnitCell q)) ≠ 0
+    rw [measure_vadd]
+    exact hq
+  have hbaseCell : basePart ⊆ closedUnitCell := by
+    intro u hu
+    change u ∈ -integerPoint q +ᵥ
+      (K.support ∩ translatedClosedUnitCell q) at hu
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hu
+    have huTranslated := hu.2
+    rw [translatedClosedUnitCell, Set.mem_vadd_set_iff_neg_vadd_mem] at huTranslated
+    simpa only [neg_neg, vadd_eq_add, neg_add_cancel_left] using huTranslated
+  have hbaseSignature : ∀ u ∈ basePart, q ∈ K.signature u := by
+    intro u hu
+    change u ∈ -integerPoint q +ᵥ
+      (K.support ∩ translatedClosedUnitCell q) at hu
+    rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hu
+    rw [mem_signature_iff]
+    simpa only [neg_neg, vadd_eq_add, add_comm] using hu.1
+  have hcellMeasurable : MeasurableSet closedUnitCell :=
+    isCompact_closedUnitCell.isClosed.measurableSet
+  have hae : ∀ᵐ u ∂volume,
+      u ∈ closedUnitCell → K.signature u ∈ K.relevantSignatures :=
+    (ae_restrict_iff' hcellMeasurable).mp K.ae_signature_mem_relevantSignatures
+  obtain ⟨u, huBase, huRelevant⟩ :=
+    Measure.exists_mem_of_measure_ne_zero_of_ae hbaseMeasure (ae_restrict_of_ae hae)
+  have hrel : K.signature u ∈ K.relevantSignatures :=
+    huRelevant (hbaseCell huBase)
+  exact ⟨K.signature u, hrel, ⟨q, hbaseSignature u huBase⟩⟩
+
 /-- Exact tiling of every positive-measure signature implies an almost-everywhere tiling of all
 signatures in the plane. -/
 theorem ae_signature_tilesUniverse_of_relevantSignatures
