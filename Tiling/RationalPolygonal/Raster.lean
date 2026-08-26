@@ -58,6 +58,108 @@ theorem volume_closedUnitCell_ne_zero : volume closedUnitCell ≠ 0 := by
   intro hcellZero
   exact hballMeasure (MeasureTheory.measure_mono_null hballSubset hcellZero)
 
+/-- Integer translate of the closed fundamental cell. -/
+def translatedClosedUnitCell (q : IntegerPlane) : Set Plane :=
+  integerPoint q +ᵥ closedUnitCell
+
+/-- Integer translates of the closed unit cell cover the real plane. -/
+theorem iUnion_translatedClosedUnitCell :
+    (⋃ q : IntegerPlane, translatedClosedUnitCell q) = Set.univ := by
+  ext x
+  simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
+  let q : IntegerPlane := ![⌊x.re⌋, ⌊x.im⌋]
+  refine ⟨q, ?_⟩
+  rw [translatedClosedUnitCell, Set.mem_vadd_set_iff_neg_vadd_mem, closedUnitCell]
+  change ((-integerPoint q + x).re, (-integerPoint q + x).im) ∈
+    Set.Icc (0 : ℝ) 1 ×ˢ Set.Icc (0 : ℝ) 1
+  rw [Set.mem_prod, Set.mem_Icc, Set.mem_Icc]
+  simp only [Complex.add_re, Complex.neg_re, integerPoint_re,
+    Complex.add_im, Complex.neg_im, integerPoint_im]
+  have hreLower := Int.floor_le x.re
+  have hreUpper := Int.lt_floor_add_one x.re
+  have himLower := Int.floor_le x.im
+  have himUpper := Int.lt_floor_add_one x.im
+  change (⌊x.re⌋ : ℝ) ≤ x.re at hreLower
+  change x.re < (⌊x.re⌋ : ℝ) + 1 at hreUpper
+  change (⌊x.im⌋ : ℝ) ≤ x.im at himLower
+  change x.im < (⌊x.im⌋ : ℝ) + 1 at himUpper
+  dsimp only [q, Matrix.cons_val_zero, Matrix.cons_val_one]
+  constructor <;> constructor <;> linarith
+
+/-- Translate a finite additive tile by subtracting one group element. -/
+noncomputable def shiftFinset {G : Type*} [AddCommGroup G]
+    (q : G) (F : Finset G) : Finset G := by
+  classical
+  exact F.image fun f ↦ f - q
+
+@[simp]
+theorem mem_shiftFinset_iff {G : Type*} [AddCommGroup G]
+    {q z : G} {F : Finset G} :
+    z ∈ shiftFinset q F ↔ z + q ∈ F := by
+  classical
+  constructor
+  · intro hz
+    rw [shiftFinset, Finset.mem_image] at hz
+    obtain ⟨f, hf, hfz⟩ := hz
+    rw [← hfz]
+    simpa only [sub_add_cancel] using hf
+  · intro hz
+    rw [shiftFinset, Finset.mem_image]
+    exact ⟨z + q, hz, by simp only [add_sub_cancel_right]⟩
+
+/-- Translating the finite tile does not change whether a fixed translation set tiles the whole
+ambient group. -/
+theorem tilesUniverse_shiftFinset_iff {G : Type*} [AddCommGroup G]
+    (q : G) (F : Finset G) (T : Set G) :
+    TilesUniverse (shiftFinset q F) T ↔ TilesUniverse F T := by
+  constructor
+  · intro hshift
+    apply tilesUniverse_of_existsUnique
+    intro x
+    obtain ⟨g, hg, hgunique⟩ :=
+      existsUnique_tile_representation hshift (x - q)
+    let f := g + q
+    refine ⟨f, ?_, ?_⟩
+    · constructor
+      · exact mem_shiftFinset_iff.mp hg.1
+      · dsimp only [f]
+        convert hg.2 using 1
+        abel
+    · intro f' hf'
+      have hcandidate : f' - q ∈ shiftFinset q F ∧
+          x - q - (f' - q) ∈ T := by
+        constructor
+        · exact mem_shiftFinset_iff.mpr (by simpa only [sub_add_cancel] using hf'.1)
+        · convert hf'.2 using 1
+          abel
+      have heq := hgunique (f' - q) hcandidate
+      dsimp only [f]
+      rw [← heq]
+      abel
+  · intro hF
+    apply tilesUniverse_of_existsUnique
+    intro x
+    obtain ⟨f, hf, hfunique⟩ :=
+      existsUnique_tile_representation hF (x + q)
+    let g := f - q
+    refine ⟨g, ?_, ?_⟩
+    · constructor
+      · exact mem_shiftFinset_iff.mpr (by simpa only [g, sub_add_cancel] using hf.1)
+      · dsimp only [g]
+        convert hf.2 using 1
+        abel
+    · intro g' hg'
+      have hcandidate : g' + q ∈ F ∧
+          x + q - (g' + q) ∈ T := by
+        constructor
+        · exact mem_shiftFinset_iff.mp hg'.1
+        · convert hg'.2 using 1
+          abel
+      have heq := hfunique (g' + q) hcandidate
+      dsimp only [g]
+      rw [← heq]
+      abel
+
 namespace PolygonalRegion
 
 /-- Almost every point of a monotile tiling belongs to exactly one translated copy. -/
@@ -156,6 +258,19 @@ theorem mem_signature_iff {K : PolygonalRegion} {u : Plane}
     {z : IntegerPlane} :
     z ∈ K.signature u ↔ u + integerPoint z ∈ K.support := by
   simp only [signature, Set.Finite.mem_toFinset, mem_latticeSlice_iff]
+
+/-- Moving the base point by an integer vector shifts the finite signature by the opposite
+integer vector. -/
+theorem signature_add_integerPoint (K : PolygonalRegion)
+    (u : Plane) (q : IntegerPlane) :
+    K.signature (u + integerPoint q) = shiftFinset q (K.signature u) := by
+  ext z
+  rw [mem_signature_iff, mem_shiftFinset_iff, mem_signature_iff, integerPoint_add]
+  constructor <;> intro h
+  · convert h using 1
+    abel
+  · convert h using 1
+    abel
 
 /-- Every signature based in the fundamental cell lies in the common finite window. -/
 theorem signature_subset_signatureWindow (K : PolygonalRegion) {u : Plane}
@@ -308,6 +423,42 @@ theorem relevantSignatures_nonempty (K : PolygonalRegion) :
     ae_restrict_neBot.mpr volume_closedUnitCell_ne_zero
   obtain ⟨u, hu⟩ := K.ae_signature_mem_relevantSignatures.exists
   exact ⟨K.signature u, hu⟩
+
+/-- Exact tiling of every positive-measure signature implies an almost-everywhere tiling of all
+signatures in the plane. -/
+theorem ae_signature_tilesUniverse_of_relevantSignatures
+    (K : PolygonalRegion) {T : Set IntegerPlane}
+    (hT : ∀ F ∈ K.relevantSignatures, TilesUniverse F T) :
+    ∀ᵐ u, TilesUniverse (K.signature u) T := by
+  have hcell : ∀ᵐ u ∂volume.restrict closedUnitCell,
+      TilesUniverse (K.signature u) T :=
+    K.ae_signature_mem_relevantSignatures.mono fun _ hu ↦ hT _ hu
+  have htranslated : ∀ q : IntegerPlane,
+      ∀ᵐ x ∂volume.restrict (translatedClosedUnitCell q),
+        TilesUniverse (K.signature x) T := by
+    intro q
+    let a : Plane := integerPoint q
+    have hmaps : Set.MapsTo (fun x : Plane ↦ -a + x)
+        (translatedClosedUnitCell q) closedUnitCell := by
+      intro x hx
+      rw [translatedClosedUnitCell, Set.mem_vadd_set_iff_neg_vadd_mem] at hx
+      simpa only [a, vadd_eq_add] using hx
+    have hpull :=
+      ((quasiMeasurePreserving_add_left volume (-a)).restrict hmaps).ae hcell
+    filter_upwards [hpull] with x hx
+    have hpoint : (-a + x) + integerPoint q = x := by
+      dsimp only [a]
+      abel
+    have hsignature := K.signature_add_integerPoint (-a + x) q
+    rw [hpoint] at hsignature
+    rw [hsignature, tilesUniverse_shiftFinset_iff]
+    exact hx
+  have hall : ∀ᵐ x ∂volume.restrict
+      (⋃ q : IntegerPlane, translatedClosedUnitCell q),
+      TilesUniverse (K.signature x) T :=
+    (ae_restrict_iUnion_iff translatedClosedUnitCell
+      (fun x ↦ TilesUniverse (K.signature x) T)).mpr htranslated
+  simpa only [iUnion_translatedClosedUnitCell, Measure.restrict_univ] using hall
 
 /-- Membership in a continuously placed tile is the corresponding raster-signature membership. -/
 theorem mem_placedTile_integerPoint_iff_signature
@@ -491,6 +642,20 @@ theorem tiles_integerPoint_image_iff_ae_signature_tilesUniverse
       ∀ᵐ u, TilesUniverse (K.signature u) T :=
   ⟨Tiles.ae_signature_tilesUniverse,
     K.tiles_integerPoint_image_of_ae_signature_tilesUniverse⟩
+
+/-- Finite raster form of the continuous tiling equation: the integer translates tile the region
+exactly when they tile every positive-measure fundamental-cell signature. -/
+theorem tiles_integerPoint_image_iff_relevantSignatures
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    K.Tiles (integerPoint '' T) ↔
+      ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
+  constructor
+  · intro htiles
+    exact K.tilesUniverse_relevantSignatures_of_ae
+      htiles.ae_signature_tilesUniverse
+  · intro hsignatures
+    exact K.tiles_integerPoint_image_of_ae_signature_tilesUniverse
+      (K.ae_signature_tilesUniverse_of_relevantSignatures hsignatures)
 
 /-- An integer-vertex polygonal region that tiles continuously has an integer translation set,
 and the same set tiles almost every raster signature. -/
