@@ -595,6 +595,54 @@ theorem ae_signature_tilesUniverse_of_relevantSignatures
       (fun x ↦ TilesUniverse (K.signature x) T)).mpr htranslated
   simpa only [iUnion_translatedClosedUnitCell, Measure.restrict_univ] using hall
 
+/-- Equality of every positive-measure signature carrier implies almost-everywhere equality of the
+corresponding continuous integer-translation carriers. -/
+theorem integerTranslationCarrier_ae_eq_of_relevantSignatures
+    (K : PolygonalRegion) {T₀ T₁ : Set IntegerPlane}
+    (hT : ∀ F ∈ K.relevantSignatures,
+      discreteCarrier F T₀ = discreteCarrier F T₁) :
+    K.integerTranslationCarrier T₀ =ᵐ[volume]
+      K.integerTranslationCarrier T₁ := by
+  have hcell : ∀ᵐ u ∂volume.restrict closedUnitCell,
+      K.signature u ∈ K.relevantSignatures :=
+    K.ae_signature_mem_relevantSignatures
+  have htranslated : ∀ q : IntegerPlane,
+      ∀ᵐ x ∂volume.restrict (translatedClosedUnitCell q),
+        x ∈ K.integerTranslationCarrier T₀ ↔
+          x ∈ K.integerTranslationCarrier T₁ := by
+    intro q
+    let a : Plane := integerPoint q
+    have hmaps : Set.MapsTo (fun x : Plane ↦ -a + x)
+        (translatedClosedUnitCell q) closedUnitCell := by
+      intro x hx
+      rw [translatedClosedUnitCell, Set.mem_vadd_set_iff_neg_vadd_mem] at hx
+      simpa only [a, vadd_eq_add] using hx
+    have hpull :=
+      ((quasiMeasurePreserving_add_left volume (-a)).restrict hmaps).ae hcell
+    filter_upwards [hpull] with x hxRelevant
+    let u : Plane := -a + x
+    have hcoordinate : x = u + integerPoint q := by
+      dsimp only [u, a]
+      abel
+    rw [K.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature
+      T₀ hcoordinate,
+      K.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature
+        T₁ hcoordinate]
+    exact Set.ext_iff.mp (hT (K.signature u) hxRelevant) q
+  have hall : ∀ᵐ x ∂volume.restrict
+      (⋃ q : IntegerPlane, translatedClosedUnitCell q),
+      x ∈ K.integerTranslationCarrier T₀ ↔
+        x ∈ K.integerTranslationCarrier T₁ :=
+    (ae_restrict_iUnion_iff translatedClosedUnitCell
+      (fun x ↦ x ∈ K.integerTranslationCarrier T₀ ↔
+        x ∈ K.integerTranslationCarrier T₁)).mpr htranslated
+  have hall' : ∀ᵐ x ∂volume,
+      x ∈ K.integerTranslationCarrier T₀ ↔
+        x ∈ K.integerTranslationCarrier T₁ := by
+    simpa only [iUnion_translatedClosedUnitCell, Measure.restrict_univ] using hall
+  filter_upwards [hall'] with x hx
+  exact propext hx
+
 /-- Membership in a continuously placed tile is the corresponding raster-signature membership. -/
 theorem mem_placedTile_integerPoint_iff_signature
     (K : PolygonalRegion) (u : Plane) (x t : IntegerPlane) :
