@@ -1194,6 +1194,26 @@ noncomputable def relevantColoredRasterTile (K : PolygonalRegion) :
     Finset (IntegerPlane × ZMod K.relevantSignatureCount) :=
   coloredRasterTile K.relevantSignatureAt
 
+/-- The single planar lattice tile obtained by replacing each relevant signature point with its
+color marker. -/
+noncomputable def relevantPlanarRasterTile (K : PolygonalRegion) :
+    Finset IntegerPlane :=
+  planarRasterTile K.relevantSignatureAt
+
+/-- Simultaneous tiling by the canonical signature enumeration is the same as simultaneous tiling
+by the underlying finite set of relevant signatures. -/
+theorem relevantSignatureAt_tilesUniverse_iff
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    (∀ i, TilesUniverse (K.relevantSignatureAt i) T) ↔
+      ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
+  constructor
+  · intro h F hF
+    obtain ⟨i, hi⟩ := K.exists_relevantSignatureAt_eq hF
+    rw [← hi]
+    exact h i
+  · intro h i
+    exact h (K.relevantSignatureAt i) (K.relevantSignatureAt_mem i)
+
 /-- The product-group tile tiles exactly when one translation set tiles every relevant
 signature. -/
 theorem relevantColoredRasterTile_tilesUniverse_iff
@@ -1204,13 +1224,18 @@ theorem relevantColoredRasterTile_tilesUniverse_iff
   let _ : NeZero K.relevantSignatureCount :=
     ⟨(K.relevantSignatureCount_pos).ne'⟩
   rw [relevantColoredRasterTile, coloredRasterTile_tilesUniverse_iff]
-  constructor
-  · intro h F hF
-    obtain ⟨i, hi⟩ := K.exists_relevantSignatureAt_eq hF
-    rw [← hi]
-    exact h i
-  · intro h i
-    exact h (K.relevantSignatureAt i) (K.relevantSignatureAt_mem i)
+  exact K.relevantSignatureAt_tilesUniverse_iff T
+
+/-- The planar marker tile is an exact encoding of all relevant signatures when translations are
+restricted to the coarse marker lattice. -/
+theorem relevantPlanarRasterTile_tilesUniverse_iff
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    TilesUniverse K.relevantPlanarRasterTile
+        (markerTranslationSet K.relevantSignatureCount T) ↔
+      ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
+  rw [relevantPlanarRasterTile,
+    planarRasterTile_tilesUniverse_iff_family K.relevantSignatureCount_pos]
+  exact K.relevantSignatureAt_tilesUniverse_iff T
 
 /-- Continuous integer-translation tiling is equivalent to tiling by the single colored raster
 tile in the product group. -/
@@ -1221,6 +1246,16 @@ theorem tiles_integerPoint_image_iff_relevantColoredRasterTile
         (coloredTranslations (M := K.relevantSignatureCount) T) := by
   rw [K.tiles_integerPoint_image_iff_relevantSignatures,
     K.relevantColoredRasterTile_tilesUniverse_iff]
+
+/-- Continuous tiling by integer translations is equivalent to tiling by the single planar marker
+tile along the scaled copy of the same translation set. -/
+theorem tiles_integerPoint_image_iff_relevantPlanarRasterTile
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    K.Tiles (integerPoint '' T) ↔
+      TilesUniverse K.relevantPlanarRasterTile
+        (markerTranslationSet K.relevantSignatureCount T) := by
+  rw [K.tiles_integerPoint_image_iff_relevantSignatures,
+    K.relevantPlanarRasterTile_tilesUniverse_iff]
 
 end PolygonalRegion
 
