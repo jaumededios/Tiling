@@ -457,4 +457,72 @@ theorem coloredRasterTile_tilesUniverse_iff {M : ℕ} [NeZero M]
 
 end ColoredRaster
 
+namespace PolygonalRegion
+
+/-- Number of positive-measure signatures of the polygonal region. -/
+noncomputable def relevantSignatureCount (K : PolygonalRegion) : ℕ :=
+  K.relevantSignatures.card
+
+/-- Canonical enumeration of the positive-measure signatures. -/
+noncomputable def relevantSignatureAt (K : PolygonalRegion)
+    (i : Fin K.relevantSignatureCount) : Finset IntegerPlane :=
+  ((K.relevantSignatures.equivFin).symm i).1
+
+/-- Every enumerated signature belongs to the relevant finite family. -/
+theorem relevantSignatureAt_mem (K : PolygonalRegion)
+    (i : Fin K.relevantSignatureCount) :
+    K.relevantSignatureAt i ∈ K.relevantSignatures :=
+  ((K.relevantSignatures.equivFin).symm i).2
+
+/-- Every relevant signature occurs in the canonical enumeration. -/
+theorem exists_relevantSignatureAt_eq (K : PolygonalRegion)
+    {F : Finset IntegerPlane} (hF : F ∈ K.relevantSignatures) :
+    ∃ i, K.relevantSignatureAt i = F := by
+  let s : K.relevantSignatures := ⟨F, hF⟩
+  refine ⟨K.relevantSignatures.equivFin s, ?_⟩
+  change ((K.relevantSignatures.equivFin).symm
+    (K.relevantSignatures.equivFin s)).1 = F
+  rw [Equiv.symm_apply_apply]
+
+/-- The relevant signature family is nonempty, so its color group has positive order. -/
+theorem relevantSignatureCount_pos (K : PolygonalRegion) :
+    0 < K.relevantSignatureCount := by
+  rw [relevantSignatureCount, Finset.card_pos]
+  exact K.relevantSignatures_nonempty
+
+/-- One finite tile in the product group encoding all positive-measure signatures. -/
+noncomputable def relevantColoredRasterTile (K : PolygonalRegion) :
+    Finset (IntegerPlane × ZMod K.relevantSignatureCount) :=
+  coloredRasterTile K.relevantSignatureAt
+
+/-- The product-group tile tiles exactly when one translation set tiles every relevant
+signature. -/
+theorem relevantColoredRasterTile_tilesUniverse_iff
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    TilesUniverse K.relevantColoredRasterTile
+        (coloredTranslations (M := K.relevantSignatureCount) T) ↔
+      ∀ F ∈ K.relevantSignatures, TilesUniverse F T := by
+  let _ : NeZero K.relevantSignatureCount :=
+    ⟨(K.relevantSignatureCount_pos).ne'⟩
+  rw [relevantColoredRasterTile, coloredRasterTile_tilesUniverse_iff]
+  constructor
+  · intro h F hF
+    obtain ⟨i, hi⟩ := K.exists_relevantSignatureAt_eq hF
+    rw [← hi]
+    exact h i
+  · intro h i
+    exact h (K.relevantSignatureAt i) (K.relevantSignatureAt_mem i)
+
+/-- Continuous integer-translation tiling is equivalent to tiling by the single colored raster
+tile in the product group. -/
+theorem tiles_integerPoint_image_iff_relevantColoredRasterTile
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    K.Tiles (integerPoint '' T) ↔
+      TilesUniverse K.relevantColoredRasterTile
+        (coloredTranslations (M := K.relevantSignatureCount) T) := by
+  rw [K.tiles_integerPoint_image_iff_relevantSignatures,
+    K.relevantColoredRasterTile_tilesUniverse_iff]
+
+end PolygonalRegion
+
 end Tiling.RationalPolygonal
