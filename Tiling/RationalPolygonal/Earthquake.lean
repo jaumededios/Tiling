@@ -445,6 +445,31 @@ theorem add_mem_quakeShiftedTranslations_quakeShiftExcept_of_mem
   rw [show (quakeGraph F T v).connectedComponentMk ts = D from htD]
   simp [hDC, ts]
 
+/-- A point of `T^k` which is not on the fixed plate comes from a unique original translation on
+a different plate, shifted by `k • v`. -/
+theorem exists_original_of_mem_quakeShiftedTranslations_quakeShiftExcept
+    {F : Finset G} {T : Set G} {v x : G}
+    {C : QuakePlate F T v} {k : ℤ}
+    (hx : x ∈ quakeShiftedTranslations (quakeShiftExcept C k))
+    (hxC : x ∉ quakePlateTranslations C) :
+    ∃ t : G, t ∈ T ∧ t ∉ quakePlateTranslations C ∧ x = k • v + t := by
+  classical
+  obtain ⟨t, ht⟩ := hx
+  let D : QuakePlate F T v := (quakeGraph F T v).connectedComponentMk t
+  have hDC : D ≠ C := by
+    intro hDC
+    have hxt : x = (t : G) := by
+      rw [← ht]
+      simp [quakeShiftExcept, D, hDC]
+    apply hxC
+    rw [hxt]
+    exact ⟨t.2, hDC⟩
+  refine ⟨t, t.2, ?_, ?_⟩
+  · intro htC
+    exact hDC (Classical.choose_spec htC)
+  · rw [← ht]
+    simp [quakeShiftExcept, D, hDC]
+
 /-- If `0 ∈ F`, a translation vector outside a fixed plate cannot lie in that plate's tile
 carrier.  Exactness is essential: the two representations would otherwise use different
 translations. -/
@@ -485,6 +510,149 @@ theorem mem_quakePlateTranslations_of_mem_shiftExcept_of_mem_carrier
       hzero hxShift hf hsShift
     simpa using hcarrier
   exact hxs ▸ hsC'
+
+/-- The points of one plate in quotient coset `c` whose full `p`-orbit is not contained in that
+plate.  These are the paper's incomplete periodic orbits. -/
+def quakeIncompleteOrbit {F : Finset G} {T : Set G} {v : G}
+    (C : QuakePlate F T v) (Λ : AddSubgroup G) (c : G ⧸ Λ) (p : G) : Set G :=
+  {x | x ∈ quakePlateTranslations C ∧ x ∈ quotientCoset Λ c ∧
+    ∃ n : ℤ, x + n • p ∉ quakePlateTranslations C}
+
+private theorem quotientCoset_add_mem_iff
+    (Λ : AddSubgroup G) (c : G ⧸ Λ) {p : G} (hp : p ∈ Λ) (x : G) :
+    x + p ∈ quotientCoset Λ c ↔ x ∈ quotientCoset Λ c := by
+  change QuotientAddGroup.mk' Λ (x + p) = c ↔ QuotientAddGroup.mk' Λ x = c
+  have hp0 : QuotientAddGroup.mk' Λ p = 0 :=
+    (QuotientAddGroup.eq_zero_iff p).2 hp
+  rw [map_add, hp0, add_zero]
+
+private theorem mem_carrier_of_mem_quakePlateTranslations
+    {F : Finset G} {T : Set G} {v x : G}
+    (hzero : 0 ∈ F) {C : QuakePlate F T v}
+    (hx : x ∈ quakePlateTranslations C) :
+    x ∈ discreteCarrier F (quakePlateTranslations C) := by
+  exact ⟨0, hzero, x, hx, (zero_add x).symm⟩
+
+private theorem quakeIncompleteOrbit_forward
+    {F : Finset G} {T : Set G} {v : G}
+    (hzero : 0 ∈ F) (hT : TilesUniverse F T)
+    (C : QuakePlate F T v) (Λ : AddSubgroup G) (c : G ⧸ Λ)
+    (p : G) (hp : p ∈ Λ) (a b : ℤ)
+    (hav : a • v ∈ Λ) (hbv : b • v ∈ Λ)
+    (hperiodA : DiscretePeriodicBy
+      (quakeShiftedTranslations (quakeShiftExcept C a) ∩ quotientCoset Λ c) p)
+    (hperiodB : DiscretePeriodicBy
+      (quakeShiftedTranslations (quakeShiftExcept C b) ∩ quotientCoset Λ c) p) :
+    ∀ {x}, x ∈ quakeIncompleteOrbit C Λ c p →
+      x + (b - a) • v ∈ quakeIncompleteOrbit C Λ c p := by
+  intro x hx
+  rcases hx with ⟨hxC, hxc, n, hynotC⟩
+  let y := x + n • p
+  have hyc : y ∈ quotientCoset Λ c := by
+    have hnp : n • p ∈ Λ := Λ.zsmul_mem hp n
+    exact (quotientCoset_add_mem_iff Λ c hnp x).2 hxc
+  have hxA : x ∈ quakeShiftedTranslations (quakeShiftExcept C a) :=
+    mem_quakeShiftedTranslations_quakeShiftExcept_of_mem hxC a
+  have hxB : x ∈ quakeShiftedTranslations (quakeShiftExcept C b) :=
+    mem_quakeShiftedTranslations_quakeShiftExcept_of_mem hxC b
+  have hyA : y ∈ quakeShiftedTranslations (quakeShiftExcept C a) ∩
+      quotientCoset Λ c := by
+    have hza := hperiodA.zsmul n x
+    exact hza.mpr ⟨hxA, hxc⟩
+  have hyB : y ∈ quakeShiftedTranslations (quakeShiftExcept C b) ∩
+      quotientCoset Λ c := by
+    have hzb := hperiodB.zsmul n x
+    exact hzb.mpr ⟨hxB, hxc⟩
+  obtain ⟨t, htT, htNotC, hyt⟩ :=
+    exists_original_of_mem_quakeShiftedTranslations_quakeShiftExcept
+      hyA.1 hynotC
+  have htPlate : ∃ D : QuakePlate F T v,
+      D ≠ C ∧ t ∈ quakePlateTranslations D := by
+    let ts : T := ⟨t, htT⟩
+    let D := (quakeGraph F T v).connectedComponentMk ts
+    refine ⟨D, ?_, mem_quakePlateTranslations_mk ts⟩
+    intro hDC
+    exact htNotC ⟨htT, hDC⟩
+  obtain ⟨D, hDC, htD⟩ := htPlate
+  have hshiftB : b • v + t ∈
+      quakeShiftedTranslations (quakeShiftExcept C b) :=
+    add_mem_quakeShiftedTranslations_quakeShiftExcept_of_mem hDC htD b
+  have hyDeltaShiftB : y + (b - a) • v ∈
+      quakeShiftedTranslations (quakeShiftExcept C b) := by
+    rw [hyt]
+    convert hshiftB using 1
+    rw [sub_smul]
+    abel
+  have hyDeltaCoset : y + (b - a) • v ∈ quotientCoset Λ c := by
+    have hdelta : (b - a) • v ∈ Λ := by
+      rw [sub_smul]
+      exact Λ.sub_mem hbv hav
+    exact (quotientCoset_add_mem_iff Λ c hdelta y).2 hyc
+  let x' := x + (b - a) • v
+  have hx'ShiftB : x' ∈ quakeShiftedTranslations (quakeShiftExcept C b) ∩
+      quotientCoset Λ c := by
+    have hper := hperiodB.zsmul (-n) (y + (b - a) • v)
+    have hmem := hper.mpr ⟨hyDeltaShiftB, hyDeltaCoset⟩
+    convert hmem using 1
+    dsimp [x', y]
+    module
+  have hx'Carrier : x' ∈ discreteCarrier F (quakePlateTranslations C) := by
+    have hxCarrier := mem_carrier_of_mem_quakePlateTranslations hzero hxC
+    have hper := (quakePlateCarrier_periodic hT C).zsmul (b - a)
+    exact (hper x).2 hxCarrier
+  have hx'C : x' ∈ quakePlateTranslations C :=
+    mem_quakePlateTranslations_of_mem_shiftExcept_of_mem_carrier
+      hzero hT hx'ShiftB.1 hx'Carrier
+  have htNotCarrier : t ∉ discreteCarrier F (quakePlateTranslations C) :=
+    not_mem_quakePlateCarrier_of_not_mem hzero hT htT htNotC
+  have hyNotCarrier : y ∉ discreteCarrier F (quakePlateTranslations C) := by
+    intro hyCarrier
+    have hper := (quakePlateCarrier_periodic hT C).zsmul a
+    apply htNotCarrier
+    apply (hper t).mp
+    convert hyCarrier using 1
+    rw [hyt]
+    abel
+  have hyDeltaNotCarrier : y + (b - a) • v ∉
+      discreteCarrier F (quakePlateTranslations C) := by
+    intro hmem
+    have hper := (quakePlateCarrier_periodic hT C).zsmul (b - a)
+    exact hyNotCarrier ((hper y).mp hmem)
+  have hyDeltaNotC : y + (b - a) • v ∉ quakePlateTranslations C := by
+    intro hmem
+    exact hyDeltaNotCarrier (mem_carrier_of_mem_quakePlateTranslations hzero hmem)
+  refine ⟨hx'C, hx'ShiftB.2, n, ?_⟩
+  intro hmem
+  apply hyDeltaNotC
+  convert hmem using 1
+  dsimp [x', y]
+  abel
+
+/-- If two auxiliary earthquakes select the same period on a lattice coset, then the incomplete
+orbits of the fixed plate acquire the difference of those quake shifts as a period.  This is the
+local period-transfer step in paper Lemma 4.2. -/
+theorem quakeIncompleteOrbit_periodic_of_repeated_cosetPeriod
+    {F : Finset G} {T : Set G} {v : G}
+    (hzero : 0 ∈ F) (hT : TilesUniverse F T)
+    (C : QuakePlate F T v) (Λ : AddSubgroup G) (c : G ⧸ Λ)
+    (p : G) (hp : p ∈ Λ) (a b : ℤ)
+    (hav : a • v ∈ Λ) (hbv : b • v ∈ Λ)
+    (hperiodA : DiscretePeriodicBy
+      (quakeShiftedTranslations (quakeShiftExcept C a) ∩ quotientCoset Λ c) p)
+    (hperiodB : DiscretePeriodicBy
+      (quakeShiftedTranslations (quakeShiftExcept C b) ∩ quotientCoset Λ c) p) :
+    DiscretePeriodicBy (quakeIncompleteOrbit C Λ c p) ((b - a) • v) := by
+  intro x
+  constructor
+  · intro hx
+    have hback := quakeIncompleteOrbit_forward hzero hT C Λ c p hp b a
+      hbv hav hperiodB hperiodA hx
+    have heq : x + (b - a) • v + (a - b) • v = x := by
+      rw [sub_smul, sub_smul]
+      module
+    rwa [heq] at hback
+  · exact quakeIncompleteOrbit_forward hzero hT C Λ c p hp a b
+      hav hbv hperiodA hperiodB
 
 end QuakeGraph
 
