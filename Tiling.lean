@@ -10,7 +10,9 @@ import Tiling.Geometry.Connected
 import Tiling.RationalPolygonal.Basic
 import Tiling.RationalPolygonal.IntegerReduction
 import Tiling.RationalPolygonal.Earthquake
+import Tiling.RationalPolygonal.EarthquakeUniform
 import Tiling.RationalPolygonal.Raster
 import Tiling.RationalPolygonal.RasterMarker
+import Tiling.RationalPolygonal.ContinuousEarthquake
 import Tiling.Measure.Counting
 import Tiling.Topology.IntersectionGraph
