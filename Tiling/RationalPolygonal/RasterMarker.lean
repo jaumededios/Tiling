@@ -726,6 +726,20 @@ private theorem existsUnique_markerBlock {M : ℕ} (hM : 0 < M)
     (Finset.disjoint_left.mp (markerBlock_disjoint hij')) hsi
   exact hnot hsj
 
+/-- Every color marker contains at least one lattice point. -/
+theorem markerBlock_nonempty {M : ℕ} (_hM : 0 < M) (i : Fin M) :
+    (markerBlock i).Nonempty := by
+  by_cases hi : i.val = 0
+  · refine ⟨markerEast M, ?_⟩
+    rw [markerBlock, if_pos hi, markerZero, Finset.mem_erase, Finset.mem_erase]
+    exact ⟨markerEast_ne_markerSouthHole M, markerEast_ne_markerWestHole M,
+      Finset.mem_insert.mpr (Or.inr (Finset.mem_insert_self ..))⟩
+  · rw [markerBlock_of_ne_zero hi, Finset.nonempty_iff_ne_empty]
+    intro hempty
+    have hcard := markerRing_card i
+    rw [hempty] at hcard
+    simp at hcard
+
 /-- A common tiling by all colors produces a tiling by the single planar raster tile, with the
 translation set scaled to the coarse marker lattice. -/
 theorem planarRasterTile_tilesUniverse_of_family {M : ℕ} (hM : 0 < M)
@@ -775,6 +789,86 @@ theorem planarRasterTile_tilesUniverse_of_family {M : ℕ} (hM : 0 < M)
       rwa [this]
     have hgf : g = f := hfUnique g ⟨hgj, hqg⟩
     rw [← hr'Eq, hgf, hs's]
+
+/-- A tiling by the planar raster tile whose translations lie in the coarse marker lattice
+decodes to one common translation set tiling every color tile. -/
+theorem family_tilesUniverse_of_planarRasterTile {M : ℕ} (hM : 0 < M)
+    (tile : Fin M → Finset IntegerPlane) (T : Set IntegerPlane)
+    (hraster : TilesUniverse (planarRasterTile tile) (markerTranslationSet M T)) :
+    ∀ i, TilesUniverse (tile i) T := by
+  intro i
+  apply tilesUniverse_of_existsUnique
+  intro x
+  obtain ⟨s, hsi⟩ := markerBlock_nonempty hM i
+  let X : IntegerPlane := markerScale M x + s
+  obtain ⟨r, hr, hrUnique⟩ := existsUnique_tile_representation hraster X
+  obtain ⟨j, g, hgj, s', hs'j, hrEq⟩ := mem_planarRasterTile_iff.mp hr.1
+  obtain ⟨t, htT, htEq⟩ := mem_markerTranslationSet_iff.mp hr.2
+  have hsModified : s ∈ modifiedMarkerSquare M := by
+    rw [← markerUnion_eq_modifiedMarkerSquare hM, markerUnion, Finset.mem_biUnion]
+    exact ⟨i, Finset.mem_univ i, hsi⟩
+  have hs'Modified : s' ∈ modifiedMarkerSquare M := by
+    rw [← markerUnion_eq_modifiedMarkerSquare hM, markerUnion, Finset.mem_biUnion]
+    exact ⟨j, Finset.mem_univ j, hs'j⟩
+  have hXSubS : X - s ∈ markerLattice M := by
+    rw [mem_markerLattice_iff]
+    refine ⟨x, ?_⟩
+    dsimp only [X]
+    abel
+  have hXSubS' : X - s' ∈ markerLattice M := by
+    rw [mem_markerLattice_iff]
+    refine ⟨g + t, ?_⟩
+    change markerScale M (g + t) = X - s'
+    rw [markerScale_add, htEq, ← hrEq]
+    abel
+  obtain ⟨chosen, hchosen, hchosenUnique⟩ :=
+    existsUnique_tile_representation (modifiedMarkerSquare_tiles_markerLattice M) X
+  have hss' : s = s' :=
+    (hchosenUnique s ⟨hsModified, hXSubS⟩).trans
+      (hchosenUnique s' ⟨hs'Modified, hXSubS'⟩).symm
+  have hij : i = j := by
+    by_contra hij
+    have hnot : s ∉ markerBlock j :=
+      Finset.disjoint_left.mp (markerBlock_disjoint hij) hsi
+    exact hnot (hss' ▸ hs'j)
+  subst j
+  have hxgt : x - g = t := by
+    apply markerScale_injective M
+    rw [markerScale_sub]
+    calc
+      markerScale M x - markerScale M g =
+          (markerScale M x + s) - (markerScale M g + s') := by
+            rw [hss']
+            abel
+      _ = X - r := by rw [hrEq]
+      _ = markerScale M t := htEq.symm
+  refine ⟨g, ⟨hgj, hxgt ▸ htT⟩, ?_⟩
+  intro g' hg'
+  let r' : IntegerPlane := markerScale M g' + s
+  have hr'Tile : r' ∈ planarRasterTile tile := by
+    exact mem_planarRasterTile_iff.mpr ⟨i, g', hg'.1, s, hsi, rfl⟩
+  have hr'Translation : X - r' ∈ markerTranslationSet M T := by
+    rw [mem_markerTranslationSet_iff]
+    refine ⟨x - g', hg'.2, ?_⟩
+    rw [markerScale_sub]
+    dsimp only [X, r']
+    abel
+  have hr'r : r' = r := hrUnique r' ⟨hr'Tile, hr'Translation⟩
+  apply markerScale_injective M
+  dsimp only [r'] at hr'r
+  have hrbase : r = markerScale M g + s := by
+    rw [← hrEq, hss']
+  rw [hrbase] at hr'r
+  exact add_right_cancel hr'r
+
+/-- On coarse-lattice translations, the planar raster tile is an exact one-tile encoding of a
+simultaneous tiling by the finite color family. -/
+theorem planarRasterTile_tilesUniverse_iff_family {M : ℕ} (hM : 0 < M)
+    (tile : Fin M → Finset IntegerPlane) (T : Set IntegerPlane) :
+    TilesUniverse (planarRasterTile tile) (markerTranslationSet M T) ↔
+      ∀ i, TilesUniverse (tile i) T :=
+  ⟨family_tilesUniverse_of_planarRasterTile hM tile T,
+    planarRasterTile_tilesUniverse_of_family hM tile T⟩
 
 section ColoredRaster
 
