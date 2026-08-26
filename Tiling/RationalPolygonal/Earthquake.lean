@@ -359,6 +359,26 @@ private theorem quake_subset_closed_under_walk
       apply ih
       exact quake_subset_closed_under_adj hT hPT hperiod htP htt'
 
+/-- A translation subset whose tile carrier has period `v` is a union of canonical quake plates:
+once it contains one translation of a plate, it contains that entire plate. -/
+theorem quakePlateTranslations_subset_of_mem_periodic
+    {F : Finset G} {T P : Set G} {v : G}
+    (hT : TilesUniverse F T) (C : QuakePlate F T v)
+    (hPT : P ⊆ T)
+    (hperiod : DiscretePeriodicBy (discreteCarrier F P) v)
+    {p : G} (hpC : p ∈ quakePlateTranslations C) (hpP : p ∈ P) :
+    quakePlateTranslations C ⊆ P := by
+  intro t htC
+  obtain ⟨hpT, hpcomp⟩ := hpC
+  obtain ⟨htT, htcomp⟩ := htC
+  let ps : T := ⟨p, hpT⟩
+  let ts : T := ⟨t, htT⟩
+  have hreach : (quakeGraph F T v).Reachable ps ts := by
+    apply SimpleGraph.ConnectedComponent.exact
+    exact hpcomp.trans htcomp.symm
+  obtain ⟨walk⟩ := hreach
+  exact quake_subset_closed_under_walk hT hPT hperiod walk hpP
+
 /-- A nonempty periodic subset of a canonical tectonic plate is the whole plate.  This proves the
 minimality clause in paper Definition 4.1. -/
 theorem quakePlate_minimal {F : Finset G} {T P : Set G} {v : G}

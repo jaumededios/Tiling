@@ -16,6 +16,7 @@ raster carrier of every plate.
 
 open MeasureTheory Set
 open scoped Pointwise
+open TranslationalTilings
 
 namespace Tiling.RationalPolygonal
 
@@ -59,6 +60,64 @@ structure IntegerSlidingReduction (K : PolygonalRegion) (T : Set Plane) where
   /-- Every raster carrier of an old plate has the retained common sliding period. -/
   signatureCarrier_periodic : ∀ C u,
     DiscretePeriodicBy (discreteCarrier (K.signature u) (plateTranslations C)) direction
+
+namespace IntegerSlidingReduction
+
+variable {K : PolygonalRegion} {T : Set Plane}
+
+/-- Each retained old plate is a subset of the complete integer translation set. -/
+theorem plateTranslations_subset (R : IntegerSlidingReduction K T)
+    (C : (K.polygonalProtoTiling T).Plate) :
+    R.plateTranslations C ⊆ R.translations := by
+  intro z hz
+  rw [← R.iUnion_plateTranslations]
+  exact Set.mem_iUnion.mpr ⟨C, hz⟩
+
+/-- A canonical point chosen from a quake plate. -/
+noncomputable def quakePlatePoint (R : IntegerSlidingReduction K T) {u : Plane}
+    (C : QuakePlate (K.signature u) R.translations R.direction) : R.translations :=
+  Classical.choose C.nonempty_supp
+
+/-- The chosen quake-plate point belongs to that quake plate. -/
+theorem quakePlatePoint_mem (R : IntegerSlidingReduction K T) {u : Plane}
+    (C : QuakePlate (K.signature u) R.translations R.direction) :
+    (R.quakePlatePoint C : IntegerPlane) ∈ quakePlateTranslations C := by
+  refine ⟨(R.quakePlatePoint C).2, ?_⟩
+  exact (SimpleGraph.ConnectedComponent.mem_supp_iff C (R.quakePlatePoint C)).mp
+    (Classical.choose_spec C.nonempty_supp)
+
+/-- The old continuous plate containing the chosen point of a canonical quake plate. -/
+noncomputable def quakePlateOwner (R : IntegerSlidingReduction K T) {u : Plane}
+    (C : QuakePlate (K.signature u) R.translations R.direction) :
+    (K.polygonalProtoTiling T).Plate := by
+  have hp : (R.quakePlatePoint C : IntegerPlane) ∈
+      ⋃ A, R.plateTranslations A := by
+    rw [R.iUnion_plateTranslations]
+    exact (R.quakePlatePoint C).2
+  exact Classical.choose (Set.mem_iUnion.mp hp)
+
+/-- The selected quake-plate point lies in its selected old continuous plate. -/
+theorem quakePlatePoint_mem_owner (R : IntegerSlidingReduction K T) {u : Plane}
+    (C : QuakePlate (K.signature u) R.translations R.direction) :
+    (R.quakePlatePoint C : IntegerPlane) ∈
+      R.plateTranslations (R.quakePlateOwner C) := by
+  dsimp only [quakePlateOwner]
+  exact Classical.choose_spec (Set.mem_iUnion.mp (by
+    rw [R.iUnion_plateTranslations]
+    exact (R.quakePlatePoint C).2))
+
+/-- Canonical quake plates refine the retained old continuous-plate partition. -/
+theorem quakePlateTranslations_subset_owner
+    (R : IntegerSlidingReduction K T) {u : Plane}
+    (hTiles : TilesUniverse (K.signature u) R.translations)
+    (C : QuakePlate (K.signature u) R.translations R.direction) :
+    quakePlateTranslations C ⊆ R.plateTranslations (R.quakePlateOwner C) := by
+  exact quakePlateTranslations_subset_of_mem_periodic hTiles C
+    (R.plateTranslations_subset (R.quakePlateOwner C))
+    (R.signatureCarrier_periodic (R.quakePlateOwner C) u)
+    (R.quakePlatePoint_mem C) (R.quakePlatePoint_mem_owner C)
+
+end IntegerSlidingReduction
 
 /-- Integer-vertex monotile tilings admit an integer sliding reduction retaining the complete old
 continuous-plate partition. -/
