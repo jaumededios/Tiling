@@ -1287,6 +1287,61 @@ theorem exists_family_tiling_of_planarRasterTile {M : ℕ} (hM : 0 < M)
   exact planarRasterTile_translation_differences_mem_markerLattice
     hM tile hzeroTile hraster hu hbase
 
+private theorem setScalarPeriodic_vadd {P : ℕ} {A : Set IntegerPlane}
+    (a : IntegerPlane) (hA : SetScalarPeriodic P A) :
+    SetScalarPeriodic P (a +ᵥ A) := by
+  intro x z
+  simp only [Set.mem_vadd_set_iff_neg_vadd_mem, vadd_eq_add]
+  have h := hA (-a + x) z
+  convert h using 1
+  · abel_nf
+
+theorem exists_scalarPeriodic_family_tiling_of_planarRasterTile
+    {M : ℕ} (hM : 0 < M) (tile : Fin M → Finset IntegerPlane)
+    (hzeroTile : (tile ⟨0, hM⟩).Nonempty)
+    {U : Set IntegerPlane} (hraster : TilesUniverse (planarRasterTile tile) U)
+    {P : ℕ} (hperiod : SetScalarPeriodic P U) :
+    ∃ T : Set IntegerPlane,
+      (∀ i, TilesUniverse (tile i) T) ∧ SetScalarPeriodic P T := by
+  obtain ⟨r, hr, -⟩ := existsUnique_tile_representation hraster 0
+  let base := -r
+  have hbase : base ∈ U := by
+    simpa only [base, zero_sub] using hr.2
+  have hcoset : ∀ u ∈ U, u - base ∈ markerLattice M := by
+    intro u hu
+    exact planarRasterTile_translation_differences_mem_markerLattice
+      hM tile hzeroTile hraster hu hbase
+  let U₀ : Set IntegerPlane := -base +ᵥ U
+  have hU₀ : U₀ ⊆ markerLattice M := by
+    intro x hx
+    have hxU : base + x ∈ U := by
+      simpa only [U₀, Set.mem_vadd_set_iff_neg_vadd_mem, neg_neg,
+        vadd_eq_add] using hx
+    have hmem := hcoset (base + x) hxU
+    have heq : base + x - base = x := by abel
+    rwa [heq] at hmem
+  let T : Set IntegerPlane := markerPreimage M U₀
+  have hscaled : markerTranslationSet M T = U₀ :=
+    markerTranslationSet_markerPreimage_eq_of_subset hU₀
+  have hraster₀ : TilesUniverse (planarRasterTile tile) U₀ := by
+    exact (tilesUniverse_vadd_translationSet_iff
+      (-base) (planarRasterTile tile) U).mpr hraster
+  rw [← hscaled] at hraster₀
+  have hfamily := family_tilesUniverse_of_planarRasterTile hM tile T hraster₀
+  have hperiod₀ : SetScalarPeriodic P U₀ :=
+    setScalarPeriodic_vadd (-base) hperiod
+  refine ⟨T, hfamily, ?_⟩
+  intro x z
+  change markerScale M (x + (P : ℤ) • z) ∈ U₀ ↔ markerScale M x ∈ U₀
+  have hscale : markerScale M (x + (P : ℤ) • z) =
+      markerScale M x + (P : ℤ) • markerScale M z := by
+    rw [markerScale_add]
+    simp only [markerScale, smul_smul]
+    rw [mul_comm (markerSide M : ℤ) (P : ℤ)]
+  rw [hscale]
+  exact hperiod₀ (markerScale M x) (markerScale M z)
+
+
 namespace PolygonalRegion
 
 /-- A polygonal region admits an integer-translation tiling exactly when its single planar raster
