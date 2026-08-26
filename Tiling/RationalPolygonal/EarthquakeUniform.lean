@@ -784,4 +784,53 @@ theorem exists_uniformQuakePeriodicDecomposition_normalized
     exact ⟨uniformQuakePeriodicDecomposition_of_no_parallel
       hzero hv hT D hvalid hnone⟩
 
+private theorem exists_uniformQuakePeriodicDecomposition_singleton_zero
+    {T : Set IntegerPlane} {v : IntegerPlane} (hv : v ≠ 0)
+    (hT : TilesUniverse ({0} : Finset IntegerPlane) T) :
+    Nonempty (UniformQuakePeriodicDecomposition ({0} : Finset IntegerPlane) T v) := by
+  classical
+  refine ⟨{
+    numberOfParts := 1
+    number_pos := Nat.one_pos
+    part := fun C _ ↦ quakePlateTranslations C
+    period := fun _ ↦ v
+    period_ne_zero := fun _ ↦ hv
+    pairwise_incommensurable := ?_
+    periodic_part := ?_
+    pairwiseDisjoint := ?_
+    iUnion_parts := ?_
+  }⟩
+  · intro i j hij
+    exact hij (Subsingleton.elim i j) |>.elim
+  · intro C _
+    have hcarrier : discreteCarrier ({0} : Finset IntegerPlane)
+        (quakePlateTranslations C) = quakePlateTranslations C := by
+      ext x
+      simp [discreteCarrier]
+    rw [← hcarrier]
+    exact quakePlateCarrier_periodic hT C
+  · intro C i _ j _ hij
+    exact hij (Subsingleton.elim i j) |>.elim
+  · intro C
+    ext x
+    simp
+
+/-- Paper Lemma 4.2 for every normalized finite tile.  The singleton case is handled directly;
+all nonsingleton tiles use the uniform Greenfeld--Tao/pigeonhole construction. -/
+theorem exists_uniformQuakePeriodicDecomposition_of_zero_mem
+    {F : Finset IntegerPlane} {T : Set IntegerPlane} {v : IntegerPlane}
+    (hzero : 0 ∈ F) (hv : v ≠ 0) (hT : TilesUniverse F T) :
+    Nonempty (UniformQuakePeriodicDecomposition F T v) := by
+  have hFpos : 0 < F.card := Finset.card_pos.mpr ⟨0, hzero⟩
+  by_cases hcard : F.card = 1
+  · obtain ⟨f, hF⟩ := Finset.card_eq_one.mp hcard
+    have hf : f = 0 := by
+      rw [hF] at hzero
+      have h0f : 0 = f := by simpa using hzero
+      exact h0f.symm
+    subst f
+    subst F
+    exact exists_uniformQuakePeriodicDecomposition_singleton_zero hv hT
+  · exact exists_uniformQuakePeriodicDecomposition_normalized hzero (by omega) hv hT
+
 end Tiling.RationalPolygonal
