@@ -1,3 +1,11 @@
 import Mathlib.Geometry.Euclidean.Volume.Measure
 import Tiling.Basic
+import Tiling.Geometry.Plane
+import Tiling.Geometry.LocalLine
+import Tiling.Geometry.PolygonalTopology
+import Tiling.Geometry.Plate
+import Tiling.Geometry.PackingTopology
+import Tiling.Geometry.Sliding
+import Tiling.Geometry.Connected
 import Tiling.Measure.Counting
+import Tiling.Topology.IntersectionGraph
