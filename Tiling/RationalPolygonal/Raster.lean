@@ -302,6 +302,44 @@ theorem mem_signature_iff {K : PolygonalRegion} {u : Plane}
     z ∈ K.signature u ↔ u + integerPoint z ∈ K.support := by
   simp only [signature, Set.Finite.mem_toFinset, mem_latticeSlice_iff]
 
+/-- Carrier covered by integer translates of a polygonal region. -/
+def integerTranslationCarrier (K : PolygonalRegion)
+    (T : Set IntegerPlane) : Set Plane :=
+  {x | ∃ y ∈ K.support, ∃ t ∈ T, x = y + integerPoint t}
+
+@[simp]
+theorem mem_integerTranslationCarrier_iff {K : PolygonalRegion}
+    {T : Set IntegerPlane} {x : Plane} :
+    x ∈ K.integerTranslationCarrier T ↔
+      ∃ y ∈ K.support, ∃ t ∈ T, x = y + integerPoint t :=
+  Iff.rfl
+
+/-- Pointwise carrier membership is exactly discrete signature-carrier membership in lattice
+coordinates. -/
+theorem mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature
+    (K : PolygonalRegion) (T : Set IntegerPlane)
+    {u x : Plane} {q : IntegerPlane} (hx : x = u + integerPoint q) :
+    x ∈ K.integerTranslationCarrier T ↔
+      q ∈ discreteCarrier (K.signature u) T := by
+  constructor
+  · rintro ⟨y, hy, t, ht, hxy⟩
+    let f : IntegerPlane := q - t
+    have hf : f ∈ K.signature u := by
+      rw [mem_signature_iff]
+      rw [integerPoint_sub]
+      rw [hxy] at hx
+      convert hy using 1
+      calc
+        u + (integerPoint q - integerPoint t) =
+            (u + integerPoint q) - integerPoint t := by abel
+        _ = (y + integerPoint t) - integerPoint t := by rw [hx]
+        _ = y := by abel
+    exact mem_discreteCarrier_iff.mpr ⟨f, hf, t, ht, by dsimp only [f]; abel⟩
+  · rintro ⟨f, hf, t, ht, hq⟩
+    refine ⟨u + integerPoint f, mem_signature_iff.mp hf, t, ht, ?_⟩
+    rw [hx, hq, integerPoint_add]
+    abel
+
 /-- Moving the base point by an integer vector shifts the finite signature by the opposite
 integer vector. -/
 theorem signature_add_integerPoint (K : PolygonalRegion)
