@@ -330,6 +330,330 @@ theorem markerUnion_eq_modifiedMarkerSquare {M : ℕ} (hM : 0 < M) :
   · exact markerUnion_subset_modifiedMarkerSquare
   · exact modifiedMarkerSquare_subset_markerUnion hM
 
+/-- The coarse lattice with step equal to the marker side length. -/
+def markerLattice (M : ℕ) : AddSubgroup IntegerPlane where
+  carrier := {x | ∃ q : IntegerPlane, (markerSide M : ℤ) • q = x}
+  zero_mem' := ⟨0, by simp⟩
+  add_mem' := by
+    rintro x y ⟨qx, rfl⟩ ⟨qy, rfl⟩
+    exact ⟨qx + qy, by simp only [smul_add]⟩
+  neg_mem' := by
+    rintro x ⟨q, rfl⟩
+    exact ⟨-q, by simp only [smul_neg]⟩
+
+@[simp]
+theorem mem_markerLattice_iff {M : ℕ} {x : IntegerPlane} :
+    x ∈ markerLattice M ↔
+      ∃ q : IntegerPlane, (markerSide M : ℤ) • q = x :=
+  Iff.rfl
+
+/-- The ordinary marker square is a fundamental domain for the coarse lattice. -/
+theorem markerSquare_tiles_markerLattice (M : ℕ) :
+    TilesUniverse (markerSquare M) (markerLattice M : Set IntegerPlane) := by
+  apply tilesUniverse_of_existsUnique
+  intro x
+  let n : ℤ := markerSide M
+  have hn : 0 < n := by
+    dsimp only [n, markerSide]
+    omega
+  let q : IntegerPlane := ![x 0 / n, x 1 / n]
+  let f : IntegerPlane := latticePoint (x 0 % n) (x 1 % n)
+  have hfBounds : ∀ i, 0 ≤ f i ∧ f i < n := by
+    intro i
+    fin_cases i
+    · exact ⟨Int.emod_nonneg _ hn.ne', Int.emod_lt_of_pos _ hn⟩
+    · exact ⟨Int.emod_nonneg _ hn.ne', Int.emod_lt_of_pos _ hn⟩
+  refine ⟨f, ?_, ?_⟩
+  · constructor
+    · rw [markerSquare, mem_gridBox_iff]
+      have h0 := hfBounds 0
+      have h1 := hfBounds 1
+      dsimp only [n] at h0 h1
+      constructor
+      · exact h0.1
+      constructor
+      · omega
+      constructor
+      · exact h1.1
+      · omega
+    · change x - f ∈ markerLattice M
+      rw [mem_markerLattice_iff]
+      refine ⟨q, ?_⟩
+      funext i
+      fin_cases i
+      · change (markerSide M : ℤ) * (x 0 / (markerSide M : ℤ)) =
+          x 0 - x 0 % (markerSide M : ℤ)
+        linarith [Int.emod_add_mul_ediv (x 0) (markerSide M : ℤ)]
+      · change (markerSide M : ℤ) * (x 1 / (markerSide M : ℤ)) =
+          x 1 - x 1 % (markerSide M : ℤ)
+        linarith [Int.emod_add_mul_ediv (x 1) (markerSide M : ℤ)]
+  · intro g hg
+    rw [markerSquare, mem_gridBox_iff] at hg
+    obtain ⟨q', hq'⟩ := mem_markerLattice_iff.mp hg.2
+    have hcoord : ∀ i, x i % n = g i := by
+      intro i
+      have hbounds : 0 ≤ g i ∧ g i < n := by
+        fin_cases i
+        · change 0 ≤ g 0 ∧ g 0 < n
+          dsimp only [n]
+          omega
+        · change 0 ≤ g 1 ∧ g 1 < n
+          dsimp only [n]
+          omega
+      have heq : g i + n * q' i = x i := by
+        have h := congrFun hq' i
+        simp only [Pi.smul_apply, smul_eq_mul] at h
+        change (markerSide M : ℤ) * q' i = x i - g i at h
+        dsimp only [n]
+        linarith
+      exact ((Int.ediv_emod_unique hn).mpr
+        ⟨heq, hbounds.1, hbounds.2⟩).2
+    funext i
+    fin_cases i
+    · exact (hcoord 0).symm
+    · exact (hcoord 1).symm
+
+/-- Replace the two boundary holes of the ordinary square by the corresponding protrusions. -/
+def markerSquareReplacement (M : ℕ) (z : IntegerPlane) : IntegerPlane :=
+  if z = markerWestHole then markerEast M
+  else if z = markerSouthHole then markerNorth M
+  else z
+
+private theorem markerWestHole_mem_markerSquare (M : ℕ) :
+    markerWestHole ∈ markerSquare M := by
+  rw [markerSquare, mem_gridBox_iff]
+  simp only [markerWestHole, latticePoint_apply_zero, latticePoint_apply_one, markerSide]
+  omega
+
+private theorem markerSouthHole_mem_markerSquare (M : ℕ) :
+    markerSouthHole ∈ markerSquare M := by
+  rw [markerSquare, mem_gridBox_iff]
+  simp only [markerSouthHole, latticePoint_apply_zero, latticePoint_apply_one, markerSide]
+  omega
+
+private theorem markerEast_not_mem_markerSquare (M : ℕ) :
+    markerEast M ∉ markerSquare M := by
+  rw [markerSquare, mem_gridBox_iff]
+  simp only [markerEast, latticePoint_apply_zero, latticePoint_apply_one, markerSide]
+  omega
+
+private theorem markerNorth_not_mem_markerSquare (M : ℕ) :
+    markerNorth M ∉ markerSquare M := by
+  rw [markerSquare, mem_gridBox_iff]
+  simp only [markerNorth, latticePoint_apply_zero, latticePoint_apply_one, markerSide]
+  omega
+
+private theorem markerEast_ne_markerNorth (M : ℕ) :
+    markerEast M ≠ markerNorth M := by
+  intro h
+  have h0 := congrFun h 0
+  simp only [markerEast, markerNorth, latticePoint_apply_zero, markerSide] at h0
+  omega
+
+private theorem markerWestHole_ne_markerSouthHole :
+    markerWestHole ≠ markerSouthHole := by
+  intro h
+  have h0 := congrFun h 0
+  simp only [markerWestHole, markerSouthHole, latticePoint_apply_zero] at h0
+  omega
+
+private theorem markerEast_ne_markerWestHole (M : ℕ) :
+    markerEast M ≠ markerWestHole := by
+  intro h
+  have h0 := congrFun h 0
+  simp only [markerEast, markerWestHole, latticePoint_apply_zero, markerSide] at h0
+  omega
+
+private theorem markerEast_ne_markerSouthHole (M : ℕ) :
+    markerEast M ≠ markerSouthHole := by
+  intro h
+  have h0 := congrFun h 0
+  simp only [markerEast, markerSouthHole, latticePoint_apply_zero, markerSide] at h0
+  omega
+
+private theorem markerNorth_ne_markerWestHole (M : ℕ) :
+    markerNorth M ≠ markerWestHole := by
+  intro h
+  have h1 := congrFun h 1
+  simp only [markerNorth, markerWestHole, latticePoint_apply_one, markerSide] at h1
+  omega
+
+private theorem markerNorth_ne_markerSouthHole (M : ℕ) :
+    markerNorth M ≠ markerSouthHole := by
+  intro h
+  have h1 := congrFun h 1
+  simp only [markerNorth, markerSouthHole, latticePoint_apply_one, markerSide] at h1
+  omega
+
+private theorem markerSquareReplacement_west (M : ℕ) :
+    markerSquareReplacement M markerWestHole = markerEast M := by
+  rw [markerSquareReplacement, if_pos rfl]
+
+private theorem markerSquareReplacement_south (M : ℕ) :
+    markerSquareReplacement M markerSouthHole = markerNorth M := by
+  rw [markerSquareReplacement, if_neg markerWestHole_ne_markerSouthHole.symm, if_pos rfl]
+
+private theorem markerSquareReplacement_of_ne (M : ℕ) {z : IntegerPlane}
+    (hwest : z ≠ markerWestHole) (hsouth : z ≠ markerSouthHole) :
+    markerSquareReplacement M z = z := by
+  rw [markerSquareReplacement, if_neg hwest, if_neg hsouth]
+
+private theorem markerEast_mem_modifiedMarkerSquare (M : ℕ) :
+    markerEast M ∈ modifiedMarkerSquare M := by
+  rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase]
+  exact ⟨markerEast_ne_markerSouthHole M, markerEast_ne_markerWestHole M,
+    Finset.mem_insert.mpr (Or.inr (Finset.mem_insert_self ..))⟩
+
+private theorem markerNorth_mem_modifiedMarkerSquare (M : ℕ) :
+    markerNorth M ∈ modifiedMarkerSquare M := by
+  rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase]
+  exact ⟨markerNorth_ne_markerSouthHole M, markerNorth_ne_markerWestHole M,
+    Finset.mem_insert_self ..⟩
+
+private theorem markerSquareReplacement_injectiveOn (M : ℕ) :
+    Set.InjOn (markerSquareReplacement M) (markerSquare M) := by
+  intro x hx y hy hxy
+  by_cases hxWest : x = markerWestHole
+  · subst x
+    by_cases hyWest : y = markerWestHole
+    · exact hyWest.symm
+    · by_cases hySouth : y = markerSouthHole
+      · subst y
+        rw [markerSquareReplacement_west, markerSquareReplacement_south] at hxy
+        exact (markerEast_ne_markerNorth M hxy).elim
+      · rw [markerSquareReplacement_west,
+          markerSquareReplacement_of_ne M hyWest hySouth] at hxy
+        exfalso
+        apply markerEast_not_mem_markerSquare M
+        rw [hxy]
+        exact hy
+  · by_cases hxSouth : x = markerSouthHole
+    · subst x
+      by_cases hyWest : y = markerWestHole
+      · subst y
+        rw [markerSquareReplacement_south, markerSquareReplacement_west] at hxy
+        exact (markerEast_ne_markerNorth M hxy.symm).elim
+      · by_cases hySouth : y = markerSouthHole
+        · exact hySouth.symm
+        · rw [markerSquareReplacement_south,
+            markerSquareReplacement_of_ne M hyWest hySouth] at hxy
+          exfalso
+          apply markerNorth_not_mem_markerSquare M
+          rw [hxy]
+          exact hy
+    · by_cases hyWest : y = markerWestHole
+      · subst y
+        rw [markerSquareReplacement_of_ne M hxWest hxSouth,
+          markerSquareReplacement_west] at hxy
+        exfalso
+        apply markerEast_not_mem_markerSquare M
+        rw [← hxy]
+        exact hx
+      · by_cases hySouth : y = markerSouthHole
+        · subst y
+          rw [markerSquareReplacement_of_ne M hxWest hxSouth,
+            markerSquareReplacement_south] at hxy
+          exfalso
+          apply markerNorth_not_mem_markerSquare M
+          rw [← hxy]
+          exact hx
+        · rw [markerSquareReplacement_of_ne M hxWest hxSouth,
+            markerSquareReplacement_of_ne M hyWest hySouth] at hxy
+          exact hxy
+
+private theorem image_markerSquareReplacement (M : ℕ) :
+    (markerSquare M).image (markerSquareReplacement M) = modifiedMarkerSquare M := by
+  classical
+  ext z
+  constructor
+  · intro hz
+    rw [Finset.mem_image] at hz
+    obtain ⟨x, hx, rfl⟩ := hz
+    by_cases hxWest : x = markerWestHole
+    · subst x
+      rw [markerSquareReplacement_west]
+      exact markerEast_mem_modifiedMarkerSquare M
+    · by_cases hxSouth : x = markerSouthHole
+      · subst x
+        rw [markerSquareReplacement_south]
+        exact markerNorth_mem_modifiedMarkerSquare M
+      · rw [markerSquareReplacement_of_ne M hxWest hxSouth]
+        rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase]
+        exact ⟨hxSouth, hxWest, Finset.mem_insert.mpr <|
+          Or.inr <| Finset.mem_insert.mpr <| Or.inr hx⟩
+  · intro hz
+    rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase] at hz
+    obtain ⟨hzSouth, hzWest, hz⟩ := hz
+    rw [Finset.mem_image]
+    rcases Finset.mem_insert.mp hz with hNorth | hz
+    · refine ⟨markerSouthHole, markerSouthHole_mem_markerSquare M, ?_⟩
+      rw [markerSquareReplacement_south, hNorth]
+    · rcases Finset.mem_insert.mp hz with hEast | hzSquare
+      · refine ⟨markerWestHole, markerWestHole_mem_markerSquare M, ?_⟩
+        rw [markerSquareReplacement_west, hEast]
+      · refine ⟨z, hzSquare, ?_⟩
+        exact markerSquareReplacement_of_ne M hzWest hzSouth
+
+private theorem markerSquareReplacement_sub_mem_markerLattice
+    (M : ℕ) {z : IntegerPlane} (hz : z ∈ markerSquare M) :
+    markerSquareReplacement M z - z ∈ markerLattice M := by
+  rw [mem_markerLattice_iff]
+  by_cases hzWest : z = markerWestHole
+  · subst z
+    refine ⟨latticePoint 1 0, ?_⟩
+    rw [markerSquareReplacement_west]
+    funext i
+    fin_cases i <;>
+      simp [markerWestHole, markerEast, markerSide, latticePoint, Pi.smul_apply]
+  · by_cases hzSouth : z = markerSouthHole
+    · subst z
+      refine ⟨latticePoint 0 1, ?_⟩
+      rw [markerSquareReplacement_south]
+      funext i
+      fin_cases i <;>
+        simp [markerSouthHole, markerNorth, markerSide, latticePoint, Pi.smul_apply]
+    · refine ⟨0, ?_⟩
+      rw [markerSquareReplacement_of_ne M hzWest hzSouth]
+      simp only [smul_zero, sub_self]
+
+private theorem tilesUniverse_image_of_sub_mem_periods
+    {G : Type*} [AddCommGroup G] [DecidableEq G] (H : AddSubgroup G)
+    (F : Finset G) (e : G → G)
+    (hdiff : ∀ f ∈ F, e f - f ∈ H)
+    (hF : TilesUniverse F (H : Set G)) :
+    TilesUniverse (F.image e) (H : Set G) := by
+  classical
+  apply tilesUniverse_of_existsUnique
+  intro x
+  obtain ⟨f, hf, hfunique⟩ := existsUnique_tile_representation hF x
+  refine ⟨e f, ?_, ?_⟩
+  · constructor
+    · exact Finset.mem_image.mpr ⟨f, hf.1, rfl⟩
+    · have hneg : f - e f ∈ H := by
+        simpa only [neg_sub] using (H.neg_mem (hdiff f hf.1))
+      have hadd := H.add_mem hf.2 hneg
+      change x - e f ∈ H
+      convert hadd using 1
+      abel
+  · intro g hg
+    obtain ⟨g₀, hg₀F, hg₀g⟩ := Finset.mem_image.mp hg.1
+    have hsourceTranslation : x - g₀ ∈ H := by
+      have hadd := H.add_mem hg.2 (hdiff g₀ hg₀F)
+      rw [← hg₀g] at hadd
+      convert hadd using 1
+      abel
+    have hg₀f := hfunique g₀ ⟨hg₀F, hsourceTranslation⟩
+    rw [← hg₀g, hg₀f]
+
+/-- The paper's modified square also tiles by the coarse marker lattice. -/
+theorem modifiedMarkerSquare_tiles_markerLattice (M : ℕ) :
+    TilesUniverse (modifiedMarkerSquare M) (markerLattice M : Set IntegerPlane) := by
+  rw [← image_markerSquareReplacement M]
+  exact tilesUniverse_image_of_sub_mem_periods (markerLattice M) (markerSquare M)
+    (markerSquareReplacement M)
+    (fun f hf ↦ markerSquareReplacement_sub_mem_markerLattice M hf)
+    (markerSquare_tiles_markerLattice M)
+
 section ColoredRaster
 
 /-- Package a finite family of lattice tiles as one tile in `ℤ² × ZMod M`, with the second
