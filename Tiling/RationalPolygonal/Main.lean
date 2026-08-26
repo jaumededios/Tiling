@@ -1,4 +1,6 @@
 import Tiling.RationalPolygonal.RasterRigidity
+import Tiling.RationalPolygonal.WeakPeriodicity
+import Tiling.RationalPolygonal.Decision
 import TranslationalTilings.Main
 
 /-!
@@ -15,23 +17,6 @@ open TranslationalTilings
 open scoped Pointwise
 
 namespace Tiling.RationalPolygonal
-
-private theorem setPeriodicBy_integerPoint_image
-    {A : Set IntegerPlane} {v : IntegerPlane}
-    (hA : ∀ x, x + v ∈ A ↔ x ∈ A) :
-    SetPeriodicBy (integerPoint '' A) (integerPoint v) := by
-  intro x
-  constructor
-  · rintro ⟨z, hz, hzx⟩
-    have hzsub : z - v ∈ A := by
-      apply (hA (z - v)).mp
-      simpa only [sub_add_cancel] using hz
-    refine ⟨z - v, hzsub, ?_⟩
-    have hpoint := congrArg (fun w : Plane ↦ w - integerPoint v) hzx
-    simpa only [integerPoint_sub, add_sub_cancel_right] using hpoint
-  · rintro ⟨z, hz, rfl⟩
-    have hzadd : z + v ∈ A := (hA z).mpr hz
-    exact ⟨z + v, hzadd, integerPoint_add z v⟩
 
 /-- A positive scalar period in both lattice coordinates becomes two linearly independent real
 periods after embedding the integer plane. -/
@@ -141,6 +126,30 @@ theorem tileable_iff_exists_doublyPeriodic_tiling (K : RationalPolygonalRegion) 
     exact K.exists_doublyPeriodic_tiling hT
   · rintro ⟨T, hT, -⟩
     exact ⟨T, hT⟩
+
+/-- **Paper Theorem 1.1.** A rational polygonal region tiles the plane exactly when it admits a
+doubly periodic translational tiling. -/
+theorem theorem_1_1 (K : RationalPolygonalRegion) :
+    (∃ T : Set Plane, K.toPolygonalRegion.Tiles T) ↔
+      ∃ T : Set Plane,
+        K.toPolygonalRegion.Tiles T ∧ DoublyPeriodic T :=
+  K.tileable_iff_exists_doublyPeriodic_tiling
+
+/-- **Paper Corollary 1.1.** The executable bounded search on a compiled raster presentation is
+true exactly when the represented rational polygonal region tiles the plane. -/
+theorem corollary_1_1
+    (P : RasterPresentation) (K : RationalPolygonalRegion)
+    (hP : P.Represents K) :
+    P.tileDecision = true ↔
+      ∃ T : Set Plane, K.toPolygonalRegion.Tiles T :=
+  P.tileDecision_eq_true_iff K hP
+
+/-- **Paper Theorem 1.2.** Every translation set tiling by a rational polygonal region is weakly
+periodic. -/
+theorem theorem_1_2
+    {K : RationalPolygonalRegion} {T : Set Plane}
+    (hT : K.toPolygonalRegion.Tiles T) : WeaklyPeriodic T :=
+  RationalPolygonalRegion.Tiles.weaklyPeriodic hT
 
 end RationalPolygonalRegion
 

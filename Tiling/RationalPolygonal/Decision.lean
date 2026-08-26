@@ -1,4 +1,4 @@
-import Tiling.RationalPolygonal.Main
+import Tiling.RationalPolygonal.RasterRigidity
 import TranslationalTilings.Algorithms
 
 set_option linter.style.header false
