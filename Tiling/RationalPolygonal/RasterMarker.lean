@@ -99,9 +99,18 @@ noncomputable def markerZero (M : ℕ) : Finset IntegerPlane :=
     (insert (markerEast M) (markerSquare M \ nonzeroMarkerRings M))).erase
       markerWestHole).erase markerSouthHole
 
+/-- The square after making the two asymmetric boundary holes and protrusions. -/
+noncomputable def modifiedMarkerSquare (M : ℕ) : Finset IntegerPlane :=
+  ((insert (markerNorth M) (insert (markerEast M) (markerSquare M))).erase
+    markerWestHole).erase markerSouthHole
+
 /-- Marker block assigned to a color. -/
 noncomputable def markerBlock {M : ℕ} (i : Fin M) : Finset IntegerPlane :=
   if i.val = 0 then markerZero M else markerRing i
+
+/-- Union of all color blocks in the marker family. -/
+noncomputable def markerUnion (M : ℕ) : Finset IntegerPlane :=
+  Finset.univ.biUnion fun i : Fin M ↦ markerBlock i
 
 @[simp]
 theorem markerBlock_zero {M : ℕ} (hM : 0 < M) :
@@ -236,6 +245,90 @@ theorem markerBlock_disjoint {M : ℕ} {i j : Fin M} (hij : i ≠ j) :
       exact (markerZero_disjoint_markerRing hi).symm
     · rw [markerBlock_of_ne_zero hi, markerBlock_of_ne_zero hj]
       exact markerRing_disjoint hij
+
+private theorem markerZero_subset_modifiedMarkerSquare (M : ℕ) :
+    markerZero M ⊆ modifiedMarkerSquare M := by
+  classical
+  intro z hz
+  rw [markerZero, Finset.mem_erase, Finset.mem_erase] at hz
+  obtain ⟨hsouth, hwest, hbase⟩ := hz
+  rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase]
+  refine ⟨hsouth, hwest, ?_⟩
+  rcases Finset.mem_insert.mp hbase with hNorth | hrest
+  · exact Finset.mem_insert.mpr (Or.inl hNorth)
+  · rcases Finset.mem_insert.mp hrest with hEast | hbase'
+    · exact Finset.mem_insert.mpr
+        (Or.inr (Finset.mem_insert.mpr (Or.inl hEast)))
+    · have hsquare : z ∈ markerSquare M := (Finset.mem_sdiff.mp hbase').1
+      have hinner : z ∈ insert (markerEast M) (markerSquare M) :=
+        Finset.mem_insert.mpr (Or.inr hsquare)
+      exact Finset.mem_insert.mpr (Or.inr hinner)
+
+private theorem markerRing_subset_modifiedMarkerSquare {M : ℕ} {i : Fin M}
+    (hi : i.val ≠ 0) : markerRing i ⊆ modifiedMarkerSquare M := by
+  classical
+  intro z hz
+  have hsquare := markerRing_subset_markerSquare hi hz
+  have hsouth : z ≠ markerSouthHole := by
+    intro hzSouth
+    subst z
+    have hb := markerRing_bounds hz
+    simp only [markerSouthHole, latticePoint_apply_one] at hb
+    omega
+  have hwest : z ≠ markerWestHole := by
+    intro hzWest
+    subst z
+    have hb := markerRing_bounds hz
+    simp only [markerWestHole, latticePoint_apply_one] at hb
+    omega
+  rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase]
+  exact ⟨hsouth, hwest, Finset.mem_insert.mpr <|
+    Or.inr <| Finset.mem_insert.mpr <| Or.inr hsquare⟩
+
+private theorem markerUnion_subset_modifiedMarkerSquare {M : ℕ} :
+    markerUnion M ⊆ modifiedMarkerSquare M := by
+  classical
+  intro z hz
+  rw [markerUnion, Finset.mem_biUnion] at hz
+  obtain ⟨i, -, hzi⟩ := hz
+  by_cases hi : i.val = 0
+  · rw [markerBlock, if_pos hi] at hzi
+    exact markerZero_subset_modifiedMarkerSquare M hzi
+  · rw [markerBlock_of_ne_zero hi] at hzi
+    exact markerRing_subset_modifiedMarkerSquare hi hzi
+
+private theorem modifiedMarkerSquare_subset_markerUnion {M : ℕ} (hM : 0 < M) :
+    modifiedMarkerSquare M ⊆ markerUnion M := by
+  classical
+  intro z hz
+  rw [modifiedMarkerSquare, Finset.mem_erase, Finset.mem_erase] at hz
+  obtain ⟨hsouth, hwest, hmodified⟩ := hz
+  rw [markerUnion, Finset.mem_biUnion]
+  by_cases hrings : z ∈ nonzeroMarkerRings M
+  · rw [nonzeroMarkerRings, Finset.mem_biUnion] at hrings
+    obtain ⟨i, -, hi⟩ := hrings
+    split at hi
+    · simp at hi
+    · refine ⟨i, Finset.mem_univ i, ?_⟩
+      rw [markerBlock_of_ne_zero (by assumption)]
+      exact hi
+  · let zero : Fin M := ⟨0, hM⟩
+    refine ⟨zero, Finset.mem_univ zero, ?_⟩
+    rw [markerBlock_zero hM, markerZero, Finset.mem_erase, Finset.mem_erase]
+    refine ⟨hsouth, hwest, ?_⟩
+    rcases Finset.mem_insert.mp hmodified with hNorth | hrest
+    · exact Finset.mem_insert.mpr (Or.inl hNorth)
+    · rcases Finset.mem_insert.mp hrest with hEast | hsquare
+      · exact Finset.mem_insert.mpr (Or.inr <| Finset.mem_insert.mpr <| Or.inl hEast)
+      · exact Finset.mem_insert.mpr (Or.inr <| Finset.mem_insert.mpr <|
+          Or.inr (Finset.mem_sdiff.mpr ⟨hsquare, hrings⟩))
+
+/-- The marker blocks partition exactly the modified square used in the raster construction. -/
+theorem markerUnion_eq_modifiedMarkerSquare {M : ℕ} (hM : 0 < M) :
+    markerUnion M = modifiedMarkerSquare M := by
+  apply Finset.Subset.antisymm
+  · exact markerUnion_subset_modifiedMarkerSquare
+  · exact modifiedMarkerSquare_subset_markerUnion hM
 
 section ColoredRaster
 
