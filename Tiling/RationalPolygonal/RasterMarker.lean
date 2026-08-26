@@ -11,7 +11,7 @@ rings on a grid of spacing three.  Color zero fills the rest of the square and c
 asymmetric protrusions and holes which force tiling translations into one coarse-lattice coset.
 -/
 
-open Set
+open Filter MeasureTheory Set
 open TranslationalTilings
 open scoped Pointwise
 
@@ -1397,6 +1397,26 @@ theorem relevantPlanarSignatureAt_tilesUniverse_iff
     exact h (K.relevantPlanarSignatureAt i)
       (K.relevantSignatureAt_mem (K.relevantPlanarSignaturePermutation i))
 
+/-- Equality of carriers over the reordered planar enumeration is equality over the underlying
+finite family of relevant signatures. -/
+theorem relevantPlanarSignatureAt_discreteCarrier_eq_iff
+    (K : PolygonalRegion) (T₀ T₁ : Set IntegerPlane) :
+    (∀ i, discreteCarrier (K.relevantPlanarSignatureAt i) T₀ =
+        discreteCarrier (K.relevantPlanarSignatureAt i) T₁) ↔
+      ∀ F ∈ K.relevantSignatures,
+        discreteCarrier F T₀ = discreteCarrier F T₁ := by
+  constructor
+  · intro h F hF
+    obtain ⟨j, hj⟩ := K.exists_relevantSignatureAt_eq hF
+    let i := K.relevantPlanarSignaturePermutation.symm j
+    have hperm : K.relevantPlanarSignaturePermutation i = j :=
+      K.relevantPlanarSignaturePermutation.apply_symm_apply j
+    rw [← hj, ← hperm]
+    exact h i
+  · intro h i
+    exact h (K.relevantPlanarSignatureAt i)
+      (K.relevantSignatureAt_mem (K.relevantPlanarSignaturePermutation i))
+
 /-- The single planar lattice tile obtained by replacing each relevant signature point with its
 color marker. -/
 noncomputable def relevantPlanarRasterTile (K : PolygonalRegion) :
@@ -1440,6 +1460,20 @@ theorem relevantPlanarRasterTile_tilesUniverse_iff
     planarRasterTile_tilesUniverse_iff_family K.relevantSignatureCount_pos]
   exact K.relevantPlanarSignatureAt_tilesUniverse_iff T
 
+/-- Equality of two coarse-translated planar raster carriers is exactly equality of every relevant
+signature carrier. -/
+theorem relevantPlanarRasterTile_discreteCarrier_eq_iff
+    (K : PolygonalRegion) (T₀ T₁ : Set IntegerPlane) :
+    discreteCarrier K.relevantPlanarRasterTile
+        (markerTranslationSet K.relevantSignatureCount T₀) =
+      discreteCarrier K.relevantPlanarRasterTile
+        (markerTranslationSet K.relevantSignatureCount T₁) ↔
+      ∀ F ∈ K.relevantSignatures,
+        discreteCarrier F T₀ = discreteCarrier F T₁ := by
+  rw [relevantPlanarRasterTile,
+    discreteCarrier_planarRaster_eq_iff K.relevantSignatureCount_pos]
+  exact K.relevantPlanarSignatureAt_discreteCarrier_eq_iff T₀ T₁
+
 /-- Continuous integer-translation tiling is equivalent to tiling by the single colored raster
 tile in the product group. -/
 theorem tiles_integerPoint_image_iff_relevantColoredRasterTile
@@ -1459,6 +1493,20 @@ theorem tiles_integerPoint_image_iff_relevantPlanarRasterTile
         (markerTranslationSet K.relevantSignatureCount T) := by
   rw [K.tiles_integerPoint_image_iff_relevantSignatures,
     K.relevantPlanarRasterTile_tilesUniverse_iff]
+
+/-- Equality of coarse-translated planar raster carriers implies almost-everywhere equality of the
+encoded polygonal carriers. -/
+theorem integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile
+    (K : PolygonalRegion) {T₀ T₁ : Set IntegerPlane}
+    (hcarrier :
+      discreteCarrier K.relevantPlanarRasterTile
+          (markerTranslationSet K.relevantSignatureCount T₀) =
+        discreteCarrier K.relevantPlanarRasterTile
+          (markerTranslationSet K.relevantSignatureCount T₁)) :
+    K.integerTranslationCarrier T₀ =ᵐ[volume]
+      K.integerTranslationCarrier T₁ := by
+  apply K.integerTranslationCarrier_ae_eq_of_relevantSignatures
+  exact (K.relevantPlanarRasterTile_discreteCarrier_eq_iff T₀ T₁).mp hcarrier
 
 end PolygonalRegion
 
