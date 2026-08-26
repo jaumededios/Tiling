@@ -64,6 +64,19 @@ private theorem carrierContactGraph_connected [Finite P]
     A.plateCarrier_nonempty
     (A.iUnion_plateCarrier_eq_univ hA)
 
+/-- A tiling with more than one plate has two distinct plate carriers with a common point. -/
+theorem exists_distinct_plate_carrier_contact [Finite P]
+    (hA : IsTiling A.prototiles A.placements)
+    (hplates : ¬Subsingleton A.Plate) :
+    ∃ C D : A.Plate,
+      C ≠ D ∧ (A.plateCarrier C ∩ A.plateCarrier D).Nonempty := by
+  let _ : Nontrivial A.Plate := not_subsingleton_iff_nontrivial.mp hplates
+  have hconnected := A.carrierContactGraph_connected hA
+  obtain ⟨C⟩ := hconnected.nonempty
+  obtain ⟨D, hCD⟩ := hconnected.preconnected.exists_adj_of_nontrivial C
+  rw [carrierContactGraph, SimpleGraph.intersectionGraph_adj] at hCD
+  exact ⟨C, D, hCD⟩
+
 private theorem not_mem_interior_left_of_mem_right_of_aedisjoint
     {s t : Set Plane} (htregular : closure (interior t) = t)
     (had : AEDisjoint volume s t) {x : Plane} (hxt : x ∈ t) :
@@ -76,14 +89,15 @@ private theorem not_mem_interior_left_of_mem_right_of_aedisjoint
   exact hne (measure_mono_null
     (Set.inter_subset_inter interior_subset interior_subset) had)
 
-/-- A boundary line of an invariant plate contains a placed vertex of that plate.  The proof takes a
-finite set of tiles covering a compact interval of the line, then looks at the right endpoint of the
-connected component of its parameter preimage. -/
-private theorem exists_placedVertex_on_invariant_contact_line [Finite P] {v : Plane}
+/-- A boundary line shared by two invariant plate carriers contains a placed vertex of the first
+plate at parameter at least one along the sliding direction.  The proof takes the tiles covering a
+compact line interval and finds the endpoint of the corresponding carrier component. -/
+theorem exists_placedVertex_on_invariant_contact_line [Finite P] {v : Plane}
     (hA : IsTiling A.prototiles A.placements) (hv : A.IsSlidingDirection v)
     {C D : A.Plate} (hCD : C ≠ D) {x : Plane}
     (hxC : x ∈ A.plateCarrier C) (hxD : x ∈ A.plateCarrier D) :
-    ∃ (i : C) (t : ℝ), t • v +ᵥ x ∈ A.placedVertexSet (i : A.placements) := by
+    ∃ (i : C) (t : ℝ), 1 ≤ t ∧
+      t • v +ᵥ x ∈ A.placedVertexSet (i : A.placements) := by
   classical
   let φ : ℝ → Plane := fun t ↦ t • v +ᵥ x
   have hφ : Continuous φ := by
@@ -213,7 +227,7 @@ private theorem exists_placedVertex_on_invariant_contact_line [Finite P] {v : Pl
     exact (not_lt_of_ge (hbGreatest.2 ht₂J)) hbt₂
   obtain ⟨i, _, hiS, _, hvertex, _⟩ :=
     A.exists_vertices_across_of_not_boundaryLocallyStraightAt hA S hbfrontier hbnotstraight
-  exact ⟨⟨i, hSsub hiS⟩, b, hvertex⟩
+  exact ⟨⟨i, hSsub hiS⟩, b, hone_le_b, hvertex⟩
 
 /-- A contact of two invariant plate carriers can be realized by aligning tile vertices along the
 sliding direction.
@@ -225,9 +239,9 @@ private theorem alignsAlong_of_carrierContact [Finite P] {v : Plane}
     ∃ r : ℝ, A.AlignsAlong v C D r := by
   rw [carrierContactGraph, SimpleGraph.intersectionGraph_adj] at hCD
   obtain ⟨hCDne, x, hxC, hxD⟩ := hCD
-  obtain ⟨i, tC, hi⟩ :=
+  obtain ⟨i, tC, -, hi⟩ :=
     A.exists_placedVertex_on_invariant_contact_line hA hv hCDne hxC hxD
-  obtain ⟨j, tD, hj⟩ :=
+  obtain ⟨j, tD, -, hj⟩ :=
     A.exists_placedVertex_on_invariant_contact_line hA hv hCDne.symm hxD hxC
   refine ⟨tD - tC, i, j, ⟨tD • v +ᵥ x, ?_, hj⟩⟩
   rw [Set.mem_vadd_set_iff_neg_vadd_mem]

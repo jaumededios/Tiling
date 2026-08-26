@@ -122,6 +122,102 @@ theorem plateCarrier_eq_translationCarrier
       simp only [vadd_eq_add]
       abel
 
+/-- For an integer-vertex polygonal monotile, the common real sliding line has a nonzero integer
+direction.  In the one-plate case every direction stabilizes the unique carrier.  Otherwise two
+applications of the contact-line vertex theorem produce distinct placed vertices in one plate;
+their difference is both parallel to the sliding line and integral. -/
+theorem Tiles.exists_integerSlidingDirection
+    {K : PolygonalRegion} (hK : K.HasIntegerVertices)
+    {T : Set Plane} (hT : K.Tiles T) :
+    ∃ w : IntegerPlane, w ≠ 0 ∧
+      (K.polygonalProtoTiling T).IsSlidingDirection (integerPoint w) := by
+  classical
+  let A := K.polygonalProtoTiling T
+  by_cases hplates : Subsingleton A.Plate
+  · let w : IntegerPlane := ![1, 0]
+    have hw : w ≠ 0 := by
+      intro hw
+      have := congrArg (fun z : IntegerPlane ↦ z 0) hw
+      norm_num [w] at this
+    refine ⟨w, hw, ?_⟩
+    refine ⟨fun hwzero ↦
+      hw (integerPoint_injective (hwzero.trans integerPoint_zero.symm)), ?_⟩
+    intro C r
+    have hcarrier : A.plateCarrier C = Set.univ := by
+      rw [← A.iUnion_plateCarrier_eq_univ hT]
+      ext x
+      constructor
+      · intro hx
+        exact Set.mem_iUnion.mpr ⟨C, hx⟩
+      · intro hx
+        obtain ⟨D, hxD⟩ := Set.mem_iUnion.mp hx
+        simpa only [hplates.elim D C] using hxD
+    rw [AddAction.mem_stabilizer_iff, hcarrier]
+    simp
+  · obtain ⟨v, hv⟩ := A.exists_isSlidingDirection hT
+    obtain ⟨C, D, hCD, x, hxC, hxD⟩ :=
+      A.exists_distinct_plate_carrier_contact hT hplates
+    obtain ⟨i, t, ht, hi⟩ :=
+      A.exists_placedVertex_on_invariant_contact_line hT hv hCD hxC hxD
+    let x' : Plane := (t + 1) • v +ᵥ x
+    have hx'C : x' ∈ A.plateCarrier C := by
+      rw [← hv.vadd_plateCarrier C (t + 1)]
+      exact ⟨x, hxC, rfl⟩
+    have hx'D : x' ∈ A.plateCarrier D := by
+      rw [← hv.vadd_plateCarrier D (t + 1)]
+      exact ⟨x, hxD, rfl⟩
+    obtain ⟨j, s, hs, hj⟩ :=
+      A.exists_placedVertex_on_invariant_contact_line hT hv hCD hx'C hx'D
+    let p : Plane := t • v +ᵥ x
+    let p' : Plane := s • v +ᵥ x'
+    let u : Plane := -i.1.1.1 +ᵥ p
+    let u' : Plane := -j.1.1.1 +ᵥ p'
+    have hu : u ∈ vertexSet K.support := by
+      change p ∈ A.placedVertexSet (i : A.placements) at hi
+      change p ∈ i.1.1.1 +ᵥ vertexSet K.support at hi
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hi
+      exact hi
+    have hu' : u' ∈ vertexSet K.support := by
+      change p' ∈ A.placedVertexSet (j : A.placements) at hj
+      change p' ∈ j.1.1.1 +ᵥ vertexSet K.support at hj
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hj
+      exact hj
+    have hiComp : A.vertexGraph.connectedComponentMk (i : A.placements) = C :=
+      (SimpleGraph.ConnectedComponent.mem_supp_iff C (i : A.placements)).mp i.2
+    have hjComp : A.vertexGraph.connectedComponentMk (j : A.placements) = C :=
+      (SimpleGraph.ConnectedComponent.mem_supp_iff C (j : A.placements)).mp j.2
+    have hijPlate : A.SamePlate (i : A.placements) (j : A.placements) := by
+      rw [A.samePlate_iff_component_eq]
+      exact hiComp.trans hjComp.symm
+    have htranslations : j.1.1.1 - i.1.1.1 ∈ integerLattice :=
+      samePlate_translation_sub_mem_integerLattice hK hijPlate
+    have hvertices : u' - u ∈ integerLattice :=
+      AddSubgroup.sub_mem integerLattice (hK u' hu') (hK u hu)
+    have hpint : p' - p ∈ integerLattice := by
+      have hsum := AddSubgroup.add_mem integerLattice htranslations hvertices
+      convert hsum using 1
+      simp only [u, u', vadd_eq_add]
+      abel
+    have hpdiff : p' - p = (s + 1) • v := by
+      simp only [p, p', x', vadd_eq_add, add_smul]
+      module
+    have hsone : s + 1 ≠ 0 := by linarith
+    have hpne : p' - p ≠ 0 := by
+      rw [hpdiff]
+      exact smul_ne_zero hsone hv.ne_zero
+    obtain ⟨w, hwpoint⟩ := mem_integerLattice_iff.mp hpint
+    have hw : w ≠ 0 := by
+      intro hw
+      apply hpne
+      rw [← hwpoint, hw, integerPoint_zero]
+    refine ⟨w, hw, ?_⟩
+    refine ⟨fun hwzero ↦
+      hw (integerPoint_injective (hwzero.trans integerPoint_zero.symm)), ?_⟩
+    intro E r
+    have hwparallel : integerPoint w = (s + 1) • v := hwpoint.trans hpdiff
+    rw [hwparallel, smul_smul]
+    exact hv.invariant E (r * (s + 1))
+
 /-- Translation vectors of one old plate after applying its assigned component shift. -/
 def shiftedContinuousPlateTranslations
     (K : PolygonalRegion) (T : Set Plane) (v : Plane)
@@ -191,20 +287,21 @@ theorem IsSlidingDirection.tiles_shiftedContinuousTranslations
     (PolygonalProtoTiling.IsSlidingDirection.isTiling_shiftComponents
       (K.polygonalProtoTiling T) hv hT shift)
 
-/-- A monotile tiling admits a component shift whose translation set is explicit and whose new
-vertex-contact graph is connected.  The returned sliding certificate still refers to the old
-plates, so downstream arguments can transport each plate separately. -/
-theorem Tiles.exists_connected_shiftedContinuousTranslations
-    {K : PolygonalRegion} {T : Set Plane} (hT : K.Tiles T) :
-    ∃ (v : Plane)
-        (_hv : (K.polygonalProtoTiling T).IsSlidingDirection v)
-        (shift : (K.polygonalProtoTiling T).Plate → ℝ),
+/-- A certified sliding direction admits an explicit component shift whose new vertex-contact
+graph is connected.  The certificate still refers to the old plates, so downstream arguments can
+transport each plate separately. -/
+theorem IsSlidingDirection.exists_connected_shiftedContinuousTranslations
+    {K : PolygonalRegion} {T : Set Plane} {v : Plane}
+    (hv : (K.polygonalProtoTiling T).IsSlidingDirection v)
+    (hT : K.Tiles T) :
+    ∃ shift : (K.polygonalProtoTiling T).Plate → ℝ,
       K.Tiles (K.shiftedContinuousTranslations T v shift) ∧
       (K.polygonalProtoTiling
         (K.shiftedContinuousTranslations T v shift)).vertexGraph.Connected := by
-  obtain ⟨v, hv, shift, hshifted, hconnected⟩ :=
-    (K.polygonalProtoTiling T).exists_connected_shift hT
-  refine ⟨v, hv, shift, ?_, ?_⟩
+  obtain ⟨shift, hshifted, hconnected⟩ :=
+    PolygonalProtoTiling.IsSlidingDirection.exists_connected_component_shift
+      (K.polygonalProtoTiling T) hv hT
+  refine ⟨shift, ?_, ?_⟩
   · change IsTiling K.prototileFamily
       (K.placements (K.shiftedContinuousTranslations T v shift))
     rw [K.placements_shiftedContinuousTranslations]
@@ -243,6 +340,36 @@ theorem Tiles.exists_connected_shiftedContinuousTranslations
           hvertex_i, hvertex_j] using hvertex
   }
   exact φ.connected_iff.mpr hconnected
+
+/-- A monotile tiling admits an explicit connected component shift. -/
+theorem Tiles.exists_connected_shiftedContinuousTranslations
+    {K : PolygonalRegion} {T : Set Plane} (hT : K.Tiles T) :
+    ∃ (v : Plane)
+        (_hv : (K.polygonalProtoTiling T).IsSlidingDirection v)
+        (shift : (K.polygonalProtoTiling T).Plate → ℝ),
+      K.Tiles (K.shiftedContinuousTranslations T v shift) ∧
+      (K.polygonalProtoTiling
+        (K.shiftedContinuousTranslations T v shift)).vertexGraph.Connected := by
+  obtain ⟨v, hv⟩ := (K.polygonalProtoTiling T).exists_isSlidingDirection hT
+  obtain ⟨shift, htiles, hconnected⟩ :=
+    PolygonalRegion.IsSlidingDirection.exists_connected_shiftedContinuousTranslations hv hT
+  exact ⟨v, hv, shift, htiles, hconnected⟩
+
+/-- Integer-vertex monotile tilings have a connected component shift along a nonzero integer
+direction, while retaining the old continuous plate decomposition. -/
+theorem Tiles.exists_integer_connected_shiftedContinuousTranslations
+    {K : PolygonalRegion} (hK : K.HasIntegerVertices)
+    {T : Set Plane} (hT : K.Tiles T) :
+    ∃ (w : IntegerPlane) (_hw : w ≠ 0)
+        (_hv : (K.polygonalProtoTiling T).IsSlidingDirection (integerPoint w))
+        (shift : (K.polygonalProtoTiling T).Plate → ℝ),
+      K.Tiles (K.shiftedContinuousTranslations T (integerPoint w) shift) ∧
+      (K.polygonalProtoTiling
+        (K.shiftedContinuousTranslations T (integerPoint w) shift)).vertexGraph.Connected := by
+  obtain ⟨w, hw, hv⟩ := hT.exists_integerSlidingDirection hK
+  obtain ⟨shift, htiles, hconnected⟩ :=
+    PolygonalRegion.IsSlidingDirection.exists_connected_shiftedContinuousTranslations hv hT
+  exact ⟨w, hw, hv, shift, htiles, hconnected⟩
 
 end PolygonalRegion
 

@@ -2,6 +2,8 @@ import Mathlib.Data.Fintype.Pigeonhole
 import Mathlib.Data.Nat.Factorial.Basic
 import Tiling.RationalPolygonal.Earthquake
 
+set_option linter.style.header false
+
 /-!
 # Uniform periodic structure of earthquake plates
 
