@@ -167,6 +167,57 @@ theorem planeTransferGraph_connected {F : Finset IntegerPlane}
     exact hscomp
   exact SimpleGraph.ConnectedComponent.eq.mp hcomp.symm
 
+private theorem planeTransfer_walk_sub_mem_addSubgroup
+    (H : AddSubgroup IntegerPlane)
+    {F : Finset IntegerPlane} {T : Set IntegerPlane}
+    (hedge : ∀ {v : IntegerPlane} (_hv : v = horizontalUnit ∨ v = verticalUnit)
+      {t t' : T}, quakeTransfer F T v t t' →
+        (t' : IntegerPlane) - (t : IntegerPlane) ∈ H)
+    {t t' : T} (p : (planeTransferGraph F T).Walk t t') :
+    (t' : IntegerPlane) - (t : IntegerPlane) ∈ H := by
+  induction p with
+  | nil => simp
+  | @cons u v w huv p ih =>
+      rw [planeTransferGraph, SimpleGraph.fromRel_adj] at huv
+      rcases huv.2 with hforward | hbackward
+      · rcases hforward with hh | hv
+        · have huvMem := hedge (Or.inl rfl) hh
+          have hsum := AddSubgroup.add_mem H huvMem ih
+          convert hsum using 1
+          abel
+        · have huvMem := hedge (Or.inr rfl) hv
+          have hsum := AddSubgroup.add_mem H huvMem ih
+          convert hsum using 1
+          abel
+      · rcases hbackward with hh | hv
+        · have huvMem := AddSubgroup.neg_mem H
+            (hedge (Or.inl rfl) hh)
+          have hsum := AddSubgroup.add_mem H huvMem ih
+          convert hsum using 1
+          abel
+        · have huvMem := AddSubgroup.neg_mem H
+            (hedge (Or.inr rfl) hv)
+          have hsum := AddSubgroup.add_mem H huvMem ih
+          convert hsum using 1
+          abel
+
+/-- If every unit owner transfer in an exact planar tiling preserves residue modulo the marker
+lattice, then all translation vectors lie in the coarse-lattice coset of any chosen base vector. -/
+theorem translations_mem_coset_of_transfer
+    (H : AddSubgroup IntegerPlane)
+    {F : Finset IntegerPlane} {T : Set IntegerPlane}
+    (hT : TilesUniverse F T) {base : IntegerPlane} (hbase : base ∈ T)
+    (hedge : ∀ {v : IntegerPlane} (_hv : v = horizontalUnit ∨ v = verticalUnit)
+      {t t' : T}, quakeTransfer F T v t t' →
+        (t' : IntegerPlane) - (t : IntegerPlane) ∈ H) :
+    ∀ t ∈ T, t - base ∈ H := by
+  intro t ht
+  let b : T := ⟨base, hbase⟩
+  let s : T := ⟨t, ht⟩
+  have hconnected := planeTransferGraph_connected hT
+  obtain ⟨p⟩ := hconnected b s
+  exact planeTransfer_walk_sub_mem_addSubgroup H hedge p
+
 /-- A closed integer-coordinate rectangle. -/
 noncomputable def gridBox (x₀ x₁ y₀ y₁ : ℤ) : Finset IntegerPlane :=
   (Finset.Icc x₀ x₁ ×ˢ Finset.Icc y₀ y₁).image
