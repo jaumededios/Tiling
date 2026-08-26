@@ -51,6 +51,28 @@ theorem existsUnique_tile_representation {F : Finset G} {T : Set G}
     have hgm : g ∈ F.filter fun f ↦ x - f ∈ T := by simpa using hg
     simpa [hf] using hgm
 
+/-- A unique tile-element representation at every point is exactly a level-one tiling of the
+ambient group. -/
+theorem tilesUniverse_of_existsUnique {F : Finset G} {T : Set G}
+    (hrep : ∀ x : G, ∃! f : G, f ∈ F ∧ x - f ∈ T) :
+    TilesUniverse F T := by
+  classical
+  apply (tilesAtLevel_iff_representation_count F T Set.univ 1).mpr
+  intro x
+  obtain ⟨f, hf, hunique⟩ := hrep x
+  have hfilter : (F.filter fun g ↦ x - g ∈ T) = {f} := by
+    ext g
+    constructor
+    · intro hg
+      have hg' : g ∈ F ∧ x - g ∈ T := by simpa using hg
+      simpa only [Finset.mem_singleton] using hunique g hg'
+    · intro hg
+      have hgf : g = f := by simpa only [Finset.mem_singleton] using hg
+      subst g
+      simpa using hf
+  rw [hfilter]
+  simp
+
 /-- Two representations of a point in an exact discrete tiling use the same translation vector. -/
 theorem translation_eq_of_eq_representations {F : Finset G} {T : Set G}
     (hT : TilesUniverse F T) {f g t s : G}
@@ -71,6 +93,14 @@ theorem translation_eq_of_eq_representations {F : Finset G} {T : Set G}
 /-- Discrete membership invariance under one specified period. -/
 def DiscretePeriodicBy (A : Set G) (v : G) : Prop :=
   ∀ x, x + v ∈ A ↔ x ∈ A
+
+/-- Integer multiples of a discrete period remain periods. -/
+theorem DiscretePeriodicBy.zsmul {A : Set G} {v : G}
+    (hA : DiscretePeriodicBy A v) (n : ℤ) :
+    DiscretePeriodicBy A (n • v) := by
+  have hperiodic : Function.Periodic (fun x ↦ x ∈ A) v :=
+    fun x ↦ propext (hA x)
+  exact fun x ↦ eq_iff_iff.mp (hperiodic.zsmul n x)
 
 end DiscreteCarrier
 
@@ -247,6 +277,122 @@ theorem quakePlateTranslations_pairwiseDisjoint {F : Finset G} {T : Set G} {v : 
   obtain ⟨_, htCcomp⟩ := htC
   obtain ⟨_, htDcomp⟩ := htD
   exact hCD (htCcomp.symm.trans htDcomp)
+
+/-- Distinct canonical quake plates have disjoint tile carriers. -/
+theorem quakePlateCarriers_disjoint {F : Finset G} {T : Set G} {v : G}
+    (hT : TilesUniverse F T) {C D : QuakePlate F T v} (hCD : C ≠ D) :
+    Disjoint (discreteCarrier F (quakePlateTranslations C))
+      (discreteCarrier F (quakePlateTranslations D)) := by
+  rw [Set.disjoint_left]
+  intro x hxC hxD
+  obtain ⟨f, hf, t, htC, hft⟩ := hxC
+  obtain ⟨g, hg, s, hsD, hgs⟩ := hxD
+  obtain ⟨htT, htcomp⟩ := htC
+  obtain ⟨hsT, hscomp⟩ := hsD
+  have hts : t = s :=
+    translation_eq_of_eq_representations hT hf htT hg hsT (hft.symm.trans hgs)
+  subst s
+  exact hCD (htcomp.symm.trans hscomp)
+
+/-- Translate every canonical quake plate by an independently chosen integer multiple of the
+quake direction. -/
+def quakeShiftedTranslations {F : Finset G} {T : Set G} {v : G}
+    (shift : QuakePlate F T v → ℤ) : Set G :=
+  Set.range fun t : T ↦
+    shift ((quakeGraph F T v).connectedComponentMk t) • v + (t : G)
+
+@[simp]
+theorem mem_quakeShiftedTranslations_iff {F : Finset G} {T : Set G} {v x : G}
+    {shift : QuakePlate F T v → ℤ} :
+    x ∈ quakeShiftedTranslations shift ↔
+      ∃ t : T, shift ((quakeGraph F T v).connectedComponentMk t) • v + (t : G) = x :=
+  Iff.rfl
+
+private theorem shifted_representation_mem_plateCarrier
+    {F : Finset G} {T : Set G} {v f : G}
+    (hT : TilesUniverse F T) (hf : f ∈ F) (t : T)
+    (shift : QuakePlate F T v → ℤ) :
+    f + (shift ((quakeGraph F T v).connectedComponentMk t) • v + (t : G)) ∈
+      discreteCarrier F
+        (quakePlateTranslations ((quakeGraph F T v).connectedComponentMk t)) := by
+  let C := (quakeGraph F T v).connectedComponentMk t
+  have hbase : f + (t : G) ∈ discreteCarrier F (quakePlateTranslations C) :=
+    ⟨f, hf, t, mem_quakePlateTranslations_mk t, rfl⟩
+  have hperiod := (quakePlateCarrier_periodic hT C).zsmul (shift C)
+  have hshifted := (hperiod (f + (t : G))).2 hbase
+  convert hshifted using 1
+  dsimp only [C]
+  abel
+
+/-- Independently shifting all canonical earthquake plates preserves the exact discrete tiling. -/
+theorem tilesUniverse_quakeShiftedTranslations
+    {F : Finset G} {T : Set G} {v : G}
+    (hT : TilesUniverse F T) (shift : QuakePlate F T v → ℤ) :
+    TilesUniverse F (quakeShiftedTranslations shift) := by
+  apply tilesUniverse_of_existsUnique
+  intro x
+  obtain ⟨f₀, hf₀, -⟩ := existsUnique_tile_representation hT x
+  let t₀ : T := ⟨x - f₀, hf₀.2⟩
+  let C₀ : QuakePlate F T v := (quakeGraph F T v).connectedComponentMk t₀
+  have hxC₀ : x ∈ discreteCarrier F (quakePlateTranslations C₀) := by
+    refine ⟨f₀, hf₀.1, t₀, mem_quakePlateTranslations_mk t₀, ?_⟩
+    dsimp only [t₀]
+    abel
+  have hperiod₀ := (quakePlateCarrier_periodic hT C₀).zsmul (-(shift C₀))
+  have hback : x + (-(shift C₀)) • v ∈
+      discreteCarrier F (quakePlateTranslations C₀) :=
+    (hperiod₀ x).2 hxC₀
+  obtain ⟨f, hf, t, htC₀, hrep⟩ := hback
+  obtain ⟨htT, htcomp⟩ := htC₀
+  let ts : T := ⟨t, htT⟩
+  have hnewTranslation : shift C₀ • v + t ∈ quakeShiftedTranslations shift := by
+    refine ⟨ts, ?_⟩
+    simp only [ts, htcomp]
+  have hxrep : x - f = shift C₀ • v + t := by
+    have hx : x = f + t + shift C₀ • v := by
+      rw [← hrep]
+      simp only [neg_smul]
+      abel
+    rw [hx]
+    abel
+  refine ⟨f, ⟨hf, hxrep ▸ hnewTranslation⟩, ?_⟩
+  intro g hg
+  obtain ⟨s, hsnew⟩ := hg.2
+  let D : QuakePlate F T v := (quakeGraph F T v).connectedComponentMk s
+  have hxD : x ∈ discreteCarrier F (quakePlateTranslations D) := by
+    have hcarrier := shifted_representation_mem_plateCarrier hT hg.1 s shift
+    have hxeq : x = g +
+        (shift ((quakeGraph F T v).connectedComponentMk s) • v + (s : G)) := by
+      have hxsub : x = g + (x - g) := by abel
+      rw [hxsub, ← hsnew]
+    rwa [← hxeq] at hcarrier
+  have hDC : D = C₀ := by
+    by_contra hne
+    exact (Set.disjoint_left.mp (quakePlateCarriers_disjoint hT hne)) hxD hxC₀
+  have hsameShift : shift D = shift C₀ := congrArg shift hDC
+  have hgOriginal : g + (s : G) = f + t := by
+    have hxg : x = g + (shift D • v + (s : G)) := by
+      have hxsub : x = g + (x - g) := by abel
+      rw [hxsub, ← hsnew]
+    rw [hsameShift] at hxg
+    have hxf : x = f + (shift C₀ • v + t) := by
+      calc
+        x = f + (x - f) := by abel
+        _ = f + (shift C₀ • v + t) := by rw [hxrep]
+    rw [hxg] at hxf
+    apply add_left_cancel (a := shift C₀ • v)
+    simpa only [add_assoc, add_left_comm, add_comm] using hxf
+  have hgf : g = f := by
+    obtain ⟨chosen, hchosen, hunique⟩ := existsUnique_tile_representation hT (f + t)
+    have hfrep : f ∈ F ∧ f + t - f ∈ T := by
+      refine ⟨hf, ?_⟩
+      simpa only [add_sub_cancel_left] using htT
+    have hgrep : g ∈ F ∧ f + t - g ∈ T := by
+      refine ⟨hg.1, ?_⟩
+      rw [← hgOriginal]
+      simpa only [add_sub_cancel_left] using s.2
+    exact (hunique g hgrep).trans (hunique f hfrep).symm
+  exact hgf
 
 end QuakeGraph
 
