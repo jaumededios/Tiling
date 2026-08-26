@@ -1,5 +1,3 @@
-/-! Generated production-API validator for arXiv:2408.02151v2. -/
-
 import Tiling.Geometry.Plane
 import Tiling.Geometry.LocalLine
 import Tiling.Geometry.PolygonalTopology
@@ -20,6 +18,8 @@ import Tiling.RationalPolygonal.SlidingReduction
 import Tiling.RationalPolygonal.WeakPeriodicity
 import Tiling.RationalPolygonal.Decision
 import Tiling.RationalPolygonal.Main
+
+/-! Generated production-API validator for arXiv:2408.02151v2. -/
 
 set_option linter.style.header false
 set_option pp.universes true

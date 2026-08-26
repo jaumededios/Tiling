@@ -48,6 +48,7 @@ MODULES = [
 LEDGER = HERE / "declaration-coverage.tsv"
 VALIDATOR = HERE / "BlueprintValidation.lean"
 SIGNATURES = HERE / "api-signatures.txt"
+DEFINITIONS = HERE / "definition-bodies.txt"
 HASHES = HERE / "generated-hashes.sha256"
 
 DECL_RE = re.compile(
@@ -78,18 +79,18 @@ def paper_item(name: str) -> str:
         "Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2": "Theorem 1.2",
         "Tiling.RationalPolygonal.PolygonalRegion.exists_integer_tiling": "Lemma 2.2",
         "Tiling.RationalPolygonal.PolygonalRegion.samePlate_translation_sub_mem_integerLattice": "Lemma 2.4",
-        "Tiling.RationalPolygonal.PolygonalRegion.exists_uniformQuakePeriodicDecomposition": "Lemma 4.2",
+        "Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition": "Lemma 4.2",
     }
     if name in exact:
         return exact[name]
     if "IsSlidingDirection" in name or "sliding" in name.lower():
         return "Lemmas 2.5-2.7 / compatibility"
+    if name.startswith("Tiling.RationalPolygonal.RasterPresentation"):
+        return "Corollary 1.1 support"
     if "Raster" in name or "signature" in name or "marker" in name.lower():
         return "Lemma 3.1 / raster support"
     if "quake" in name.lower() or "Earthquake" in name:
         return "Definition 4.1 / Lemma 4.2 support"
-    if name.startswith("Tiling.RationalPolygonal.RasterPresentation"):
-        return "Corollary 1.1 support"
     if "WeakPeriodic" in name or "weaklyPeriodic" in name:
         return "Theorem 1.2 support"
     return "model / geometric support"
@@ -165,9 +166,9 @@ def render_ledger(decls: list[Decl]) -> str:
 
 def render_validator(decls: list[Decl]) -> str:
     rows = [
-        "/-! Generated production-API validator for arXiv:2408.02151v2. -/",
-        "",
         *(f"import {module}" for module in MODULES),
+        "",
+        "/-! Generated production-API validator for arXiv:2408.02151v2. -/",
         "",
         "set_option linter.style.header false",
         "set_option pp.universes true",
@@ -205,6 +206,35 @@ def signature_output(decls: list[Decl]) -> str:
     return lean_output(source)
 
 
+def definition_output(decls: list[Decl]) -> str:
+    names = [
+        decl.name for decl in decls
+        if decl.kind in {"abbrev", "def", "structure", "class", "instance"}
+    ]
+    source = "\n".join([
+        *(f"import {module}" for module in MODULES),
+        "set_option pp.universes true",
+        "set_option pp.explicit true",
+        "set_option pp.all true",
+        *(f"#print {name}" for name in names),
+        "",
+    ])
+    return lean_output(source)
+
+
+def lake_build() -> None:
+    proc = subprocess.run(
+        ["lake", "build", *MODULES],
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"production Lake build failed:\n{proc.stdout}")
+
+
 def strict_compile() -> None:
     for module in MODULES:
         proc = subprocess.run(
@@ -217,6 +247,15 @@ def strict_compile() -> None:
         )
         if proc.returncode != 0:
             raise RuntimeError(f"strict compile failed for {module}:\n{proc.stdout}")
+
+
+def documentation_check() -> None:
+    for module in MODULES:
+        source = source_for(module).read_text() + "\n#lint only docBlame\n"
+        try:
+            lean_output(source)
+        except RuntimeError as exc:
+            raise RuntimeError(f"documentation check failed for {module}:\n{exc}") from exc
 
 
 def trust_check(decls: list[Decl]) -> tuple[int, str]:
@@ -269,7 +308,13 @@ def main() -> int:
     ledger = render_ledger(decls)
     validator = render_validator(decls)
     signatures = signature_output(decls)
-    payloads = {LEDGER: ledger, VALIDATOR: validator, SIGNATURES: signatures}
+    definitions = definition_output(decls)
+    payloads = {
+        LEDGER: ledger,
+        VALIDATOR: validator,
+        SIGNATURES: signatures,
+        DEFINITIONS: definitions,
+    }
     hashes = render_hashes(payloads)
 
     if args.update:
@@ -283,7 +328,9 @@ def main() -> int:
     stale = [path for path, text in expected.items() if not path.exists() or path.read_text() != text]
     if stale:
         raise RuntimeError("stale generated artifacts: " + ", ".join(str(path) for path in stale))
+    lake_build()
     strict_compile()
+    documentation_check()
     # Compile the committed validator as its own source gate.
     proc = subprocess.run(
         ["lake", "env", "lean", "-DwarningAsError=true", str(VALIDATOR)],
@@ -298,7 +345,7 @@ def main() -> int:
     theorem_count, _ = trust_check(decls)
     print(
         f"PASS: {len(MODULES)} modules, {len(decls)} declarations, "
-        f"{theorem_count} theorem trust closures"
+        f"{theorem_count} theorem trust closures, documentation clean"
     )
     return 0
 

@@ -43,8 +43,8 @@ equality.
 - [`05-main-results.md`](05-main-results.md) assembles Theorems 1.1 and 1.2 and Corollary 1.1.
 - [`declaration-coverage.tsv`](declaration-coverage.tsv) is the generated 20-module public API
   ledger.  [`validate.py`](validate.py) regenerates it together with the exact signature dump,
-  `#check` validator, and artifact hashes; `validate.py --check` also runs strict source and trust
-  gates.
+  public-definition body dump, `#check` validator, and artifact hashes; `validate.py --check` also
+  runs a fresh production build, strict source compilation, documentation lint, and trust gates.
 
 Theorem 1.1 and Theorem 1.2 are proved at the semantic paper level.  The Corollary 1.1 Boolean is
 fully executable on a finite `RasterPresentation`; the comparator separately records that a raw

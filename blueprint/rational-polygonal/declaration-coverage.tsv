@@ -450,7 +450,7 @@ Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUn
 Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	790	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicCover_normalized	Definition 4.1 / Lemma 4.2 support	proved
 Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	811	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition_normalized	Definition 4.1 / Lemma 4.2 support	proved
 Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	872	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition_of_zero_mem	Definition 4.1 / Lemma 4.2 support	proved
-Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	892	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	892	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition	Lemma 4.2	proved
 Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	24	def	Tiling.RationalPolygonal.PolygonalRegion.continuousPlateTranslations	model / geometric support	proved
 Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	31	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_continuousPlateTranslations_iff	model / geometric support	proved
 Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	41	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_continuousPlateTranslations_mk	model / geometric support	proved
@@ -510,17 +510,17 @@ Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicit
 Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	242	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerVertices	Theorem 1.2 support	proved
 Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	258	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedTranslations_normalizedTranslations	model / geometric support	proved
 Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	271	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.Tiles.weaklyPeriodic	Theorem 1.2 support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	21	structure	Tiling.RationalPolygonal.RasterPresentation	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	23	field	Tiling.RationalPolygonal.RasterPresentation.rasterTile	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	30	def	Tiling.RationalPolygonal.RasterPresentation.Represents	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	34	def	Tiling.RationalPolygonal.RasterPresentation.tileDecision	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	38	def	Tiling.RationalPolygonal.RasterPresentation.tileDecisionCost	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	42	theorem	Tiling.RationalPolygonal.RasterPresentation.planarTileDecisionCounted_eq	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	51	theorem	Tiling.RationalPolygonal.RasterPresentation.tileable_iff_canonicalRaster	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	76	theorem	Tiling.RationalPolygonal.RasterPresentation.tileDecision_eq_true_iff	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	85	def	Tiling.RationalPolygonal.RasterPresentation.tileableDecidable	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	94	def	Tiling.RationalPolygonal.RasterPresentation.canonical	Lemma 3.1 / raster support	proved
-Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	98	theorem	Tiling.RationalPolygonal.RasterPresentation.canonical_represents	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	21	structure	Tiling.RationalPolygonal.RasterPresentation	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	23	field	Tiling.RationalPolygonal.RasterPresentation.rasterTile	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	30	def	Tiling.RationalPolygonal.RasterPresentation.Represents	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	34	def	Tiling.RationalPolygonal.RasterPresentation.tileDecision	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	38	def	Tiling.RationalPolygonal.RasterPresentation.tileDecisionCost	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	42	theorem	Tiling.RationalPolygonal.RasterPresentation.planarTileDecisionCounted_eq	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	51	theorem	Tiling.RationalPolygonal.RasterPresentation.tileable_iff_canonicalRaster	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	76	theorem	Tiling.RationalPolygonal.RasterPresentation.tileDecision_eq_true_iff	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	85	def	Tiling.RationalPolygonal.RasterPresentation.tileableDecidable	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	94	def	Tiling.RationalPolygonal.RasterPresentation.canonical	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	98	theorem	Tiling.RationalPolygonal.RasterPresentation.canonical_represents	Corollary 1.1 support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	23	theorem	Tiling.RationalPolygonal.doublyPeriodic_integerPoint_image_of_setScalarPeriodic	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	61	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_doublyPeriodic_integer_tiling_of_tileable_raster	model / geometric support	proved
 Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	88	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.doublyPeriodic_denormalizedTranslations	model / geometric support	proved

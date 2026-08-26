@@ -61,12 +61,12 @@ algorithm are joined only near their consumers.  `Main` is the terminal paper-fa
 
 - `validate.py --update` derives one canonical row for every public declaration and explicit
   public structure field in the 20 owned modules.
-- `validate.py --check` regenerates and compares the ledger, exact elaborated signature dump, and
-  generated hashes; strict-compiles every production source and the `#check` validator; and runs
-  `#print axioms` on every public theorem/lemma.
+- `validate.py --check` regenerates and compares the ledger, exact elaborated signature dump,
+  public-definition body dump, and generated hashes; rebuilds and strict-compiles every production
+  source and the `#check` validator; runs `docBlame`; and runs `#print axioms` on every public
+  theorem/lemma.
 - `BlueprintValidation.lean` imports genuine production only and contains no declaration stubs.
 - Production never imports generated validation artifacts.
 - Helpers remain private unless another production module consumes them.
 - Every public declaration has a mathematical docstring; module-level comments explain the proof
   boundary and dependency role.
-
