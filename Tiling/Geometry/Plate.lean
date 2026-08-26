@@ -117,13 +117,6 @@ theorem edgeGraph_adj (i j : A.placements) :
   · rintro ⟨hij, hconnected⟩
     exact ⟨hij, Or.inl hconnected⟩
 
-/-- In a packing by nondegenerate polygonal tiles, two distinct placements share a nonvertex if
-and only if their frontiers share a nondegenerate edge segment. -/
-theorem edgeConnected_iff_sharesNonvertex_of_isPacking
-    (hpacking : IsPacking A.prototiles A.placements) {i j : A.placements} (hij : i ≠ j) :
-    A.EdgeConnected i j ↔ A.SharesNonvertex i j := by
-  sorry
-
 /-- Two placements belong to the same plate when a finite walk in the vertex graph joins them. -/
 abbrev SamePlate : A.placements → A.placements → Prop :=
   A.vertexGraph.Reachable
