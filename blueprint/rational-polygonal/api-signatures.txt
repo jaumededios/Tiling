@@ -73,6 +73,37 @@ Tiling.positiveSide : (a v : Tiling.Plane) → Set.{0} Tiling.Plane
 Tiling.negativeSide : (a v : Tiling.Plane) → Set.{0} Tiling.Plane
 Tiling.positiveHalfPlane : (a v : Tiling.Plane) → Set.{0} Tiling.Plane
 Tiling.negativeHalfPlane : (a v : Tiling.Plane) → Set.{0} Tiling.Plane
+@Tiling.mem_positiveSide : ∀ {a v z : Tiling.Plane},
+  Iff
+    (@Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane)
+      (Tiling.positiveSide a v) z)
+    (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+      (Tiling.signedSide a v z))
+@Tiling.mem_negativeSide : ∀ {a v z : Tiling.Plane},
+  Iff
+    (@Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane)
+      (Tiling.negativeSide a v) z)
+    (@LT.lt.{0} Real Real.instLT (Tiling.signedSide a v z)
+      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+@Tiling.mem_positiveHalfPlane : ∀ {a v z : Tiling.Plane},
+  Iff
+    (@Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane)
+      (Tiling.positiveHalfPlane a v) z)
+    (@LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+      (Tiling.signedSide a v z))
+@Tiling.mem_negativeHalfPlane : ∀ {a v z : Tiling.Plane},
+  Iff
+    (@Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane)
+      (Tiling.negativeHalfPlane a v) z)
+    (@LE.le.{0} Real Real.instLE (Tiling.signedSide a v z)
+      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+@Tiling.mem_affineLine : ∀ {a v z : Tiling.Plane},
+  Iff
+    (@Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane)
+      (Tiling.affineLine a v) z)
+    (@Eq.{1} Real (Tiling.signedSide a v z) (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+Tiling.signedSide_self : ∀ (a v : Tiling.Plane),
+  @Eq.{1} Real (Tiling.signedSide a v a) (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
 Tiling.signedSide_vadd_smul : ∀ (a v : Tiling.Plane) (r : Real),
   @Eq.{1} Real
     (Tiling.signedSide a v
@@ -1107,6 +1138,62 @@ Tiling.planarCrossCLM : (v : Tiling.Plane) →
                 (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
         instInnerProductSpaceRealComplex))
     (@Semiring.toModule.{0} Real Real.semiring)
+Tiling.planarCrossCLM_apply : ∀ (v z : Tiling.Plane),
+  @Eq.{1} Real
+    (@DFunLike.coe.{1, 1, 1}
+      (@ContinuousLinearMap.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) Tiling.Plane
+        (@UniformSpace.toTopologicalSpace.{0} Tiling.Plane
+          (@PseudoMetricSpace.toUniformSpace.{0} Tiling.Plane
+            (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
+              (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))))
+        Complex.instAddCommMonoid Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Real.instAddCommMonoid
+        (@NormedSpace.toModule.{0, 0} Real Tiling.Plane Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Tiling.Plane Real.instRCLike
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                    (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+            instInnerProductSpaceRealComplex))
+        (@Semiring.toModule.{0} Real Real.semiring))
+      Tiling.Plane (fun (x : Tiling.Plane) => Real)
+      (@ContinuousLinearMap.funLike.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring)) Tiling.Plane
+        (@UniformSpace.toTopologicalSpace.{0} Tiling.Plane
+          (@PseudoMetricSpace.toUniformSpace.{0} Tiling.Plane
+            (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
+              (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))))
+        Complex.instAddCommMonoid Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Real.instAddCommMonoid
+        (@NormedSpace.toModule.{0, 0} Real Tiling.Plane Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Tiling.Plane Real.instRCLike
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                    (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+            instInnerProductSpaceRealComplex))
+        (@Semiring.toModule.{0} Real Real.semiring))
+      (Tiling.planarCrossCLM v) z)
+    (Tiling.planarCross v z)
 Tiling.AffineSubspace.exists_levelSet_coordinate : ∀
   (L :
     @AffineSubspace.{0, 0, 0} Real Tiling.Plane Tiling.Plane Real.instRing Complex.addCommGroup
@@ -1790,6 +1877,19 @@ Tiling.isPreconnected_ball_inter_negativeSide : ∀ (a v : Tiling.Plane) (r : Re
               (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))
         a r)
       (Tiling.negativeSide a v))
+Tiling.signedSide_add_mul_I : ∀ (a v : Tiling.Plane),
+  @Eq.{1} Real
+    (Tiling.signedSide a v
+      (@HAdd.hAdd.{0, 0, 0} Tiling.Plane Tiling.Plane Tiling.Plane (@instHAdd.{0} Tiling.Plane Complex.instAdd) a
+        (@HMul.hMul.{0, 0, 0} Tiling.Plane Complex Tiling.Plane (@instHMul.{0} Tiling.Plane Complex.instMul) v
+          Complex.I)))
+    (@DFunLike.coe.{1, 1, 1}
+      (@MonoidWithZeroHom.{0, 0} Complex Real (@instMulZeroOneClassOfSemiring.{0} Complex Complex.instSemiring)
+        (@instMulZeroOneClassOfSemiring.{0} Real Real.semiring))
+      Complex (fun (x : Complex) => Real)
+      (@MonoidWithZeroHom.funLike.{0, 0} Complex Real (@instMulZeroOneClassOfSemiring.{0} Complex Complex.instSemiring)
+        (@instMulZeroOneClassOfSemiring.{0} Real Real.semiring))
+      Complex.normSq v)
 Tiling.signedSide_add_smul_mul_I : ∀ (a v : Tiling.Plane) (t : Real),
   @Eq.{1} Real
     (Tiling.signedSide a v
@@ -1813,6 +1913,21 @@ Tiling.signedSide_add_smul_mul_I : ∀ (a v : Tiling.Plane) (t : Real),
           (@HMul.hMul.{0, 0, 0} Tiling.Plane Complex Tiling.Plane (@instHMul.{0} Tiling.Plane Complex.instMul) v
             Complex.I))))
     (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) t
+      (@DFunLike.coe.{1, 1, 1}
+        (@MonoidWithZeroHom.{0, 0} Complex Real (@instMulZeroOneClassOfSemiring.{0} Complex Complex.instSemiring)
+          (@instMulZeroOneClassOfSemiring.{0} Real Real.semiring))
+        Complex (fun (x : Complex) => Real)
+        (@MonoidWithZeroHom.funLike.{0, 0} Complex Real
+          (@instMulZeroOneClassOfSemiring.{0} Complex Complex.instSemiring)
+          (@instMulZeroOneClassOfSemiring.{0} Real Real.semiring))
+        Complex.normSq v))
+Tiling.signedSide_sub_mul_I : ∀ (a v : Tiling.Plane),
+  @Eq.{1} Real
+    (Tiling.signedSide a v
+      (@HSub.hSub.{0, 0, 0} Tiling.Plane Tiling.Plane Tiling.Plane (@instHSub.{0} Tiling.Plane Complex.instSub) a
+        (@HMul.hMul.{0, 0, 0} Tiling.Plane Complex Tiling.Plane (@instHMul.{0} Tiling.Plane Complex.instMul) v
+          Complex.I)))
+    (@Neg.neg.{0} Real Real.instNeg
       (@DFunLike.coe.{1, 1, 1}
         (@MonoidWithZeroHom.{0, 0} Complex Real (@instMulZeroOneClassOfSemiring.{0} Complex Complex.instSemiring)
           (@instMulZeroOneClassOfSemiring.{0} Real Real.semiring))
@@ -1895,6 +2010,14 @@ Tiling.negativeHalfPlane_eq_negativeSide_union_line : ∀ (a v : Tiling.Plane),
   @Eq.{1} (Set.{0} Tiling.Plane) (Tiling.negativeHalfPlane a v)
     (@Union.union.{0} (Set.{0} Tiling.Plane) (@Set.instUnion.{0} Tiling.Plane) (Tiling.negativeSide a v)
       (Tiling.affineLine a v))
+Tiling.compl_positiveHalfPlane : ∀ (a v : Tiling.Plane),
+  @Eq.{1} (Set.{0} Tiling.Plane)
+    (@Compl.compl.{0} (Set.{0} Tiling.Plane) (@Set.instCompl.{0} Tiling.Plane) (Tiling.positiveHalfPlane a v))
+    (Tiling.negativeSide a v)
+Tiling.compl_negativeHalfPlane : ∀ (a v : Tiling.Plane),
+  @Eq.{1} (Set.{0} Tiling.Plane)
+    (@Compl.compl.{0} (Set.{0} Tiling.Plane) (@Set.instCompl.{0} Tiling.Plane) (Tiling.negativeHalfPlane a v))
+    (Tiling.positiveSide a v)
 @Tiling.IsPreconnected.subset_interior_or_subset_interior_compl_of_disjoint_frontier.{u_1} : ∀ {X : Type u_1}
   [inst : TopologicalSpace.{u_1} X] {c s : Set.{u_1} X} (hc : @IsPreconnected.{u_1} X inst c)
   (hdisj :
@@ -5306,6 +5429,109 @@ Tiling.RationalPolygonal.RationalPolygonalRegion.normalized_vertex_integral : �
 Tiling.RationalPolygonal.RationalPolygonalRegion.isRelativelyRational : ∀
   (K : Tiling.RationalPolygonal.RationalPolygonalRegion),
   Tiling.RationalPolygonal.IsRelativelyRational (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K)
+@Tiling.RationalPolygonal.discreteCarrier.{u_1} : {G : Type u_1} →
+  [AddCommGroup.{u_1} G] → (F : Finset.{u_1} G) → (T : Set.{u_1} G) → Set.{u_1} G
+@Tiling.RationalPolygonal.mem_discreteCarrier_iff.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
+  {F : Finset.{u_1} G} {T : Set.{u_1} G} {x : G},
+  Iff
+    (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G)
+      (@Tiling.RationalPolygonal.discreteCarrier.{u_1} G inst F T) x)
+    (@Exists.{u_1 + 1} G fun (f : G) =>
+      And
+        (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+          (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
+        (@Exists.{u_1 + 1} G fun (t : G) =>
+          And (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T t)
+            (@Eq.{u_1 + 1} G x
+              (@HAdd.hAdd.{u_1, u_1, u_1} G G G
+                (@instHAdd.{u_1} G
+                  (@AddCommMagma.toAdd.{u_1} G
+                    (@AddCommSemigroup.toAddCommMagma.{u_1} G
+                      (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
+                f t))))
+@Tiling.RationalPolygonal.existsUnique_tile_representation.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
+  {F : Finset.{u_1} G} {T : Set.{u_1} G} (hT : @TranslationalTilings.TilesUniverse.{u_1} G inst F T) (x : G),
+  @ExistsUnique.{u_1 + 1} G fun (f : G) =>
+    And
+      (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
+      (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T
+        (@HSub.hSub.{u_1, u_1, u_1} G G G
+          (@instHSub.{u_1} G
+            (@SubNegMonoid.toSub.{u_1} G (@AddGroup.toSubNegMonoid.{u_1} G (@AddCommGroup.toAddGroup.{u_1} G inst))))
+          x f))
+@Tiling.RationalPolygonal.tilesUniverse_of_existsUnique.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
+  {F : Finset.{u_1} G} {T : Set.{u_1} G}
+  (hrep :
+    ∀ (x : G),
+      @ExistsUnique.{u_1 + 1} G fun (f : G) =>
+        And
+          (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+            (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
+          (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T
+            (@HSub.hSub.{u_1, u_1, u_1} G G G
+              (@instHSub.{u_1} G
+                (@SubNegMonoid.toSub.{u_1} G
+                  (@AddGroup.toSubNegMonoid.{u_1} G (@AddCommGroup.toAddGroup.{u_1} G inst))))
+              x f))),
+  @TranslationalTilings.TilesUniverse.{u_1} G inst F T
+@Tiling.RationalPolygonal.shiftFinset.{u_1} : {G : Type u_1} →
+  [AddCommGroup.{u_1} G] → (q : G) → (F : Finset.{u_1} G) → Finset.{u_1} G
+@Tiling.RationalPolygonal.mem_shiftFinset_iff.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G] {q z : G}
+  {F : Finset.{u_1} G},
+  Iff
+    (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G))
+      (@Tiling.RationalPolygonal.shiftFinset.{u_1} G inst q F) z)
+    (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F
+      (@HAdd.hAdd.{u_1, u_1, u_1} G G G
+        (@instHAdd.{u_1} G
+          (@AddCommMagma.toAdd.{u_1} G
+            (@AddCommSemigroup.toAddCommMagma.{u_1} G
+              (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
+        z q))
+@Tiling.RationalPolygonal.tilesUniverse_shiftFinset_iff.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G] (q : G)
+  (F : Finset.{u_1} G) (T : Set.{u_1} G),
+  Iff (@TranslationalTilings.TilesUniverse.{u_1} G inst (@Tiling.RationalPolygonal.shiftFinset.{u_1} G inst q F) T)
+    (@TranslationalTilings.TilesUniverse.{u_1} G inst F T)
+@Tiling.RationalPolygonal.translation_eq_of_eq_representations.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
+  {F : Finset.{u_1} G} {T : Set.{u_1} G} (hT : @TranslationalTilings.TilesUniverse.{u_1} G inst F T) {f g t s : G}
+  (hf :
+    @Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
+  (ht : @Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T t)
+  (hg :
+    @Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F g)
+  (hs : @Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T s)
+  (heq :
+    @Eq.{u_1 + 1} G
+      (@HAdd.hAdd.{u_1, u_1, u_1} G G G
+        (@instHAdd.{u_1} G
+          (@AddCommMagma.toAdd.{u_1} G
+            (@AddCommSemigroup.toAddCommMagma.{u_1} G
+              (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
+        f t)
+      (@HAdd.hAdd.{u_1, u_1, u_1} G G G
+        (@instHAdd.{u_1} G
+          (@AddCommMagma.toAdd.{u_1} G
+            (@AddCommSemigroup.toAddCommMagma.{u_1} G
+              (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
+        g s)),
+  @Eq.{u_1 + 1} G t s
+@Tiling.RationalPolygonal.DiscretePeriodicBy.{u_1} : {G : Type u_1} →
+  [AddCommGroup.{u_1} G] → (A : Set.{u_1} G) → (v : G) → Prop
+@Tiling.RationalPolygonal.DiscretePeriodicBy.zsmul.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
+  {A : Set.{u_1} G} {v : G} (hA : @Tiling.RationalPolygonal.DiscretePeriodicBy.{u_1} G inst A v) (n : Int),
+  @Tiling.RationalPolygonal.DiscretePeriodicBy.{u_1} G inst A
+    (@HSMul.hSMul.{0, u_1, u_1} Int G G
+      (@instHSMul.{0, u_1} Int G
+        (@ZSMul.toSMul.{u_1} G
+          (@SubNegMonoid.toZSMul.{u_1} G (@AddGroup.toSubNegMonoid.{u_1} G (@AddCommGroup.toAddGroup.{u_1} G inst)))))
+      n v)
+@Tiling.RationalPolygonal.quakeTransfer.{u_1} : {G : Type u_1} →
+  [AddCommGroup.{u_1} G] → (F : Finset.{u_1} G) → (T : Set.{u_1} G) → (v : G) → (t t' : @Set.Elem.{u_1} G T) → Prop
 Tiling.RationalPolygonal.PolygonalRegion.polygonalProtoTiling : (K : Tiling.RationalPolygonal.PolygonalRegion) →
   (T : Set.{0} Tiling.Plane) → Tiling.PolygonalProtoTiling.{0} Unit
 Tiling.RationalPolygonal.PolygonalRegion.polygonalProtoTiling_prototiles : ∀
@@ -5498,7 +5724,7 @@ Tiling.RationalPolygonal.isCompact_closedUnitCell : @IsCompact.{0} Tiling.Plane
       (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
         (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
           (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
-            (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+            (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))))
   Tiling.RationalPolygonal.closedUnitCell
 Tiling.RationalPolygonal.volume_closedUnitCell_ne_zero : @Ne.{1} ENNReal
   (@DFunLike.coe.{1, 1, 1}
@@ -5630,7 +5856,7 @@ Tiling.RationalPolygonal.PolygonalRegion.locallyFinite_integerTranslates : ∀
         (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
           (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
             (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
-              (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+              (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))))
     fun (t : @Set.Elem.{0} Tiling.RationalPolygonal.IntegerPlane T) =>
     @HVAdd.hVAdd.{0, 0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (Set.{0} Tiling.Plane)
       (@instHVAdd.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane)
@@ -5651,14 +5877,14 @@ Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_closure_inter
           (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
             (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
               (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
-                (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+                (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))))
       (@interior.{0} Tiling.Plane
         (@UniformSpace.toTopologicalSpace.{0} Tiling.Plane
           (@PseudoMetricSpace.toUniformSpace.{0} Tiling.Plane
             (@SeminormedRing.toPseudoMetricSpace.{0} Tiling.Plane
               (@SeminormedCommRing.toSeminormedRing.{0} Tiling.Plane
                 (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
-                  (@CommCStarAlgebra.toNormedCommRing.{0} Tiling.Plane instCommCStarAlgebraComplex))))))
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField))))))
         (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T)))
     (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T)
 Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_eq_of_ae_eq : ∀
@@ -6184,31 +6410,6 @@ Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantSi
             (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
               instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
               Complex.borelSpace))))
-@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition : {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane} →
-  (D : TranslationalTilings.WeakPeriodicDecomposition A) →
-    Tiling.RationalPolygonal.WeakPeriodicDecomposition
-      (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A)
-@Tiling.RationalPolygonal.weaklyPeriodic_integerPoint_image : ∀ {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane}
-  (hA : TranslationalTilings.WeaklyPeriodic A),
-  Tiling.RationalPolygonal.WeaklyPeriodic
-    (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A)
-@Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerPoint_image : ∀
-  {K : Tiling.RationalPolygonal.PolygonalRegion} {T : Set.{0} Tiling.RationalPolygonal.IntegerPlane}
-  (hT :
-    Tiling.RationalPolygonal.PolygonalRegion.Tiles K
-      (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint T)),
-  Tiling.RationalPolygonal.WeaklyPeriodic
-    (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint T)
-Tiling.RationalPolygonal.RationalPolygonalRegion.exists_weaklyPeriodic_tiling : ∀
-  (K : Tiling.RationalPolygonal.RationalPolygonalRegion) {T : Set.{0} Tiling.Plane}
-  (hT :
-    Tiling.RationalPolygonal.PolygonalRegion.Tiles
-      (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K) T),
-  @Exists.{1} (Set.{0} Tiling.Plane) fun (S : Set.{0} Tiling.Plane) =>
-    And
-      (Tiling.RationalPolygonal.PolygonalRegion.Tiles
-        (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion K) S)
-      (Tiling.RationalPolygonal.WeaklyPeriodic S)
 Tiling.RationalPolygonal.latticePoint : (x y : Int) → Tiling.RationalPolygonal.IntegerPlane
 Tiling.RationalPolygonal.latticePoint_apply_zero : ∀ (x y : Int),
   @Eq.{1} Int
@@ -7268,45 +7469,6 @@ Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_carrier_eq_iff
           (Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount K) T₁)))
     (@Eq.{1} (Set.{0} Tiling.Plane) (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₀)
       (Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier K T₁))
-Tiling.RationalPolygonal.rigidFrame : Finset.{0} Tiling.RationalPolygonal.IntegerPlane
-@Tiling.RationalPolygonal.rigidFrame_translation_differences_mem_lattice : ∀
-  {T : Set.{0} Tiling.RationalPolygonal.IntegerPlane}
-  (hT :
-    @TranslationalTilings.TilesUniverse.{0} Tiling.RationalPolygonal.IntegerPlane
-      (@Pi.addCommGroup.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
-        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
-        fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddCommGroup)
-      Tiling.RationalPolygonal.rigidFrame T)
-  {t u : Tiling.RationalPolygonal.IntegerPlane}
-  (ht :
-    @Membership.mem.{0, 0} Tiling.RationalPolygonal.IntegerPlane (Set.{0} Tiling.RationalPolygonal.IntegerPlane)
-      (@Set.instMembership.{0} Tiling.RationalPolygonal.IntegerPlane) T t)
-  (hu :
-    @Membership.mem.{0, 0} Tiling.RationalPolygonal.IntegerPlane (Set.{0} Tiling.RationalPolygonal.IntegerPlane)
-      (@Set.instMembership.{0} Tiling.RationalPolygonal.IntegerPlane) T u),
-  @Membership.mem.{0, 0} Tiling.RationalPolygonal.IntegerPlane
-    (@AddSubgroup.{0} Tiling.RationalPolygonal.IntegerPlane
-      (@Pi.addGroup.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
-        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
-        fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddGroup))
-    (@SetLike.instMembership.{0, 0}
-      (@AddSubgroup.{0} Tiling.RationalPolygonal.IntegerPlane
-        (@Pi.addGroup.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
-          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
-          fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddGroup))
-      Tiling.RationalPolygonal.IntegerPlane
-      (@AddSubgroup.instSetLike.{0} Tiling.RationalPolygonal.IntegerPlane
-        (@Pi.addGroup.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
-          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
-          fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddGroup)))
-    (Tiling.RationalPolygonal.markerLattice (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
-    (@HSub.hSub.{0, 0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.RationalPolygonal.IntegerPlane
-      Tiling.RationalPolygonal.IntegerPlane
-      (@instHSub.{0} Tiling.RationalPolygonal.IntegerPlane
-        (@Pi.instSub.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
-          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
-          fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instSub))
-      t u)
 @Tiling.RationalPolygonal.markerBlock_west_filler : ∀ {M : Nat}
   (hM : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) M) {i : Fin M}
   {s : Tiling.RationalPolygonal.IntegerPlane}
@@ -7490,109 +7652,6 @@ Tiling.RationalPolygonal.PolygonalRegion.exists_integer_tiling_iff_relevantPlana
         fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAddCommGroup)
       F T),
   TranslationalTilings.WeaklyPeriodic T
-@Tiling.RationalPolygonal.discreteCarrier.{u_1} : {G : Type u_1} →
-  [AddCommGroup.{u_1} G] → (F : Finset.{u_1} G) → (T : Set.{u_1} G) → Set.{u_1} G
-@Tiling.RationalPolygonal.mem_discreteCarrier_iff.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
-  {F : Finset.{u_1} G} {T : Set.{u_1} G} {x : G},
-  Iff
-    (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G)
-      (@Tiling.RationalPolygonal.discreteCarrier.{u_1} G inst F T) x)
-    (@Exists.{u_1 + 1} G fun (f : G) =>
-      And
-        (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-          (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
-        (@Exists.{u_1 + 1} G fun (t : G) =>
-          And (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T t)
-            (@Eq.{u_1 + 1} G x
-              (@HAdd.hAdd.{u_1, u_1, u_1} G G G
-                (@instHAdd.{u_1} G
-                  (@AddCommMagma.toAdd.{u_1} G
-                    (@AddCommSemigroup.toAddCommMagma.{u_1} G
-                      (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
-                f t))))
-@Tiling.RationalPolygonal.existsUnique_tile_representation.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
-  {F : Finset.{u_1} G} {T : Set.{u_1} G} (hT : @TranslationalTilings.TilesUniverse.{u_1} G inst F T) (x : G),
-  @ExistsUnique.{u_1 + 1} G fun (f : G) =>
-    And
-      (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
-      (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T
-        (@HSub.hSub.{u_1, u_1, u_1} G G G
-          (@instHSub.{u_1} G
-            (@SubNegMonoid.toSub.{u_1} G (@AddGroup.toSubNegMonoid.{u_1} G (@AddCommGroup.toAddGroup.{u_1} G inst))))
-          x f))
-@Tiling.RationalPolygonal.tilesUniverse_of_existsUnique.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
-  {F : Finset.{u_1} G} {T : Set.{u_1} G}
-  (hrep :
-    ∀ (x : G),
-      @ExistsUnique.{u_1 + 1} G fun (f : G) =>
-        And
-          (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-            (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
-          (@Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T
-            (@HSub.hSub.{u_1, u_1, u_1} G G G
-              (@instHSub.{u_1} G
-                (@SubNegMonoid.toSub.{u_1} G
-                  (@AddGroup.toSubNegMonoid.{u_1} G (@AddCommGroup.toAddGroup.{u_1} G inst))))
-              x f))),
-  @TranslationalTilings.TilesUniverse.{u_1} G inst F T
-@Tiling.RationalPolygonal.shiftFinset.{u_1} : {G : Type u_1} →
-  [AddCommGroup.{u_1} G] → (q : G) → (F : Finset.{u_1} G) → Finset.{u_1} G
-@Tiling.RationalPolygonal.mem_shiftFinset_iff.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G] {q z : G}
-  {F : Finset.{u_1} G},
-  Iff
-    (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G))
-      (@Tiling.RationalPolygonal.shiftFinset.{u_1} G inst q F) z)
-    (@Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F
-      (@HAdd.hAdd.{u_1, u_1, u_1} G G G
-        (@instHAdd.{u_1} G
-          (@AddCommMagma.toAdd.{u_1} G
-            (@AddCommSemigroup.toAddCommMagma.{u_1} G
-              (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
-        z q))
-@Tiling.RationalPolygonal.tilesUniverse_shiftFinset_iff.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G] (q : G)
-  (F : Finset.{u_1} G) (T : Set.{u_1} G),
-  Iff (@TranslationalTilings.TilesUniverse.{u_1} G inst (@Tiling.RationalPolygonal.shiftFinset.{u_1} G inst q F) T)
-    (@TranslationalTilings.TilesUniverse.{u_1} G inst F T)
-@Tiling.RationalPolygonal.translation_eq_of_eq_representations.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
-  {F : Finset.{u_1} G} {T : Set.{u_1} G} (hT : @TranslationalTilings.TilesUniverse.{u_1} G inst F T) {f g t s : G}
-  (hf :
-    @Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F f)
-  (ht : @Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T t)
-  (hg :
-    @Membership.mem.{u_1, u_1} G (Finset.{u_1} G)
-      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} G) G (@Finset.instSetLike.{u_1} G)) F g)
-  (hs : @Membership.mem.{u_1, u_1} G (Set.{u_1} G) (@Set.instMembership.{u_1} G) T s)
-  (heq :
-    @Eq.{u_1 + 1} G
-      (@HAdd.hAdd.{u_1, u_1, u_1} G G G
-        (@instHAdd.{u_1} G
-          (@AddCommMagma.toAdd.{u_1} G
-            (@AddCommSemigroup.toAddCommMagma.{u_1} G
-              (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
-        f t)
-      (@HAdd.hAdd.{u_1, u_1, u_1} G G G
-        (@instHAdd.{u_1} G
-          (@AddCommMagma.toAdd.{u_1} G
-            (@AddCommSemigroup.toAddCommMagma.{u_1} G
-              (@AddCommMonoid.toAddCommSemigroup.{u_1} G (@AddCommGroup.toAddCommMonoid.{u_1} G inst)))))
-        g s)),
-  @Eq.{u_1 + 1} G t s
-@Tiling.RationalPolygonal.DiscretePeriodicBy.{u_1} : {G : Type u_1} →
-  [AddCommGroup.{u_1} G] → (A : Set.{u_1} G) → (v : G) → Prop
-@Tiling.RationalPolygonal.DiscretePeriodicBy.zsmul.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G]
-  {A : Set.{u_1} G} {v : G} (hA : @Tiling.RationalPolygonal.DiscretePeriodicBy.{u_1} G inst A v) (n : Int),
-  @Tiling.RationalPolygonal.DiscretePeriodicBy.{u_1} G inst A
-    (@HSMul.hSMul.{0, u_1, u_1} Int G G
-      (@instHSMul.{0, u_1} Int G
-        (@ZSMul.toSMul.{u_1} G
-          (@SubNegMonoid.toZSMul.{u_1} G (@AddGroup.toSubNegMonoid.{u_1} G (@AddCommGroup.toAddGroup.{u_1} G inst)))))
-      n v)
-@Tiling.RationalPolygonal.quakeTransfer.{u_1} : {G : Type u_1} →
-  [AddCommGroup.{u_1} G] → (F : Finset.{u_1} G) → (T : Set.{u_1} G) → (v : G) → (t t' : @Set.Elem.{u_1} G T) → Prop
 @Tiling.RationalPolygonal.quakeGraph.{u_1} : {G : Type u_1} →
   [AddCommGroup.{u_1} G] → (F : Finset.{u_1} G) → (T : Set.{u_1} G) → (v : G) → SimpleGraph.{u_1} (@Set.Elem.{u_1} G T)
 @Tiling.RationalPolygonal.quakeGraph_shiftFinset.{u_1} : ∀ {G : Type u_1} [inst : AddCommGroup.{u_1} G] (q : G)
@@ -8990,6 +9049,21 @@ Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction : (K : Tiling.R
 @Tiling.RationalPolygonal.setPeriodicBy_iUnion.{u_1} : ∀ {ι : Sort u_1} {A : ι → Set.{0} Tiling.Plane}
   {v : Tiling.Plane} (hA : ∀ (i : ι), Tiling.RationalPolygonal.SetPeriodicBy (A i) v),
   Tiling.RationalPolygonal.SetPeriodicBy (@Set.iUnion.{0, u_1} Tiling.Plane ι fun (i : ι) => A i) v
+@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition : {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane} →
+  (D : TranslationalTilings.WeakPeriodicDecomposition A) →
+    Tiling.RationalPolygonal.WeakPeriodicDecomposition
+      (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A)
+@Tiling.RationalPolygonal.weaklyPeriodic_integerPoint_image : ∀ {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane}
+  (hA : TranslationalTilings.WeaklyPeriodic A),
+  Tiling.RationalPolygonal.WeaklyPeriodic
+    (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A)
+@Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerPoint_image : ∀
+  {K : Tiling.RationalPolygonal.PolygonalRegion} {T : Set.{0} Tiling.RationalPolygonal.IntegerPlane}
+  (hT :
+    Tiling.RationalPolygonal.PolygonalRegion.Tiles K
+      (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint T)),
+  Tiling.RationalPolygonal.WeaklyPeriodic
+    (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint T)
 @Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.unshiftedQuakePart : {K :
     Tiling.RationalPolygonal.PolygonalRegion} →
   {T : Set.{0} Tiling.Plane} →

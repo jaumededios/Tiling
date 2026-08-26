@@ -31,10 +31,10 @@ MODULES = [
     "Tiling.Geometry.Sliding",
     "Tiling.Geometry.Connected",
     "Tiling.RationalPolygonal.Basic",
+    "Tiling.RationalPolygonal.DiscreteCarrier",
     "Tiling.RationalPolygonal.IntegerReduction",
     "Tiling.RationalPolygonal.Raster",
     "Tiling.RationalPolygonal.RasterMarker",
-    "Tiling.RationalPolygonal.RigidFrame",
     "Tiling.RationalPolygonal.RasterRigidity",
     "Tiling.RationalPolygonal.Earthquake",
     "Tiling.RationalPolygonal.EarthquakeUniform",
@@ -51,11 +51,26 @@ SIGNATURES = HERE / "api-signatures.txt"
 DEFINITIONS = HERE / "definition-bodies.txt"
 HASHES = HERE / "generated-hashes.sha256"
 
+ATTRIBUTE = r"(?:@\[[^]]*\]\s*)*"
+MODIFIER = r"(?:(?:private|protected|noncomputable|unsafe|partial|local)\s+)*"
 DECL_RE = re.compile(
-    r"^(?:(?:noncomputable|protected)\s+)*(abbrev|def|theorem|lemma|structure|class|instance)\s+"
-    r"([A-Za-z_][A-Za-z0-9_'.]*)"
+    rf"^{ATTRIBUTE}(?P<modifiers>{MODIFIER})"
+    r"(?P<kind>abbrev|def|theorem|lemma|structure|class|instance|inductive|axiom|opaque)\s+"
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_'.]*)"
 )
-FIELD_RE = re.compile(r"^  ([A-Za-z_][A-Za-z0-9_']*)\s*(?:\([^)]*\)|\{[^}]*\})*\s*:")
+FIELD_RE = re.compile(
+    rf"^  {ATTRIBUTE}(?P<name>[A-Za-z_][A-Za-z0-9_']*)"
+    r"\s*(?:\([^)]*\)|\{[^}]*\})*\s*:"
+)
+
+# Lean generates these public-looking helpers for structures/inductives.  They share source ranges
+# with user commands but are not source-level public commands or explicit structure fields.
+GENERATED_SUFFIXES = (
+    ".casesOn",
+    ".recOn",
+    ".noConfusion",
+    ".mk.noConfusion",
+)
 
 
 @dataclass(frozen=True)
@@ -97,9 +112,8 @@ def paper_item(name: str) -> str:
     return "model / geometric support"
 
 
-def parse_module(module: str) -> list[Decl]:
-    path = source_for(module)
-    lines = path.read_text().splitlines()
+def parse_lines(module: str, source: str, path_label: str) -> list[Decl]:
+    lines = source.splitlines()
     namespace: list[str] = []
     blocks: list[tuple[str, str | None]] = []
     result: list[Decl] = []
@@ -124,28 +138,148 @@ def parse_module(module: str) -> list[Decl]:
             active_structure = None
             continue
 
-        if line.startswith("private "):
-            active_structure = None
-            continue
-
         match = DECL_RE.match(line)
         if match:
-            kind, local = match.groups()
+            modifiers = match.group("modifiers").split()
+            if "private" in modifiers or "local" in modifiers:
+                active_structure = None
+                continue
+            kind = match.group("kind")
+            local = match.group("name")
             full = ".".join([*namespace, local])
-            result.append(Decl(module, str(path.relative_to(ROOT)), lineno, kind, full, paper_item(full)))
+            result.append(Decl(module, path_label, lineno, kind, full, paper_item(full)))
             active_structure = (full, len(line) - len(line.lstrip())) if kind in {"structure", "class"} else None
             continue
 
         if active_structure is not None:
             field = FIELD_RE.match(line)
             if field:
-                full = f"{active_structure[0]}.{field.group(1)}"
-                result.append(Decl(module, str(path.relative_to(ROOT)), lineno, "field", full, paper_item(full)))
+                full = f"{active_structure[0]}.{field.group('name')}"
+                result.append(Decl(module, path_label, lineno, "field", full, paper_item(full)))
 
     return result
 
 
+def parse_module(module: str) -> list[Decl]:
+    path = source_for(module)
+    return parse_lines(module, path.read_text(), str(path.relative_to(ROOT)))
+
+
+def parser_regression() -> None:
+    """Keep same-line attributes/modifiers from silently falling out of the source ledger."""
+    source = """namespace LedgerRegression
+@[simp] theorem attributed_theorem : True := by trivial
+@[simp] protected theorem protected_theorem : True := by trivial
+noncomputable def public_definition : Nat := 0
+@[simp] private theorem private_theorem : True := by trivial
+local instance local_instance : Inhabited Nat := inferInstance
+structure Packet where
+  @[simp] payload : Nat
+end LedgerRegression
+"""
+    parsed = parse_lines("LedgerRegression", source, "<parser-regression>")
+    actual = [(decl.kind, decl.name, decl.line) for decl in parsed]
+    expected = [
+        ("theorem", "LedgerRegression.attributed_theorem", 2),
+        ("theorem", "LedgerRegression.protected_theorem", 3),
+        ("def", "LedgerRegression.public_definition", 4),
+        ("structure", "LedgerRegression.Packet", 7),
+        ("field", "LedgerRegression.Packet.payload", 8),
+    ]
+    if actual != expected:
+        raise RuntimeError(f"declaration-parser regression: expected {expected}, got {actual}")
+
+
+def compiled_public_declarations() -> dict[str, tuple[str, int]]:
+    """Enumerate public, source-ranged constants owned by each compiled production module.
+
+    This is deliberately independent of the source parser.  Module ownership comes from Lean's
+    environment, and source positions come from the compiled declaration-range extension.
+    """
+    module_rows = ",\n    ".join(f"(`{module}, \"{module}\")" for module in MODULES)
+    source = f"""import Lean
+{chr(10).join(f'import {module}' for module in MODULES)}
+
+open Lean Elab Command
+
+private def ledgerConstantKind? : ConstantInfo → Option String
+  | .axiomInfo _ => some \"axiom\"
+  | .defnInfo _ => some \"definition\"
+  | .thmInfo _ => some \"theorem\"
+  | .opaqueInfo _ => some \"opaque\"
+  | .inductInfo _ => some \"inductive\"
+  | .quotInfo _ | .ctorInfo _ | .recInfo _ => none
+
+run_cmd do
+  let env ← getEnv
+  let modules : Array (Name × String) := #[
+    {module_rows}
+  ]
+  for (moduleName, moduleText) in modules do
+    let some moduleIdx := env.getModuleIdx? moduleName
+      | throwError m!\"compiled module is missing: {{moduleName}}\"
+    for (declName, info) in env.constants.toList do
+      if env.getModuleIdxFor? declName == some moduleIdx && !isPrivateName declName then
+        if let some kind := ledgerConstantKind? info then
+          if let some ranges ← findDeclarationRanges? declName then
+            logInfo m!\"LEDGER_OWNED\\t{{moduleText}}\\t{{ranges.selectionRange.pos.line}}\\t{{kind}}\\t{{declName}}\"
+"""
+    output = lean_output(source)
+    compiled: dict[str, tuple[str, int]] = {}
+    prefix = "LEDGER_OWNED\t"
+    for line in output.splitlines():
+        if not line.startswith(prefix):
+            continue
+        module, lineno, _kind, name = line[len(prefix) :].split("\t", 3)
+        if name.endswith(GENERATED_SUFFIXES):
+            continue
+        if name in compiled:
+            raise RuntimeError(f"duplicate compiled public declaration: {name}")
+        compiled[name] = (module, int(lineno))
+    if not compiled:
+        raise RuntimeError("compiled declaration cross-check produced no declarations")
+    return compiled
+
+
+def cross_check_compiled(decls: list[Decl]) -> None:
+    compiled = compiled_public_declarations()
+    parsed = {decl.name: (decl.module, decl.line) for decl in decls}
+    extras = sorted(set(parsed) - set(compiled))
+    moved = sorted(
+        name for name in parsed if name in compiled and parsed[name] != compiled[name]
+    )
+
+    # Several declarations can legitimately share one source command line (structure-generated
+    # recursors and inherited projections).  Conversely, `deriving` generates declarations on a
+    # line which is not itself a public command or explicit field.  Comparing all other owned
+    # source-range lines makes omissions detectable without mistaking those generated constants
+    # for source commands.
+    parsed_lines = set(parsed.values())
+    source_lines = {
+        module: source_for(module).read_text().splitlines() for module in MODULES
+    }
+    compiled_lines = {
+        (module, line)
+        for module, line in compiled.values()
+        if not source_lines[module][line - 1].lstrip().startswith("deriving")
+    }
+    omitted_lines = sorted(compiled_lines - parsed_lines)
+    if omitted_lines or extras or moved:
+        details = []
+        if omitted_lines:
+            details.append(f"source parser omitted compiled declaration lines: {omitted_lines}")
+        if extras:
+            details.append(f"source ledger extras: {extras}")
+        if moved:
+            details.append(
+                "source/compiled ownership or line mismatches: "
+                + repr([(name, parsed[name], compiled[name]) for name in moved])
+            )
+        raise RuntimeError("; ".join(details))
+
+
 def declarations() -> list[Decl]:
+    parser_regression()
     out: list[Decl] = []
     for module in MODULES:
         out.extend(parse_module(module))
@@ -153,6 +287,7 @@ def declarations() -> list[Decl]:
     duplicates = [decl.name for decl in out if decl.name in seen or seen.add(decl.name)]
     if duplicates:
         raise RuntimeError(f"duplicate parsed declarations: {duplicates}")
+    cross_check_compiled(out)
     return out
 
 
@@ -182,7 +317,10 @@ def render_validator(decls: list[Decl]) -> str:
 
 def lean_output(source: str) -> str:
     proc = subprocess.run(
-        ["lake", "env", "lean", "--stdin", "-DwarningAsError=true"],
+        [
+            "lake", "env", "lean", "--stdin",
+            "-DwarningAsError=true", "-Dlinter.unusedDecidableInType=true",
+        ],
         cwd=ROOT,
         input=source,
         text=True,
@@ -239,7 +377,10 @@ def lake_build() -> None:
 def strict_compile() -> None:
     for module in MODULES:
         proc = subprocess.run(
-            ["lake", "env", "lean", "-DwarningAsError=true", str(source_for(module))],
+            [
+                "lake", "env", "lean", "-DwarningAsError=true",
+                "-Dlinter.unusedDecidableInType=true", str(source_for(module)),
+            ],
             cwd=ROOT,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -336,7 +477,10 @@ def main() -> int:
     documentation_check()
     # Compile the committed validator as its own source gate.
     proc = subprocess.run(
-        ["lake", "env", "lean", "-DwarningAsError=true", str(VALIDATOR)],
+        [
+            "lake", "env", "lean", "-DwarningAsError=true",
+            "-Dlinter.unusedDecidableInType=true", str(VALIDATOR),
+        ],
         cwd=ROOT,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,

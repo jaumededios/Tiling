@@ -57,8 +57,8 @@ The headline results additionally use the following genuine declarations.
    `tiles_of_normalizedRegion_tiles` implement affine normalization and inverse transport.
 2. `signature`, `relevantSignatures`, and the a.e. signature lemmas reduce a continuous integer
    tiling to one common exact tiling problem for finitely many lattice tiles.
-3. `RasterMarker`, `RigidFrame`, and `RasterRigidity` construct the marker tile, prove its frame
-   rigidity, and decode arbitrary raster tilings back to one common signature translation set.
+3. `RasterMarker` and `RasterRigidity` construct the marker tile, prove its frame rigidity, and
+   decode arbitrary raster tilings back to one common signature translation set.
 4. `quakePlateCarrier_periodic`, `quakePlate_minimal`, and
    `tilesUniverse_quakeShiftedTranslations` establish the canonical earthquake decomposition and
    the validity of independent plate shifts.

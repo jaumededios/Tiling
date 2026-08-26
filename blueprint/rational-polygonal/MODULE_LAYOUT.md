@@ -10,21 +10,17 @@ Tiling.Geometry.Plane
 
 Tiling.RationalPolygonal.Basic
   ├─ IntegerReduction
-  └─ Raster
-       └─ RasterMarker
-            ├─ RigidFrame
-            └─ RasterRigidity
+  └─ DiscreteCarrier
+       ├─ Raster + IntegerReduction
+       │    └─ RasterMarker
+       │         └─ RasterRigidity
+       └─ Earthquake + TranslationalTilings quantitative weak-period API
+            └─ EarthquakeUniform
 
-Raster + Connected
+Raster + EarthquakeUniform
   └─ ContinuousEarthquake
        └─ SlidingReduction
-
-Raster + TranslationalTilings quantitative weak-period API
-  └─ Earthquake
-       └─ EarthquakeUniform
-
-SlidingReduction + EarthquakeUniform
-  └─ WeakPeriodicity
+            └─ WeakPeriodicity
 
 RasterRigidity + TranslationalTilings.Algorithms
   └─ Decision
@@ -42,9 +38,10 @@ RasterRigidity + WeakPeriodicity + Decision + TranslationalTilings.Main
 | `Sliding`, `Connected` | Common sliding direction and component shifts merging the vertex graph. |
 | `RationalPolygonal.Basic` | Region/tiling model, rational presentation, normalization, real periodicity, inverse transport. |
 | `IntegerReduction` | Monotile wrappers, Lemmas 2.2 and 2.4, integer connected tilings. |
+| `DiscreteCarrier` | Exact finite-tile carriers, unique representations, tile shifts, and elementary transfer/period APIs shared by rasterization and earthquakes. |
 | `Raster` | Lattice signatures, relevant positive-measure fibers, continuous/discrete tiling equivalence. |
 | `RasterMarker` | Marker construction, simultaneous-family encoding, exact carrier decoding. |
-| `RigidFrame`, `RasterRigidity` | Marker-frame rigidity and removal of the coarse-lattice restriction. |
+| `RasterRigidity` | Marker-frame rigidity, removal of the coarse-lattice restriction, and arbitrary-tiling decoding. |
 | `Earthquake` | Canonical graph/components, carrier periodicity/minimality, independent shifts. |
 | `EarthquakeUniform` | Uniform finite periodic decomposition of every quake plate (Lemma 4.2). |
 | `ContinuousEarthquake` | Continuous plate partition and shifts retaining the original tiling. |
@@ -53,18 +50,21 @@ RasterRigidity + WeakPeriodicity + Decision + TranslationalTilings.Main
 | `Decision` | Executable finite-raster search, exact cost, and semantic correctness certificate. |
 | `Main` | Thin endpoints for Theorem 1.1, Corollary 1.1, and Theorem 1.2. |
 
-Lower geometric/raster modules do not import the Greenfeld--Tao umbrella.  The earthquake module
-uses the quantitative weak-period declarations it needs; periodic completion and the executable
-algorithm are joined only near their consumers.  `Main` is the terminal paper-facing join.
+Lower geometric/raster modules do not import the Greenfeld--Tao weak-periodicity development.
+`DiscreteCarrier` is the shared lower interface; the earthquake module adds exactly the
+quantitative weak-period declarations it needs.  Periodic completion and the executable algorithm
+are joined only near their consumers.  `Main` is the terminal paper-facing join and is exported by
+the root `Tiling` umbrella.
 
 ## API and validation policy
 
 - `validate.py --update` derives one canonical row for every public declaration and explicit
-  public structure field in the 20 owned modules.
+  public structure field in the 20 owned modules.  A same-line attribute/modifier regression and
+  an independent compiled-module ownership/source-range cross-check prevent silent omissions.
 - `validate.py --check` regenerates and compares the ledger, exact elaborated signature dump,
   public-definition body dump, and generated hashes; rebuilds and strict-compiles every production
-  source and the `#check` validator; runs `docBlame`; and runs `#print axioms` on every public
-  theorem/lemma.
+  source and the `#check` validator with warnings and unused decidable instances treated as errors;
+  runs `docBlame`; and runs `#print axioms` on every public theorem/lemma.
 - `BlueprintValidation.lean` imports genuine production only and contains no declaration stubs.
 - Production never imports generated validation artifacts.
 - Helpers remain private unless another production module consumes them.

@@ -32,10 +32,10 @@ zero color is the square remainder with two protrusions and two matching holes. 
 block disjointness, the exact modified-square union, marker-lattice tiling, and the forward
 simultaneous-family encoding.
 
-`RigidFrame` proves that the modified-square frame has no relative placement freedom modulo the
-marker lattice.  `RasterRigidity` combines the frame and fillers to show that every exact tiling by
-the raster tile lies in one marker-lattice coset, then decodes that coset to one common translation
-set for all source signatures.
+`RasterRigidity` proves directly that the modified-square frame and asymmetric fillers leave no
+relative placement freedom modulo the marker lattice.  It shows that every exact tiling by the
+raster tile lies in one marker-lattice coset, then decodes that coset to one common translation set
+for all source signatures.  There is no parallel special-case frame module.
 
 The canonical finite tile is
 

@@ -1781,6 +1781,80 @@ fun (K : Tiling.RationalPolygonal.RationalPolygonalRegion) {A : Set.{0} Tiling.P
     (@Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition._proof_2 K A D)
     (@Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition._proof_3 K A D)
     (@Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition._proof_4 K A D)
+def Tiling.RationalPolygonal.discreteCarrier.{u} : {G : Type u} →
+  [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → Set.{u} G :=
+fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) =>
+  @Set.ofPred.{u} G fun (x : G) =>
+    @Exists.{u + 1} G fun (f : G) =>
+      And
+        (@Membership.mem.{u, u} G (Finset.{u} G)
+          (@SetLike.instMembership.{u, u} (Finset.{u} G) G (@Finset.instSetLike.{u} G)) F f)
+        (@Exists.{u + 1} G fun (t : G) =>
+          And (@Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) T t)
+            (@Eq.{u + 1} G x
+              (@HAdd.hAdd.{u, u, u} G G G
+                (@instHAdd.{u} G
+                  (@AddCommMagma.toAdd.{u} G
+                    (@AddCommSemigroup.toAddCommMagma.{u} G
+                      (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
+                f t)))
+def Tiling.RationalPolygonal.shiftFinset.{u} : {G : Type u} →
+  [AddCommGroup.{u} G] → (q : G) → (F : Finset.{u} G) → Finset.{u} G :=
+fun {G : Type u} [inst : AddCommGroup.{u} G] (q : G) (F : Finset.{u} G) =>
+  @Finset.image.{u, u} G G (fun (a b : G) => Classical.propDecidable (@Eq.{u + 1} G a b))
+    (fun (f : G) =>
+      @HSub.hSub.{u, u, u} G G G
+        (@instHSub.{u} G
+          (@SubNegMonoid.toSub.{u} G (@AddGroup.toSubNegMonoid.{u} G (@AddCommGroup.toAddGroup.{u} G inst))))
+        f q)
+    F
+def Tiling.RationalPolygonal.DiscretePeriodicBy.{u} : {G : Type u} →
+  [AddCommGroup.{u} G] → (A : Set.{u} G) → (v : G) → Prop :=
+fun {G : Type u} [inst : AddCommGroup.{u} G] (A : Set.{u} G) (v : G) =>
+  ∀ (x : G),
+    Iff
+      (@Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) A
+        (@HAdd.hAdd.{u, u, u} G G G
+          (@instHAdd.{u} G
+            (@AddCommMagma.toAdd.{u} G
+              (@AddCommSemigroup.toAddCommMagma.{u} G
+                (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
+          x v))
+      (@Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) A x)
+def Tiling.RationalPolygonal.quakeTransfer.{u} : {G : Type u} →
+  [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → (v : G) → (t t' : @Set.Elem.{u} G T) → Prop :=
+fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) (v : G) (t t' : @Set.Elem.{u} G T) =>
+  @Exists.{u + 1} G fun (f : G) =>
+    And
+      (@Membership.mem.{u, u} G (Finset.{u} G)
+        (@SetLike.instMembership.{u, u} (Finset.{u} G) G (@Finset.instSetLike.{u} G)) F f)
+      (@Exists.{u + 1} G fun (f' : G) =>
+        And
+          (@Membership.mem.{u, u} G (Finset.{u} G)
+            (@SetLike.instMembership.{u, u} (Finset.{u} G) G (@Finset.instSetLike.{u} G)) F f')
+          (@Eq.{u + 1} G
+            (@HAdd.hAdd.{u, u, u} G G G
+              (@instHAdd.{u} G
+                (@AddCommMagma.toAdd.{u} G
+                  (@AddCommSemigroup.toAddCommMagma.{u} G
+                    (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
+              (@HAdd.hAdd.{u, u, u} G G G
+                (@instHAdd.{u} G
+                  (@AddCommMagma.toAdd.{u} G
+                    (@AddCommSemigroup.toAddCommMagma.{u} G
+                      (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
+                f
+                (@Subtype.val.{u + 1} G
+                  (fun (x : G) => @Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) T x) t))
+              v)
+            (@HAdd.hAdd.{u, u, u} G G G
+              (@instHAdd.{u} G
+                (@AddCommMagma.toAdd.{u} G
+                  (@AddCommSemigroup.toAddCommMagma.{u} G
+                    (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
+              f'
+              (@Subtype.val.{u + 1} G
+                (fun (x : G) => @Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) T x) t'))))
 def Tiling.RationalPolygonal.PolygonalRegion.polygonalProtoTiling : (K : Tiling.RationalPolygonal.PolygonalRegion) →
   (T : Set.{0} Tiling.Plane) → Tiling.PolygonalProtoTiling.{0} Unit :=
 fun (K : Tiling.RationalPolygonal.PolygonalRegion) (T : Set.{0} Tiling.Plane) =>
@@ -2048,24 +2122,6 @@ fun (T : Set.{0} Tiling.Plane) =>
   @Set.ofPred.{0} Tiling.RationalPolygonal.IntegerPlane fun (z : Tiling.RationalPolygonal.IntegerPlane) =>
     @Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane) T
       (Tiling.RationalPolygonal.integerPoint z)
-def Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition : {A :
-    Set.{0} Tiling.RationalPolygonal.IntegerPlane} →
-  (D : TranslationalTilings.WeakPeriodicDecomposition A) →
-    Tiling.RationalPolygonal.WeakPeriodicDecomposition
-      (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A) :=
-fun {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane} (D : TranslationalTilings.WeakPeriodicDecomposition A) =>
-  @Tiling.RationalPolygonal.WeakPeriodicDecomposition.mk
-    (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A)
-    (@TranslationalTilings.WeakPeriodicDecomposition.numberOfParts A D)
-    (fun (i : Fin (@TranslationalTilings.WeakPeriodicDecomposition.numberOfParts A D)) =>
-      @Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint
-        (@TranslationalTilings.WeakPeriodicDecomposition.part A D i))
-    (fun (i : Fin (@TranslationalTilings.WeakPeriodicDecomposition.numberOfParts A D)) =>
-      Tiling.RationalPolygonal.integerPoint (@TranslationalTilings.WeakPeriodicDecomposition.period A D i))
-    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_1 A D)
-    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_2 A D)
-    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_3 A D)
-    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_4 A D)
 def Tiling.RationalPolygonal.latticePoint : (x y : Int) → Tiling.RationalPolygonal.IntegerPlane :=
 fun (x y : Int) =>
   @Matrix.vecCons.{0} Int (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) x
@@ -2665,82 +2721,6 @@ def Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile : (K : Til
 fun (K : Tiling.RationalPolygonal.PolygonalRegion) =>
   @Tiling.RationalPolygonal.planarRasterTile (Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount K)
     (Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignatureAt K)
-def Tiling.RationalPolygonal.rigidFrame : Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
-Tiling.RationalPolygonal.modifiedMarkerSquare (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
-def Tiling.RationalPolygonal.discreteCarrier.{u} : {G : Type u} →
-  [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → Set.{u} G :=
-fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) =>
-  @Set.ofPred.{u} G fun (x : G) =>
-    @Exists.{u + 1} G fun (f : G) =>
-      And
-        (@Membership.mem.{u, u} G (Finset.{u} G)
-          (@SetLike.instMembership.{u, u} (Finset.{u} G) G (@Finset.instSetLike.{u} G)) F f)
-        (@Exists.{u + 1} G fun (t : G) =>
-          And (@Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) T t)
-            (@Eq.{u + 1} G x
-              (@HAdd.hAdd.{u, u, u} G G G
-                (@instHAdd.{u} G
-                  (@AddCommMagma.toAdd.{u} G
-                    (@AddCommSemigroup.toAddCommMagma.{u} G
-                      (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
-                f t)))
-def Tiling.RationalPolygonal.shiftFinset.{u} : {G : Type u} →
-  [AddCommGroup.{u} G] → (q : G) → (F : Finset.{u} G) → Finset.{u} G :=
-fun {G : Type u} [inst : AddCommGroup.{u} G] (q : G) (F : Finset.{u} G) =>
-  @Finset.image.{u, u} G G (fun (a b : G) => Classical.propDecidable (@Eq.{u + 1} G a b))
-    (fun (f : G) =>
-      @HSub.hSub.{u, u, u} G G G
-        (@instHSub.{u} G
-          (@SubNegMonoid.toSub.{u} G (@AddGroup.toSubNegMonoid.{u} G (@AddCommGroup.toAddGroup.{u} G inst))))
-        f q)
-    F
-def Tiling.RationalPolygonal.DiscretePeriodicBy.{u} : {G : Type u} →
-  [AddCommGroup.{u} G] → (A : Set.{u} G) → (v : G) → Prop :=
-fun {G : Type u} [inst : AddCommGroup.{u} G] (A : Set.{u} G) (v : G) =>
-  ∀ (x : G),
-    Iff
-      (@Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) A
-        (@HAdd.hAdd.{u, u, u} G G G
-          (@instHAdd.{u} G
-            (@AddCommMagma.toAdd.{u} G
-              (@AddCommSemigroup.toAddCommMagma.{u} G
-                (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
-          x v))
-      (@Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) A x)
-def Tiling.RationalPolygonal.quakeTransfer.{u} : {G : Type u} →
-  [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → (v : G) → (t t' : @Set.Elem.{u} G T) → Prop :=
-fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) (v : G) (t t' : @Set.Elem.{u} G T) =>
-  @Exists.{u + 1} G fun (f : G) =>
-    And
-      (@Membership.mem.{u, u} G (Finset.{u} G)
-        (@SetLike.instMembership.{u, u} (Finset.{u} G) G (@Finset.instSetLike.{u} G)) F f)
-      (@Exists.{u + 1} G fun (f' : G) =>
-        And
-          (@Membership.mem.{u, u} G (Finset.{u} G)
-            (@SetLike.instMembership.{u, u} (Finset.{u} G) G (@Finset.instSetLike.{u} G)) F f')
-          (@Eq.{u + 1} G
-            (@HAdd.hAdd.{u, u, u} G G G
-              (@instHAdd.{u} G
-                (@AddCommMagma.toAdd.{u} G
-                  (@AddCommSemigroup.toAddCommMagma.{u} G
-                    (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
-              (@HAdd.hAdd.{u, u, u} G G G
-                (@instHAdd.{u} G
-                  (@AddCommMagma.toAdd.{u} G
-                    (@AddCommSemigroup.toAddCommMagma.{u} G
-                      (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
-                f
-                (@Subtype.val.{u + 1} G
-                  (fun (x : G) => @Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) T x) t))
-              v)
-            (@HAdd.hAdd.{u, u, u} G G G
-              (@instHAdd.{u} G
-                (@AddCommMagma.toAdd.{u} G
-                  (@AddCommSemigroup.toAddCommMagma.{u} G
-                    (@AddCommMonoid.toAddCommSemigroup.{u} G (@AddCommGroup.toAddCommMonoid.{u} G inst)))))
-              f'
-              (@Subtype.val.{u + 1} G
-                (fun (x : G) => @Membership.mem.{u, u} G (Set.{u} G) (@Set.instMembership.{u} G) T x) t'))))
 def Tiling.RationalPolygonal.quakeGraph.{u} : {G : Type u} →
   [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → (v : G) → SimpleGraph.{u} (@Set.Elem.{u} G T) :=
 fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) (v : G) =>
@@ -3768,6 +3748,24 @@ fun {K : Tiling.RationalPolygonal.PolygonalRegion} {T : Set.{0} Tiling.Plane}
               (@Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.translations K T R) x)
           (@Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlatePoint K T R u C)))
     (@Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlateOwner._proof_2 K T R u C hp)
+def Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition : {A :
+    Set.{0} Tiling.RationalPolygonal.IntegerPlane} →
+  (D : TranslationalTilings.WeakPeriodicDecomposition A) →
+    Tiling.RationalPolygonal.WeakPeriodicDecomposition
+      (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A) :=
+fun {A : Set.{0} Tiling.RationalPolygonal.IntegerPlane} (D : TranslationalTilings.WeakPeriodicDecomposition A) =>
+  @Tiling.RationalPolygonal.WeakPeriodicDecomposition.mk
+    (@Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint A)
+    (@TranslationalTilings.WeakPeriodicDecomposition.numberOfParts A D)
+    (fun (i : Fin (@TranslationalTilings.WeakPeriodicDecomposition.numberOfParts A D)) =>
+      @Set.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.Plane Tiling.RationalPolygonal.integerPoint
+        (@TranslationalTilings.WeakPeriodicDecomposition.part A D i))
+    (fun (i : Fin (@TranslationalTilings.WeakPeriodicDecomposition.numberOfParts A D)) =>
+      Tiling.RationalPolygonal.integerPoint (@TranslationalTilings.WeakPeriodicDecomposition.period A D i))
+    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_1 A D)
+    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_2 A D)
+    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_3 A D)
+    (@Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition._proof_4 A D)
 def Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.unshiftedQuakePart : {K :
     Tiling.RationalPolygonal.PolygonalRegion} →
   {T : Set.{0} Tiling.Plane} →
