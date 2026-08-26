@@ -1,0 +1,351 @@
+import Tiling.RationalPolygonal.Earthquake
+import Tiling.RationalPolygonal.IntegerReduction
+
+set_option linter.style.header false
+
+/-!
+# Fundamental-cell raster signatures
+
+For a polygonal region `K` and a point `u` in one lattice cell, the raster signature consists of
+the integer vectors `z` for which `u + z` lies in `K`.  Compactness of `K` and closed discreteness
+of the embedded integer plane make every signature finite.  The elementary representation lemma
+below is the exact local bridge between a continuous integer-translation tiling and a discrete
+tiling of `ℤ²` by one signature.
+-/
+
+open Filter MeasureTheory Set
+open TranslationalTilings
+open scoped Pointwise
+
+namespace Tiling.RationalPolygonal
+
+/-- A compact closed representative of one fundamental cell of the integer lattice. -/
+def closedUnitCell : Set Plane :=
+  Complex.equivRealProdCLM ⁻¹' (Set.Icc (0 : ℝ) 1 ×ˢ Set.Icc (0 : ℝ) 1)
+
+/-- The closed fundamental cell is compact. -/
+theorem isCompact_closedUnitCell : IsCompact closedUnitCell := by
+  exact Complex.equivRealProdCLM.toHomeomorph.isCompact_preimage.2
+    (isCompact_Icc.prod isCompact_Icc)
+
+namespace PolygonalRegion
+
+/-- Almost every point of a monotile tiling belongs to exactly one translated copy. -/
+theorem Tiles.ae_existsUnique_translation {K : PolygonalRegion} {T : Set Plane}
+    (hT : K.Tiles T) :
+    ∀ᵐ x, ∃! t : Plane,
+      t ∈ T ∧ x ∈ placedTile K.prototileFamily (t, ()) := by
+  let A := K.placements T
+  let _ : Countable A := (Tiling.IsTiling.countable hT).to_subtype
+  have hunique : ∀ᵐ x, ∀ i j : A,
+      x ∈ placedTile K.prototileFamily i.1 →
+      x ∈ placedTile K.prototileFamily j.1 → i = j := by
+    rw [ae_all_iff]
+    intro i
+    rw [ae_all_iff]
+    intro j
+    by_cases hij : i = j
+    · subst j
+      simp
+    · rw [ae_iff]
+      have hijval : i.1 ≠ j.1 := by
+        intro hval
+        apply hij
+        exact Subtype.ext hval
+      have had := hT.isPacking i.2 j.2 hijval
+      change volume
+        (placedTile K.prototileFamily i.1 ∩
+          placedTile K.prototileFamily j.1) = 0 at had
+      rw [show {x | ¬(x ∈ placedTile K.prototileFamily i.1 →
+          x ∈ placedTile K.prototileFamily j.1 → i = j)} =
+          placedTile K.prototileFamily i.1 ∩
+            placedTile K.prototileFamily j.1 by
+        ext x
+        simp [hij]]
+      exact had
+  filter_upwards [hT.isCover, hunique] with x hxcover hxunique
+  obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hxcover
+  refine ⟨i.1.1, ⟨i.2, hxi⟩, ?_⟩
+  intro t ht
+  let j : A := ⟨(t, ()), ht.1⟩
+  have hij := hxunique i j hxi ht.2
+  exact congrArg (fun p : A ↦ p.1.1) hij |>.symm
+
+/-- Integer offsets at which the lattice orbit of `u` meets the polygonal support. -/
+def latticeSlice (K : PolygonalRegion) (u : Plane) : Set IntegerPlane :=
+  {z | u + integerPoint z ∈ K.support}
+
+@[simp]
+theorem mem_latticeSlice_iff {K : PolygonalRegion} {u : Plane}
+    {z : IntegerPlane} :
+    z ∈ K.latticeSlice u ↔ u + integerPoint z ∈ K.support :=
+  Iff.rfl
+
+/-- Every lattice slice of a bounded polygonal region is finite. -/
+theorem latticeSlice_finite (K : PolygonalRegion) (u : Plane) :
+    (K.latticeSlice u).Finite := by
+  have hcompact : IsCompact (-u +ᵥ K.support) :=
+    (K.isPolygonal.vadd (-u)).isCompact
+  have hfinite := finite_integerPoint_preimage_of_isCompact hcompact
+  apply hfinite.subset
+  intro z hz
+  change u + integerPoint z ∈ K.support at hz
+  change integerPoint z ∈ -u +ᵥ K.support
+  rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+  convert hz using 1
+  simp only [vadd_eq_add]
+  abel
+
+/-- All integer offsets that can occur in a signature based in the closed fundamental cell. -/
+def signatureWindow (K : PolygonalRegion) : Set IntegerPlane :=
+  {z | ∃ u ∈ closedUnitCell, u + integerPoint z ∈ K.support}
+
+/-- The common signature window is finite. -/
+theorem signatureWindow_finite (K : PolygonalRegion) :
+    K.signatureWindow.Finite := by
+  let differences : Set Plane :=
+    (fun p : Plane × Plane ↦ p.1 - p.2) ''
+      (K.support ×ˢ closedUnitCell)
+  have hcompact : IsCompact differences :=
+    (K.isPolygonal.isCompact.prod isCompact_closedUnitCell).image continuous_sub
+  have hfinite := finite_integerPoint_preimage_of_isCompact hcompact
+  apply hfinite.subset
+  intro z hz
+  obtain ⟨u, huCell, huz⟩ := hz
+  change integerPoint z ∈ differences
+  refine ⟨(u + integerPoint z, u), ⟨huz, huCell⟩, ?_⟩
+  simp only
+  abel
+
+/-- The finite raster tile seen from a fundamental-cell point. -/
+noncomputable def signature (K : PolygonalRegion) (u : Plane) : Finset IntegerPlane :=
+  K.latticeSlice_finite u |>.toFinset
+
+@[simp]
+theorem mem_signature_iff {K : PolygonalRegion} {u : Plane}
+    {z : IntegerPlane} :
+    z ∈ K.signature u ↔ u + integerPoint z ∈ K.support := by
+  simp only [signature, Set.Finite.mem_toFinset, mem_latticeSlice_iff]
+
+/-- Every signature based in the fundamental cell lies in the common finite window. -/
+theorem signature_subset_signatureWindow (K : PolygonalRegion) {u : Plane}
+    (hu : u ∈ closedUnitCell) :
+    ↑(K.signature u) ⊆ K.signatureWindow := by
+  intro z hz
+  exact ⟨u, hu, (mem_signature_iff.mp hz)⟩
+
+/-- The finite list of all candidate signatures inside the common window. -/
+noncomputable def candidateSignatures (K : PolygonalRegion) :
+    Finset (Finset IntegerPlane) :=
+  K.signatureWindow_finite.toFinset.powerset
+
+/-- Every actual fundamental-cell signature occurs in the finite candidate list. -/
+theorem signature_mem_candidateSignatures (K : PolygonalRegion) {u : Plane}
+    (hu : u ∈ closedUnitCell) :
+    K.signature u ∈ K.candidateSignatures := by
+  rw [candidateSignatures, Finset.mem_powerset]
+  intro z hz
+  simpa only [Set.Finite.mem_toFinset] using
+    K.signature_subset_signatureWindow hu hz
+
+/-- Membership in a continuously placed tile is the corresponding raster-signature membership. -/
+theorem mem_placedTile_integerPoint_iff_signature
+    (K : PolygonalRegion) (u : Plane) (x t : IntegerPlane) :
+    u + integerPoint x ∈
+        placedTile K.prototileFamily (integerPoint t, ()) ↔
+      x - t ∈ K.signature u := by
+  rw [mem_signature_iff]
+  change u + integerPoint x ∈ integerPoint t +ᵥ K.support ↔ _
+  rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+  have heq : -integerPoint t +ᵥ (u + integerPoint x) =
+      u + integerPoint (x - t) := by
+    rw [show integerPoint (x - t) = integerPoint x - integerPoint t by
+      exact map_sub integerPointHom x t]
+    simp only [vadd_eq_add]
+    abel
+  rw [heq]
+
+/-- Exact discrete tiling by one signature is equivalent to unique continuous placement
+representation on the full lattice orbit through `u`. -/
+theorem signature_tilesUniverse_iff_unique_translation
+    (K : PolygonalRegion) (u : Plane) (T : Set IntegerPlane) :
+    TilesUniverse (K.signature u) T ↔
+      ∀ x : IntegerPlane, ∃! t : IntegerPlane,
+        t ∈ T ∧
+          u + integerPoint x ∈
+            placedTile K.prototileFamily (integerPoint t, ()) := by
+  constructor
+  · intro htiles x
+    obtain ⟨f, hf, hfunique⟩ :=
+      existsUnique_tile_representation htiles x
+    let t : IntegerPlane := x - f
+    refine ⟨t, ?_, ?_⟩
+    · refine ⟨hf.2, ?_⟩
+      rw [K.mem_placedTile_integerPoint_iff_signature]
+      simpa only [t, sub_sub_cancel] using hf.1
+    · intro s hs
+      have hxs : x - s ∈ K.signature u :=
+        (K.mem_placedTile_integerPoint_iff_signature u x s).mp hs.2
+      have hchosen : f = x - s := (hfunique (x - s) ⟨hxs, by
+        simpa only [sub_sub_cancel] using hs.1⟩).symm
+      dsimp only [t]
+      rw [hchosen]
+      abel
+  · intro hunique
+    apply tilesUniverse_of_existsUnique
+    intro x
+    obtain ⟨t, ht, htunique⟩ := hunique x
+    let f : IntegerPlane := x - t
+    refine ⟨f, ?_, ?_⟩
+    · refine ⟨?_, ?_⟩
+      · exact (K.mem_placedTile_integerPoint_iff_signature u x t).mp ht.2
+      · simpa only [f, sub_sub_cancel] using ht.1
+    · intro g hg
+      let s : IntegerPlane := x - g
+      have hs : s ∈ T ∧
+          u + integerPoint x ∈
+            placedTile K.prototileFamily (integerPoint s, ()) := by
+        refine ⟨hg.2, ?_⟩
+        rw [K.mem_placedTile_integerPoint_iff_signature]
+        simpa only [s, sub_sub_cancel] using hg.1
+      have hst : s = t := htunique s hs
+      dsimp only [f, s] at hst ⊢
+      rw [← hst]
+      abel
+
+/-- If all translation vectors are integral, record their unique integer coordinates. -/
+def integerTranslationSet (T : Set Plane) : Set IntegerPlane :=
+  {z | integerPoint z ∈ T}
+
+@[simp]
+theorem mem_integerTranslationSet_iff {T : Set Plane} {z : IntegerPlane} :
+    z ∈ integerTranslationSet T ↔ integerPoint z ∈ T :=
+  Iff.rfl
+
+/-- An integral real translation set is exactly the image of its integer-coordinate set. -/
+theorem integerPoint_image_integerTranslationSet {T : Set Plane}
+    (hT : ∀ t ∈ T, IsIntegerPoint t) :
+    integerPoint '' integerTranslationSet T = T := by
+  ext t
+  constructor
+  · rintro ⟨z, hz, rfl⟩
+    exact hz
+  · intro ht
+    obtain ⟨z, hz⟩ := mem_integerLattice_iff.mp (hT t ht)
+    refine ⟨z, ?_, hz⟩
+    change integerPoint z ∈ T
+    rw [hz]
+    exact ht
+
+/-- A continuous tiling by integer translations induces, for almost every fundamental-cell point,
+an exact discrete tiling by its finite signature. -/
+theorem Tiles.ae_signature_tilesUniverse {K : PolygonalRegion}
+    {T : Set IntegerPlane}
+    (hT : K.Tiles (integerPoint '' T)) :
+    ∀ᵐ u, TilesUniverse (K.signature u) T := by
+  have hglobal := hT.ae_existsUnique_translation
+  have horbits : ∀ᵐ u, ∀ x : IntegerPlane, ∃! r : Plane,
+      r ∈ integerPoint '' T ∧
+        u + integerPoint x ∈ placedTile K.prototileFamily (r, ()) := by
+    rw [ae_all_iff]
+    intro x
+    have horbit :=
+      (quasiMeasurePreserving_add_left volume (integerPoint x)).ae hglobal
+    simpa only [add_comm] using horbit
+  filter_upwards [horbits] with u hu
+  apply (K.signature_tilesUniverse_iff_unique_translation u T).mpr
+  intro y
+  obtain ⟨r, hr, hrunique⟩ := hu y
+  obtain ⟨t, htT, htr⟩ := hr.1
+  refine ⟨t, ?_, ?_⟩
+  · refine ⟨htT, ?_⟩
+    simpa only [htr] using hr.2
+  · intro s hs
+    have hrs : integerPoint s = r := by
+      apply hrunique (integerPoint s)
+      exact ⟨⟨s, hs.1, rfl⟩, hs.2⟩
+    exact integerPoint_injective (hrs.trans htr.symm)
+
+/-- Conversely, almost-everywhere discrete tiling of the signatures reconstructs the continuous
+integer-translation tiling. -/
+theorem tiles_integerPoint_image_of_ae_signature_tilesUniverse
+    (K : PolygonalRegion) {T : Set IntegerPlane}
+    (hT : ∀ᵐ u, TilesUniverse (K.signature u) T) :
+    K.Tiles (integerPoint '' T) := by
+  have htranslations : (integerPoint '' T).Countable :=
+    Set.to_countable T |>.image integerPoint
+  refine ⟨placements_countable K htranslations, ?_, ?_⟩
+  · intro p hp q hq hpq
+    change p.1 ∈ integerPoint '' T at hp
+    change q.1 ∈ integerPoint '' T at hq
+    obtain ⟨t, ht, htp⟩ := hp
+    obtain ⟨s, hs, hsq⟩ := hq
+    change AEDisjoint volume
+      (placedTile K.prototileFamily p)
+      (placedTile K.prototileFamily q)
+    change volume
+      (placedTile K.prototileFamily p ∩
+        placedTile K.prototileFamily q) = 0
+    have hae : ∀ᵐ u,
+        u ∉ placedTile K.prototileFamily p ∩
+          placedTile K.prototileFamily q := by
+      filter_upwards [hT] with u hu
+      intro huinter
+      obtain ⟨chosen, hchosen, hunique⟩ :=
+        (K.signature_tilesUniverse_iff_unique_translation u T).mp hu 0
+      have htPlaced : u + integerPoint 0 ∈
+          placedTile K.prototileFamily (integerPoint t, ()) := by
+        have hup := huinter.1
+        change u ∈ p.1 +ᵥ K.support at hup
+        change u + integerPoint 0 ∈ integerPoint t +ᵥ K.support
+        simpa only [integerPoint_zero, add_zero, htp] using hup
+      have hsPlaced : u + integerPoint 0 ∈
+          placedTile K.prototileFamily (integerPoint s, ()) := by
+        have huq := huinter.2
+        change u ∈ q.1 +ᵥ K.support at huq
+        change u + integerPoint 0 ∈ integerPoint s +ᵥ K.support
+        simpa only [integerPoint_zero, add_zero, hsq] using huq
+      have htchosen := hunique t ⟨ht, htPlaced⟩
+      have hschosen := hunique s ⟨hs, hsPlaced⟩
+      apply hpq
+      apply Prod.ext
+      · rw [← htp, ← hsq, htchosen, hschosen]
+      · exact Subsingleton.elim _ _
+    simpa only [not_not, Set.ofPred_mem_eq] using (ae_iff.mp hae)
+  · filter_upwards [hT] with u hu
+    obtain ⟨t, ht, -⟩ :=
+      (K.signature_tilesUniverse_iff_unique_translation u T).mp hu 0
+    let p : Placement Plane Unit := (integerPoint t, ())
+    have hp : p ∈ K.placements (integerPoint '' T) :=
+      ⟨t, ht.1, rfl⟩
+    apply Set.mem_iUnion.mpr
+    refine ⟨⟨p, hp⟩, ?_⟩
+    simpa only [p, integerPoint_zero, add_zero] using ht.2
+
+/-- The exact measure-theoretic raster bridge: continuous integer tilings are equivalent to
+almost-everywhere simultaneous discrete tilings by their finite signatures. -/
+theorem tiles_integerPoint_image_iff_ae_signature_tilesUniverse
+    (K : PolygonalRegion) (T : Set IntegerPlane) :
+    K.Tiles (integerPoint '' T) ↔
+      ∀ᵐ u, TilesUniverse (K.signature u) T :=
+  ⟨Tiles.ae_signature_tilesUniverse,
+    K.tiles_integerPoint_image_of_ae_signature_tilesUniverse⟩
+
+/-- An integer-vertex polygonal region that tiles continuously has an integer translation set,
+and the same set tiles almost every raster signature. -/
+theorem exists_integer_signature_tiling {K : PolygonalRegion}
+    (hK : K.HasIntegerVertices) {T : Set Plane} (hT : K.Tiles T) :
+    ∃ S : Set IntegerPlane,
+      K.Tiles (integerPoint '' S) ∧
+        ∀ᵐ u, TilesUniverse (K.signature u) S := by
+  obtain ⟨T', hT'tiles, -, hT'integer⟩ := K.exists_integer_tiling hK hT
+  let S := integerTranslationSet T'
+  have himage : integerPoint '' S = T' :=
+    integerPoint_image_integerTranslationSet hT'integer
+  have htilesImage : K.Tiles (integerPoint '' S) := by
+    rwa [himage]
+  exact ⟨S, htilesImage, htilesImage.ae_signature_tilesUniverse⟩
+
+end PolygonalRegion
+
+end Tiling.RationalPolygonal

@@ -40,6 +40,20 @@ theorem integerPointHom_apply (z : IntegerPlane) : integerPointHom z = integerPo
   rfl
 
 @[simp]
+theorem integerPoint_zero : integerPoint 0 = 0 := by
+  exact map_zero integerPointHom
+
+@[simp]
+theorem integerPoint_add (x y : IntegerPlane) :
+    integerPoint (x + y) = integerPoint x + integerPoint y := by
+  exact map_add integerPointHom x y
+
+@[simp]
+theorem integerPoint_sub (x y : IntegerPlane) :
+    integerPoint (x - y) = integerPoint x - integerPoint y := by
+  exact map_sub integerPointHom x y
+
+@[simp]
 theorem integerPoint_re (z : IntegerPlane) : (integerPoint z).re = z 0 := by
   simp [integerPoint]
 
@@ -58,6 +72,34 @@ theorem integerPoint_injective : Injective integerPoint := by
   · have h1 : (x 1 : ℝ) = (y 1 : ℝ) := by
       simpa only [integerPoint_im] using congrArg Complex.im hxy
     exact_mod_cast h1
+
+/-- The embedded integer plane is a closed discrete subset of the real plane. -/
+theorem integerPoint_isClosedEmbedding :
+    Topology.IsClosedEmbedding integerPoint := by
+  let hcoords : IntegerPlane ≃ₜ ℤ × ℤ := Homeomorph.finTwoArrow
+  have hpair : Topology.IsClosedEmbedding (Prod.map ((↑) : ℤ → ℝ) ((↑) : ℤ → ℝ)) :=
+    Int.isClosedEmbedding_coe_real.prodMap Int.isClosedEmbedding_coe_real
+  have hrealPair : Topology.IsClosedEmbedding
+      (fun z : IntegerPlane ↦ ((z 0 : ℝ), (z 1 : ℝ))) := by
+    convert hpair.comp hcoords.isClosedEmbedding using 1
+    funext z
+    change ((z 0 : ℝ), (z 1 : ℝ)) =
+      Prod.map ((↑) : ℤ → ℝ) ((↑) : ℤ → ℝ) (z 0, z 1)
+    rfl
+  have hcomplex :=
+    Complex.equivRealProdCLM.symm.toHomeomorph.isClosedEmbedding.comp hrealPair
+  convert hcomplex using 1
+  funext z
+  change integerPoint z = Complex.equivRealProdCLM.symm ((z 0 : ℝ), (z 1 : ℝ))
+  rw [Complex.equivRealProdCLM_symm_apply]
+  rfl
+
+/-- Only finitely many integer lattice points lie in a compact planar set. -/
+theorem finite_integerPoint_preimage_of_isCompact {s : Set Plane}
+    (hs : IsCompact s) :
+    {z : IntegerPlane | integerPoint z ∈ s}.Finite := by
+  change (integerPoint ⁻¹' s).Finite
+  exact (integerPoint_isClosedEmbedding.isCompact_preimage hs).finite_of_discrete
 
 /-- The additive subgroup of points having two integer coordinates. -/
 def integerLattice : AddSubgroup Plane :=
