@@ -16,5 +16,6 @@ import Tiling.RationalPolygonal.RasterMarker
 import Tiling.RationalPolygonal.ContinuousEarthquake
 import Tiling.RationalPolygonal.SlidingReduction
 import Tiling.RationalPolygonal.WeakPeriodicity
+import Tiling.RationalPolygonal.Decision
 import Tiling.Measure.Counting
 import Tiling.Topology.IntersectionGraph
