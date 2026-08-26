@@ -231,6 +231,47 @@ structure RationalPolygonalRegion extends PolygonalRegion where
 
 namespace RationalPolygonalRegion
 
+/-- Translate the chosen anchor to the origin and clear the common vertex denominator. -/
+def normalizedSupport (K : RationalPolygonalRegion) : Set Plane :=
+  (K.denominator : ℝ) • (-K.anchor +ᵥ K.support)
+
+/-- The polygonal region obtained by the paper's rational affine normalization. -/
+def normalizedRegion (K : RationalPolygonalRegion) : PolygonalRegion where
+  support := K.normalizedSupport
+  isPolygonal := by
+    apply IsPolygonal.smul (K.isPolygonal.vadd (-K.anchor))
+    exact_mod_cast K.denominator_pos.ne'
+  nonempty := by
+    obtain ⟨x, hx⟩ := K.nonempty
+    have hxtranslated : -K.anchor +ᵥ x ∈ -K.anchor +ᵥ K.support := by
+      rw [Set.mem_vadd_set_iff_neg_vadd_mem]
+      have hpoint : -(-K.anchor) +ᵥ (-K.anchor +ᵥ x) = x := by
+        simp only [vadd_eq_add]
+        abel
+      rwa [hpoint]
+    exact ⟨(K.denominator : ℝ) • (-K.anchor +ᵥ x),
+      ⟨-K.anchor +ᵥ x, hxtranslated, rfl⟩⟩
+
+@[simp]
+theorem normalizedRegion_support (K : RationalPolygonalRegion) :
+    K.normalizedRegion.support = K.normalizedSupport :=
+  rfl
+
+/-- Every intrinsic vertex of the normalized region is an integer point. -/
+theorem normalized_vertex_integral (K : RationalPolygonalRegion) :
+    ∀ w ∈ vertexSet K.normalizedSupport, IsIntegerPoint w := by
+  intro w hw
+  have hn : (K.denominator : ℝ) ≠ 0 := by
+    exact_mod_cast K.denominator_pos.ne'
+  rw [normalizedSupport, vertexSet_smul _ hn, vertexSet_vadd] at hw
+  obtain ⟨u, hu, rfl⟩ := hw
+  rw [Set.mem_vadd_set_iff_neg_vadd_mem] at hu
+  have hu' := K.vertex_integral (-(-K.anchor) +ᵥ u) hu
+  convert hu' using 1
+  simp only [vadd_eq_add]
+  congr 1
+  abel
+
 /-- A common-denominator rational presentation implies the paper's relative-rationality
 predicate. -/
 theorem isRelativelyRational (K : RationalPolygonalRegion) :

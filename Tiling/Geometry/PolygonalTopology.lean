@@ -1,5 +1,6 @@
 import Mathlib.Analysis.Normed.Affine.AddTorsorBases
 import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.OuterMeasure.Basic
 import Tiling.Geometry.Plane
 import Tiling.Topology.IntersectionGraph
@@ -531,6 +532,100 @@ theorem IsPolygonal.vadd {s : Set Plane} (hs : IsPolygonal s) (a : Plane) :
   obtain ⟨T⟩ := hs
   exact ⟨T.vadd a⟩
 
+/-- Nonzero real dilation preserves nondegenerate triangularity. -/
+theorem IsTriangle.smul {s : Set Plane} (hs : IsTriangle s) (r : ℝ) (hr : r ≠ 0) :
+    IsTriangle (r • s) := by
+  obtain ⟨a, b, c, harea, rfl⟩ := hs
+  refine ⟨r • a, r • b, r • c, ?_, ?_⟩
+  · have heq : twiceSignedArea (r • a) (r • b) (r • c) =
+        r ^ 2 * twiceSignedArea a b c := by
+      simp only [twiceSignedArea, Complex.smul_re, Complex.smul_im, smul_eq_mul]
+      ring
+    rw [heq]
+    exact mul_ne_zero (pow_ne_zero _ hr) harea
+  · rw [← convexHull_smul]
+    congr 1
+    ext x
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
+    constructor
+    · rintro ⟨y, (rfl | rfl | rfl), rfl⟩ <;> simp
+    · rintro (rfl | rfl | rfl)
+      · exact ⟨a, by simp, rfl⟩
+      · exact ⟨b, by simp, rfl⟩
+      · exact ⟨c, by simp, rfl⟩
+
+/-- Nonzero real dilation preserves almost-everywhere disjointness in the plane. -/
+theorem aedisjoint_smul {s t : Set Plane} (r : ℝ) (hr : r ≠ 0)
+    (h : AEDisjoint volume s t) : AEDisjoint volume (r • s) (r • t) := by
+  rw [AEDisjoint]
+  have hinter : (r • s) ∩ (r • t) = r • (s ∩ t) := by
+    ext x
+    constructor
+    · rintro ⟨⟨y, hy, rfl⟩, ⟨z, hz, heq⟩⟩
+      have hyz : y = z := (smul_right_injective Plane hr) heq.symm
+      subst z
+      exact ⟨y, ⟨hy, hz⟩, rfl⟩
+    · rintro ⟨y, ⟨hy, hz⟩, rfl⟩
+      exact ⟨⟨y, hy, rfl⟩, ⟨y, hz, rfl⟩⟩
+  rw [hinter, Measure.addHaar_smul volume, h]
+  simp
+
+/-- Dilate every triangle in a triangulation by one nonzero real scalar. -/
+noncomputable def Triangulation.smul {s : Set Plane} (T : Triangulation s)
+    (r : ℝ) (hr : r ≠ 0) : Triangulation (r • s) where
+  pieces := T.pieces.image (r • ·)
+  isTriangle := by
+    intro t ht
+    simp only [Finset.mem_image] at ht
+    obtain ⟨u, hu, rfl⟩ := ht
+    exact (T.isTriangle u hu).smul r hr
+  pairwiseAEDisjoint := by
+    intro t₁ ht₁ t₂ ht₂ hne
+    simp only [Finset.mem_coe, Finset.mem_image] at ht₁ ht₂
+    obtain ⟨u₁, hu₁, rfl⟩ := ht₁
+    obtain ⟨u₂, hu₂, rfl⟩ := ht₂
+    apply aedisjoint_smul r hr
+    apply T.pairwiseAEDisjoint hu₁ hu₂
+    intro h
+    apply hne
+    rw [h]
+  sUnion_eq := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp hx
+      simp only [Finset.mem_coe, Finset.mem_image] at ht
+      obtain ⟨u, hu, rfl⟩ := ht
+      obtain ⟨y, hyu, hyx⟩ := hxt
+      refine ⟨y, ?_, hyx⟩
+      rw [← T.sUnion_eq]
+      exact Set.mem_sUnion_of_mem hyu hu
+    · rintro ⟨y, hys, rfl⟩
+      have hys' : y ∈ ⋃₀ (T.pieces : Set (Set Plane)) := by rwa [T.sUnion_eq]
+      obtain ⟨u, hu, hyu⟩ := Set.mem_sUnion.mp hys'
+      apply Set.mem_sUnion_of_mem (t := r • u)
+      · exact ⟨y, hyu, rfl⟩
+      · simp only [Finset.mem_coe, Finset.mem_image]
+        exact ⟨u, hu, rfl⟩
+
+/-- Nonzero real dilation preserves polygonality. -/
+theorem IsPolygonal.smul {s : Set Plane} (hs : IsPolygonal s) (r : ℝ) (hr : r ≠ 0) :
+    IsPolygonal (r • s) := by
+  obtain ⟨T⟩ := hs
+  exact ⟨T.smul r hr⟩
+
+private noncomputable def scalarLinearEquiv (r : ℝ) (hr : r ≠ 0) :
+    Plane ≃ₗ[ℝ] Plane :=
+  DistribMulAction.toLinearEquiv ℝ Plane (Units.mk0 r hr)
+
+/-- Extreme points commute with a nonzero real dilation. -/
+private theorem extremePoints_smul (r : ℝ) (hr : r ≠ 0) (s : Set Plane) :
+    (r • s).extremePoints ℝ = r • s.extremePoints ℝ := by
+  have h := image_extremePoints (scalarLinearEquiv r hr) s
+  change (fun x : Plane ↦ r • x) '' extremePoints ℝ s =
+    extremePoints ℝ ((fun x : Plane ↦ r • x) '' s) at h
+  simpa only [Set.image_smul] using h.symm
+
 private theorem extremePoints_vadd (a : Plane) (s : Set Plane) :
     (a +ᵥ s).extremePoints ℝ = a +ᵥ s.extremePoints ℝ := by
   ext x
@@ -616,6 +711,56 @@ theorem vertexSet_vadd (a : Plane) (s : Set Plane) :
       exact hxu
     rw [← extremePoints_vadd] at hxtranslated
     simpa only [vadd_vadd, add_neg_cancel, zero_vadd] using hxtranslated
+
+/-- Intrinsic polygon vertices commute with nonzero real dilation. -/
+theorem vertexSet_smul (r : ℝ) (hr : r ≠ 0) (s : Set Plane) :
+    vertexSet (r • s) = r • vertexSet s := by
+  ext x
+  constructor
+  · intro hx
+    refine ⟨r⁻¹ • x, ?_, ?_⟩
+    · change ∀ T : Triangulation s,
+        ∃ t ∈ T.pieces, r⁻¹ • x ∈ t.extremePoints ℝ
+      intro T
+      change ∀ T' : Triangulation (r • s),
+        ∃ t ∈ T'.pieces, x ∈ t.extremePoints ℝ at hx
+      obtain ⟨t, ht, hxt⟩ := hx (T.smul r hr)
+      simp only [Triangulation.smul, Finset.mem_image] at ht
+      obtain ⟨u, hu, rfl⟩ := ht
+      rw [extremePoints_smul r hr u] at hxt
+      obtain ⟨y, hy, hyx⟩ := hxt
+      refine ⟨u, hu, ?_⟩
+      have hy_eq : y = r⁻¹ • x := by
+        calc
+          y = r⁻¹ • (r • y) := by simp [hr]
+          _ = r⁻¹ • x := congrArg (fun z : Plane ↦ r⁻¹ • z) hyx
+      simpa only [← hy_eq] using hy
+    · simp [hr]
+  · rintro ⟨y, hy, rfl⟩
+    change ∀ T' : Triangulation (r • s),
+      ∃ t ∈ T'.pieces, r • y ∈ t.extremePoints ℝ
+    intro T'
+    have hcancel : r⁻¹ • (r • s) = s := by
+      simp [smul_smul, hr]
+    let U₀ : Triangulation (r⁻¹ • (r • s)) :=
+      T'.smul r⁻¹ (inv_ne_zero hr)
+    let U : Triangulation s := U₀.cast hcancel
+    change ∀ T : Triangulation s,
+      ∃ t ∈ T.pieces, y ∈ t.extremePoints ℝ at hy
+    obtain ⟨u, hu, hyu⟩ := hy U
+    have hu₀ : u ∈ U₀.pieces := by
+      change u ∈ (U₀.cast hcancel).pieces at hu
+      simpa only [Triangulation.cast_pieces] using hu
+    simp only [U₀, Triangulation.smul, Finset.mem_image] at hu₀
+    obtain ⟨t, ht, rfl⟩ := hu₀
+    refine ⟨t, ht, ?_⟩
+    rw [extremePoints_smul r⁻¹ (inv_ne_zero hr) t] at hyu
+    obtain ⟨z, hz, hzy⟩ := hyu
+    have hz_eq : z = r • y := by
+      calc
+        z = r • (r⁻¹ • z) := by simp [hr]
+        _ = r • y := congrArg (fun w : Plane ↦ r • w) hzy
+    simpa only [← hz_eq] using hz
 
 /-- Away from a triangulation-independent vertex, a polygonal frontier is locally straight.
 

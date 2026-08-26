@@ -39,6 +39,12 @@ theorem polygonalProtoTiling_placements (K : PolygonalRegion) (T : Set Plane) :
 def HasIntegerVertices (K : PolygonalRegion) : Prop :=
   ∀ v ∈ vertexSet K.support, IsIntegerPoint v
 
+/-- Clearing the denominator in a rational presentation produces an integer-vertex region. -/
+theorem RationalPolygonalRegion.normalizedRegion_hasIntegerVertices
+    (K : RationalPolygonalRegion) :
+    K.normalizedRegion.HasIntegerVertices :=
+  K.normalized_vertex_integral
+
 /-- The paper's integer-tiling condition: every placed intrinsic vertex is integral. -/
 def IsIntegerTiling (K : PolygonalRegion) (T : Set Plane) : Prop :=
   K.Tiles T ∧
