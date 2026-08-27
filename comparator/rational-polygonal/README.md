@@ -7,8 +7,8 @@ mathematician can audit **what is claimed** without reading or trusting any file
 
 ## What the trusted statement says
 
-`ChallengeDeps.lean` imports only seven named Mathlib modules. It develops the vocabulary from
-first principles:
+`Challenge.lean` imports only seven named Mathlib modules and develops the entire vocabulary from
+first principles before displaying the theorem:
 
 1. a prototile is a nonempty measurable set;
 2. placements form a tiling when they are countable, pairwise almost-everywhere disjoint, and cover
@@ -37,11 +37,11 @@ almost-everywhere relation, so the two representatives have the same tilings.
 
 | file | role | trusted by the comparator? |
 |---|---|---|
-| `ChallengeDeps.lean` | Mathlib-only mathematical definitions used by the statement | yes |
-| `Challenge.lean` | the theorem statement with a `sorry` proof | yes |
-| `Solution.lean` | the exact same theorem, proved via the full project | no; checked |
+| `Challenge.lean` | all Mathlib-only definitions, followed by the theorem with a `sorry` proof | yes |
+| `Solution.lean` | the same definitions and theorem, followed by the bridge to the full project | no; checked |
 
-The solution bridge is intentionally explicit. It converts triangulations in both directions,
+The definition block is repeated in `Solution.lean`; Comparator checks that the two independently
+elaborated copies are identical. The solution bridge is intentionally explicit. It converts triangulations in both directions,
 proves that both notions of intrinsic vertex coincide, embeds coordinatewise integer points in the
 project's integer lattice, and converts the direct monotile packing/covering relation to and from
 the project's unit-labelled placement relation. Only then does it invoke the production theorem.
