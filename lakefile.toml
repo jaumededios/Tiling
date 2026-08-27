@@ -19,3 +19,18 @@ name = "Tiling"
 
 [[lean_lib]]
 name = "TranslationalTilings"
+
+# The three bare module names below follow the directory convention used by
+# leanprover/comparator: the trusted challenge and the submitted solution are
+# compiled in separate environments, while both share `ChallengeDeps`.
+[[lean_lib]]
+name = "ChallengeDeps"
+srcDir = "comparator/rational-polygonal"
+
+[[lean_lib]]
+name = "Challenge"
+srcDir = "comparator/rational-polygonal"
+
+[[lean_lib]]
+name = "Solution"
+srcDir = "comparator/rational-polygonal"
