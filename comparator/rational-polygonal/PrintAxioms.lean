@@ -5,4 +5,4 @@ A quick trust check which does not require the comparator executable.  The stron
 also verifies that the solution theorem has exactly the trusted challenge statement.
 -/
 
-#print axioms DeDiosGreenfeldComparator.periodic_tiling_of_rational_polygon
+#print axioms DeDiosPontGrebikGreenfeldMadridComparator.periodic_tiling_of_rational_polygon
