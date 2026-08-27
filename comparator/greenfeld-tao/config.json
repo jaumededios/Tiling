@@ -1,0 +1,17 @@
+{
+  "challenge_module": "GreenfeldTaoChallenge",
+  "solution_module": "GreenfeldTaoSolution",
+  "theorem_names": [
+    "GreenfeldTaoComparator.level_one_tilings_are_weakly_periodic",
+    "GreenfeldTaoComparator.higher_level_tilings_need_not_be_weakly_periodic",
+    "GreenfeldTaoComparator.tileable_periodic_sets_have_periodic_tilings",
+    "GreenfeldTaoComparator.planar_tileability_is_decidable",
+    "GreenfeldTaoComparator.structure_of_periodic_representation_count"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

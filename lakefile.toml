@@ -30,3 +30,11 @@ srcDir = "comparator/rational-polygonal"
 [[lean_lib]]
 name = "Solution"
 srcDir = "comparator/rational-polygonal"
+
+[[lean_lib]]
+name = "GreenfeldTaoChallenge"
+srcDir = "comparator/greenfeld-tao"
+
+[[lean_lib]]
+name = "GreenfeldTaoSolution"
+srcDir = "comparator/greenfeld-tao"
