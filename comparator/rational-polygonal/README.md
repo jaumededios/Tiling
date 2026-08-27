@@ -37,7 +37,7 @@ almost-everywhere relation, so the two representatives have the same tilings.
 
 | file | role | trusted by the comparator? |
 |---|---|---|
-| `ChallengeDeps.lean` | Mathlib-only definitions and the proposition `PeriodicTilingTheorem` | yes |
+| `ChallengeDeps.lean` | Mathlib-only mathematical definitions used by the statement | yes |
 | `Challenge.lean` | the theorem statement with a `sorry` proof | yes |
 | `Solution.lean` | the exact same theorem, proved via the full project | no; checked |
 

@@ -151,8 +151,11 @@ open ProductionBridge
 This repeats the exact challenge theorem name and type.  The proof constructs the production
 region, applies paper Theorem 1.1, and converts the returned tiling back to the independent
 Mathlib-only vocabulary. -/
-theorem periodic_tiling_of_rational_polygon : PeriodicTilingTheorem := by
-  intro Ω hΩ htileable
+theorem periodic_tiling_of_rational_polygon
+    (Ω : Set Plane) (hΩ : RationalPolygon Ω) :
+    (∃ T : Set Plane, TranslationTiling volume Ω T) →
+      ∃ T : Set Plane, Periodic T ∧ TranslationTiling volume Ω T := by
+  intro htileable
   obtain ⟨K, hK⟩ := exists_productionRegion hΩ
   obtain ⟨T, hT⟩ := htileable
   have hT' : TranslationTiling volume K.support T := by

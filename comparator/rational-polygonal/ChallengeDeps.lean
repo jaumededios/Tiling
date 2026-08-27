@@ -177,17 +177,4 @@ def RationalPolygon (Ω : Set Plane) : Prop :=
         ∀ w ∈ intrinsicVertices Ω,
           IsIntegerPoint ((denominator : ℝ) • (w - anchor))
 
-/-! ## 4. The de Dios Pont--Grebík--Greenfeld--Madrid theorem -/
-
-/-- **Periodic tiling theorem for rational polygonal sets.**
-
-If the rational polygonal set `Ω` tiles the real plane by translations at all, then it also
-tiles using a translation set invariant under two linearly independent periods.
-
-The ambient measure is Mathlib's Lebesgue measure `volume` on `ℂ ≃ ℝ²`. -/
-def PeriodicTilingTheorem : Prop :=
-  ∀ (Ω : Set Plane), RationalPolygon Ω →
-    (∃ T : Set Plane, TranslationTiling volume Ω T) →
-      ∃ T : Set Plane, Periodic T ∧ TranslationTiling volume Ω T
-
 end DeDiosGreenfeldComparator
