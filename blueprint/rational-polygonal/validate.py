@@ -31,17 +31,23 @@ MODULES = [
     "Tiling.Geometry.Sliding",
     "Tiling.Geometry.Connected",
     "Tiling.RationalPolygonal.Basic",
+    "Tiling.RationalPolygonal.LinearFeasibility",
+    "Tiling.RationalPolygonal.RawInput",
     "Tiling.RationalPolygonal.DiscreteCarrier",
     "Tiling.RationalPolygonal.IntegerReduction",
     "Tiling.RationalPolygonal.Raster",
     "Tiling.RationalPolygonal.RasterMarker",
+    "Tiling.RationalPolygonal.ComputableMarker",
     "Tiling.RationalPolygonal.RasterRigidity",
     "Tiling.RationalPolygonal.Earthquake",
     "Tiling.RationalPolygonal.EarthquakeUniform",
     "Tiling.RationalPolygonal.ContinuousEarthquake",
     "Tiling.RationalPolygonal.SlidingReduction",
     "Tiling.RationalPolygonal.WeakPeriodicity",
+    "Tiling.RationalPolygonal.SignatureCompiler",
+    "Tiling.RationalPolygonal.SignatureCorrectness",
     "Tiling.RationalPolygonal.Decision",
+    "Tiling.RationalPolygonal.RawDecision",
     "Tiling.RationalPolygonal.Main",
 ]
 
@@ -56,10 +62,10 @@ MODIFIER = r"(?:(?:private|protected|noncomputable|unsafe|partial|local)\s+)*"
 DECL_RE = re.compile(
     rf"^{ATTRIBUTE}(?P<modifiers>{MODIFIER})"
     r"(?P<kind>abbrev|def|theorem|lemma|structure|class|instance|inductive|axiom|opaque)\s+"
-    r"(?P<name>[A-Za-z_][A-Za-z0-9_'.]*)"
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_'.!?]*)"
 )
 FIELD_RE = re.compile(
-    rf"^  {ATTRIBUTE}(?P<name>[A-Za-z_][A-Za-z0-9_']*)"
+    rf"^  {ATTRIBUTE}(?P<name>[A-Za-z_][A-Za-z0-9_'.!?]*)"
     r"\s*(?:\([^)]*\)|\{[^}]*\})*\s*:"
 )
 
@@ -171,6 +177,9 @@ def parser_regression() -> None:
 @[simp] theorem attributed_theorem : True := by trivial
 @[simp] protected theorem protected_theorem : True := by trivial
 noncomputable def public_definition : Nat := 0
+@[simp]
+theorem separately_attributed : True := by trivial
+def optionalResult? : Option Nat := none
 @[simp] private theorem private_theorem : True := by trivial
 local instance local_instance : Inhabited Nat := inferInstance
 structure Packet where
@@ -183,8 +192,10 @@ end LedgerRegression
         ("theorem", "LedgerRegression.attributed_theorem", 2),
         ("theorem", "LedgerRegression.protected_theorem", 3),
         ("def", "LedgerRegression.public_definition", 4),
-        ("structure", "LedgerRegression.Packet", 7),
-        ("field", "LedgerRegression.Packet.payload", 8),
+        ("theorem", "LedgerRegression.separately_attributed", 6),
+        ("def", "LedgerRegression.optionalResult?", 7),
+        ("structure", "LedgerRegression.Packet", 10),
+        ("field", "LedgerRegression.Packet.payload", 11),
     ]
     if actual != expected:
         raise RuntimeError(f"declaration-parser regression: expected {expected}, got {actual}")
@@ -250,10 +261,10 @@ def cross_check_compiled(decls: list[Decl]) -> None:
     )
 
     # Several declarations can legitimately share one source command line (structure-generated
-    # recursors and inherited projections).  Conversely, `deriving` generates declarations on a
-    # line which is not itself a public command or explicit field.  Comparing all other owned
-    # source-range lines makes omissions detectable without mistaking those generated constants
-    # for source commands.
+    # recursors and inherited projections).  Conversely, `deriving` and command attributes such
+    # as standalone `@[ext]` can generate declarations on a line which is not itself a public
+    # command or explicit field.  Comparing all other owned source-range lines makes omissions
+    # detectable without mistaking those generated constants for source commands.
     parsed_lines = set(parsed.values())
     source_lines = {
         module: source_for(module).read_text().splitlines() for module in MODULES
@@ -261,7 +272,7 @@ def cross_check_compiled(decls: list[Decl]) -> None:
     compiled_lines = {
         (module, line)
         for module, line in compiled.values()
-        if not source_lines[module][line - 1].lstrip().startswith("deriving")
+        if not source_lines[module][line - 1].lstrip().startswith(("deriving", "@["))
     }
     omitted_lines = sorted(compiled_lines - parsed_lines)
     if omitted_lines or extras or moved:
@@ -400,6 +411,44 @@ def documentation_check() -> None:
             raise RuntimeError(f"documentation check failed for {module}:\n{exc}") from exc
 
 
+def executable_frontend_regression() -> None:
+    """Exercise fractional normalization and a complete small signature-family compilation.
+
+    The final planar tiling search is intentionally excluded: even tiny marker rasters make that
+    exhaustive search unsuitable for a validation smoke test.
+    """
+    source = """import Tiling.RationalPolygonal.RawDecision
+
+open Tiling.RationalPolygonal
+open Tiling.RationalPolygonal.Raw
+open Tiling.RationalPolygonal.Raw.Compiler
+
+def fractionalCode : Code where
+  triangles := [{
+    a := ⟨(1 : ℚ) / 2, (1 : ℚ) / 3⟩
+    b := ⟨(2 : ℚ) / 3, (1 : ℚ) / 3⟩
+    c := ⟨(1 : ℚ) / 2, (1 : ℚ) / 2⟩
+  }]
+
+def unitZTriangle : ZTriangle where
+  a := ⟨0, 0⟩
+  b := ⟨1, 0⟩
+  c := ⟨0, 1⟩
+
+#eval fractionalCode.commonDenominator
+#eval scaledCoordinate fractionalCode.commonDenominator ((2 : ℚ) / 3)
+#eval scaledCoordinate fractionalCode.commonDenominator ((1 : ℚ) / 3)
+#eval (signatureFamily [unitZTriangle]).length
+#eval (signatureFamily [unitZTriangle]).map Finset.card
+"""
+    actual = [line.strip() for line in lean_output(source).splitlines() if line.strip()]
+    expected = ["6", "4", "2", "2", "[1, 0]"]
+    if actual != expected:
+        raise RuntimeError(
+            f"executable frontend regression: expected {expected}, got {actual}"
+        )
+
+
 def trust_check(decls: list[Decl]) -> tuple[int, str]:
     theorem_names = [d.name for d in decls if d.kind in {"theorem", "lemma"}]
     source = "\n".join([
@@ -489,10 +538,12 @@ def main() -> int:
     )
     if proc.returncode != 0:
         raise RuntimeError(f"validator compile failed:\n{proc.stdout}")
+    executable_frontend_regression()
     theorem_count, _ = trust_check(decls)
     print(
         f"PASS: {len(MODULES)} modules, {len(decls)} declarations, "
-        f"{theorem_count} theorem trust closures, documentation clean"
+        f"{theorem_count} theorem trust closures, documentation clean, "
+        "executable frontend regression passed"
     )
     return 0
 

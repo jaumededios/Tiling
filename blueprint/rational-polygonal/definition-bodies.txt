@@ -1781,6 +1781,664 @@ fun (K : Tiling.RationalPolygonal.RationalPolygonalRegion) {A : Set.{0} Tiling.P
     (@Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition._proof_2 K A D)
     (@Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition._proof_3 K A D)
     (@Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition._proof_4 K A D)
+structure Tiling.RationalPolygonal.LinearFeasibility.StrictInequality : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a : Rat
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b : Rat
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c : Rat
+constructor:
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk (a b c : Rat) :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+structure Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a : Rat
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c : Rat
+constructor:
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.mk (a c : Rat) :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1
+def Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.Satisfies : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (p : Prod.{0, 0} Rat Rat) → Prop :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (p : Prod.{0, 0} Rat Rat) =>
+  @LT.lt.{0} Rat Rat.instLT
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a q) (@Prod.fst.{0, 0} Rat Rat p))
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q) (@Prod.snd.{0, 0} Rat Rat p)))
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c q)
+def Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.Satisfies : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  (x : Rat) → Prop :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) (x : Rat) =>
+  @LT.lt.{0} Rat Rat.instLT
+    (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q) x)
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c q)
+def Tiling.RationalPolygonal.LinearFeasibility.SatisfiesAll : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (p : Prod.{0, 0} Rat Rat) → Prop :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (p : Prod.{0, 0} Rat Rat) =>
+  ∀ (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality),
+    @Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+        (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+        (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) qs q →
+      Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.Satisfies q p
+def Tiling.RationalPolygonal.LinearFeasibility.SatisfiesAll1 : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  (x : Rat) → Prop :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) (x : Rat) =>
+  ∀ (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1),
+    @Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1
+        (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1)
+        (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) qs q →
+      Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.Satisfies q x
+def Tiling.RationalPolygonal.LinearFeasibility.upperBound? : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  Option.{0} Rat :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) =>
+  @ite.{1} (Option.{0} Rat)
+    (@LT.lt.{0} Rat Rat.instLT (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q))
+    (Rat.instDecidableLt (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q))
+    (@Option.some.{0} Rat
+      (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c q)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)))
+    (@Option.none.{0} Rat)
+def Tiling.RationalPolygonal.LinearFeasibility.lowerBound? : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  Option.{0} Rat :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) =>
+  @ite.{1} (Option.{0} Rat)
+    (@LT.lt.{0} Rat Rat.instLT (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)
+      (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+    (Rat.instDecidableLt (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)
+      (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+    (@Option.some.{0} Rat
+      (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c q)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)))
+    (@Option.none.{0} Rat)
+def Tiling.RationalPolygonal.LinearFeasibility.constantValid : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  Bool :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) =>
+  @Decidable.decide
+    (Or
+      (@Ne.{1} Rat (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)
+        (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+      (@LT.lt.{0} Rat Rat.instLT (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c q)))
+    (@instDecidableOr
+      (@Ne.{1} Rat (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)
+        (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+      (@LT.lt.{0} Rat Rat.instLT (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c q))
+      (@instDecidableNot
+        (@Eq.{1} Rat (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (instDecidableEqRat (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a q)
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))))
+      (Rat.instDecidableLt (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c q)))
+def Tiling.RationalPolygonal.LinearFeasibility.lowerBounds : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  List.{0} Rat :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) =>
+  @List.filterMap.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 Rat
+    Tiling.RationalPolygonal.LinearFeasibility.lowerBound? qs
+def Tiling.RationalPolygonal.LinearFeasibility.upperBounds : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  List.{0} Rat :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) =>
+  @List.filterMap.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 Rat
+    Tiling.RationalPolygonal.LinearFeasibility.upperBound? qs
+def Tiling.RationalPolygonal.LinearFeasibility.chooseBetween : (ls us : List.{0} Rat) → Option.{0} Rat :=
+fun (ls us : List.{0} Rat) =>
+  Tiling.RationalPolygonal.LinearFeasibility.chooseBetween.match_1.{1} (fun (x x_1 : Option.{0} Rat) => Option.{0} Rat)
+    (@List.max?.{0} Rat Rat.instSup ls) (@List.min?.{0} Rat Rat.instInf us)
+    (fun (_ : Unit) => @Option.some.{0} Rat (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+    (fun (l : Rat) =>
+      @Option.some.{0} Rat
+        (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) l
+          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))))
+    (fun (u : Rat) =>
+      @Option.some.{0} Rat
+        (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub) u
+          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))))
+    fun (l u : Rat) =>
+    @ite.{1} (Option.{0} Rat) (@LT.lt.{0} Rat Rat.instLT l u) (Rat.instDecidableLt l u)
+      (@Option.some.{0} Rat
+        (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+          (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) l u)
+          (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))))
+      (@Option.none.{0} Rat)
+def Tiling.RationalPolygonal.LinearFeasibility.solve1D : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) →
+  Option.{0} Rat :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1) =>
+  @ite.{1} (Option.{0} Rat)
+    (@Eq.{1} Bool
+      (@List.all.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 qs
+        Tiling.RationalPolygonal.LinearFeasibility.constantValid)
+      Bool.true)
+    (instDecidableEqBool
+      (@List.all.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 qs
+        Tiling.RationalPolygonal.LinearFeasibility.constantValid)
+      Bool.true)
+    (Tiling.RationalPolygonal.LinearFeasibility.chooseBetween
+      (Tiling.RationalPolygonal.LinearFeasibility.lowerBounds qs)
+      (Tiling.RationalPolygonal.LinearFeasibility.upperBounds qs))
+    (@Option.none.{0} Rat)
+def Tiling.RationalPolygonal.LinearFeasibility.negativeY : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @List.filter.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+    (fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+      @Decidable.decide
+        (@LT.lt.{0} Rat Rat.instLT (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (Rat.instDecidableLt (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))))
+    qs
+def Tiling.RationalPolygonal.LinearFeasibility.positiveY : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @List.filter.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+    (fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+      @Decidable.decide
+        (@LT.lt.{0} Rat Rat.instLT (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+          (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q))
+        (Rat.instDecidableLt (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+          (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)))
+    qs
+def Tiling.RationalPolygonal.LinearFeasibility.zeroY : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @List.filter.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+    (fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+      @Decidable.decide
+        (@Eq.{1} Rat (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (instDecidableEqRat (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))))
+    qs
+def Tiling.RationalPolygonal.LinearFeasibility.zeroProjection : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.mk
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a q)
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c q)
+def Tiling.RationalPolygonal.LinearFeasibility.pairProjection : (l u :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 :=
+fun (l u : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.mk
+    (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b u)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a l))
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b l)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a u)))
+    (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b u)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c l))
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b l)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c u)))
+def Tiling.RationalPolygonal.LinearFeasibility.eliminateY : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1 :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @HAppend.hAppend.{0, 0, 0} (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1)
+    (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1)
+    (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1)
+    (@instHAppendOfAppend.{0} (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1)
+      (@List.instAppend.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1))
+    (@List.map.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+      Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1
+      Tiling.RationalPolygonal.LinearFeasibility.zeroProjection (Tiling.RationalPolygonal.LinearFeasibility.zeroY qs))
+    (@List.flatMap.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+      Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1
+      (fun (l : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+        @List.map.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1
+          (Tiling.RationalPolygonal.LinearFeasibility.pairProjection l)
+          (Tiling.RationalPolygonal.LinearFeasibility.positiveY qs))
+      (Tiling.RationalPolygonal.LinearFeasibility.negativeY qs))
+def Tiling.RationalPolygonal.LinearFeasibility.verticalBound : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (x : Rat) → Rat :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (x : Rat) =>
+  @HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+    (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c q)
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a q) x))
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+def Tiling.RationalPolygonal.LinearFeasibility.yLowerBound? : (x : Rat) →
+  (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) → Option.{0} Rat :=
+fun (x : Rat) (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @ite.{1} (Option.{0} Rat)
+    (@LT.lt.{0} Rat Rat.instLT (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+      (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+    (Rat.instDecidableLt (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q)
+      (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+    (@Option.some.{0} Rat (Tiling.RationalPolygonal.LinearFeasibility.verticalBound q x)) (@Option.none.{0} Rat)
+def Tiling.RationalPolygonal.LinearFeasibility.yUpperBound? : (x : Rat) →
+  (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) → Option.{0} Rat :=
+fun (x : Rat) (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @ite.{1} (Option.{0} Rat)
+    (@LT.lt.{0} Rat Rat.instLT (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q))
+    (Rat.instDecidableLt (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q))
+    (@Option.some.{0} Rat (Tiling.RationalPolygonal.LinearFeasibility.verticalBound q x)) (@Option.none.{0} Rat)
+def Tiling.RationalPolygonal.LinearFeasibility.yLowerBounds : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (x : Rat) → List.{0} Rat :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (x : Rat) =>
+  @List.filterMap.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality Rat
+    (Tiling.RationalPolygonal.LinearFeasibility.yLowerBound? x) qs
+def Tiling.RationalPolygonal.LinearFeasibility.yUpperBounds : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (x : Rat) → List.{0} Rat :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (x : Rat) =>
+  @List.filterMap.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality Rat
+    (Tiling.RationalPolygonal.LinearFeasibility.yUpperBound? x) qs
+def Tiling.RationalPolygonal.LinearFeasibility.solveY : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (x : Rat) → Option.{0} Rat :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (x : Rat) =>
+  Tiling.RationalPolygonal.LinearFeasibility.chooseBetween
+    (Tiling.RationalPolygonal.LinearFeasibility.yLowerBounds qs x)
+    (Tiling.RationalPolygonal.LinearFeasibility.yUpperBounds qs x)
+def Tiling.RationalPolygonal.LinearFeasibility.solve : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  Option.{0} (Prod.{0, 0} Rat Rat) :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  Tiling.RationalPolygonal.LinearFeasibility.solve.match_1.{1}
+    (fun (x : Option.{0} Rat) => Option.{0} (Prod.{0, 0} Rat Rat))
+    (Tiling.RationalPolygonal.LinearFeasibility.solve1D (Tiling.RationalPolygonal.LinearFeasibility.eliminateY qs))
+    (fun (_ : Unit) => @Option.none.{0} (Prod.{0, 0} Rat Rat)) fun (x : Rat) =>
+    @Option.map.{0, 0} Rat (Prod.{0, 0} Rat Rat) (fun (y : Rat) => @Prod.mk.{0, 0} Rat Rat x y)
+      (Tiling.RationalPolygonal.LinearFeasibility.solveY qs x)
+def Tiling.RationalPolygonal.LinearFeasibility.isFeasible : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  Bool :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @Option.isSome.{0} (Prod.{0, 0} Rat Rat) (Tiling.RationalPolygonal.LinearFeasibility.solve qs)
+structure Tiling.RationalPolygonal.Raw.QPoint : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.QPoint.x : Rat
+  Tiling.RationalPolygonal.Raw.QPoint.y : Rat
+constructor:
+  Tiling.RationalPolygonal.Raw.QPoint.mk (x y : Rat) : Tiling.RationalPolygonal.Raw.QPoint
+def Tiling.RationalPolygonal.Raw.QPoint.toPlane : (p : Tiling.RationalPolygonal.Raw.QPoint) → Tiling.Plane :=
+fun (p : Tiling.RationalPolygonal.Raw.QPoint) =>
+  @HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+    (Complex.ofReal (@Rat.cast.{0} Real Real.instRatCast (Tiling.RationalPolygonal.Raw.QPoint.x p)))
+    (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+      (Complex.ofReal (@Rat.cast.{0} Real Real.instRatCast (Tiling.RationalPolygonal.Raw.QPoint.y p))) Complex.I)
+def Tiling.RationalPolygonal.Raw.QPoint.coordinates : (p : Tiling.RationalPolygonal.Raw.QPoint) → Finset.{0} Rat :=
+fun (p : Tiling.RationalPolygonal.Raw.QPoint) =>
+  @Insert.insert.{0, 0} Rat (Finset.{0} Rat) (@Finset.instInsert.{0} Rat instDecidableEqRat)
+    (Tiling.RationalPolygonal.Raw.QPoint.x p)
+    (@Singleton.singleton.{0, 0} Rat (Finset.{0} Rat) (@Finset.instSingleton.{0} Rat)
+      (Tiling.RationalPolygonal.Raw.QPoint.y p))
+structure Tiling.RationalPolygonal.Raw.QTriangle : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.QTriangle.a : Tiling.RationalPolygonal.Raw.QPoint
+  Tiling.RationalPolygonal.Raw.QTriangle.b : Tiling.RationalPolygonal.Raw.QPoint
+  Tiling.RationalPolygonal.Raw.QTriangle.c : Tiling.RationalPolygonal.Raw.QPoint
+constructor:
+  Tiling.RationalPolygonal.Raw.QTriangle.mk (a b c : Tiling.RationalPolygonal.Raw.QPoint) :
+    Tiling.RationalPolygonal.Raw.QTriangle
+def Tiling.RationalPolygonal.Raw.QTriangle.vertices : (t : Tiling.RationalPolygonal.Raw.QTriangle) →
+  Finset.{0} Tiling.RationalPolygonal.Raw.QPoint :=
+fun (t : Tiling.RationalPolygonal.Raw.QTriangle) =>
+  @Insert.insert.{0, 0} Tiling.RationalPolygonal.Raw.QPoint (Finset.{0} Tiling.RationalPolygonal.Raw.QPoint)
+    (@Finset.instInsert.{0} Tiling.RationalPolygonal.Raw.QPoint Tiling.RationalPolygonal.Raw.instDecidableEqQPoint)
+    (Tiling.RationalPolygonal.Raw.QTriangle.a t)
+    (@Insert.insert.{0, 0} Tiling.RationalPolygonal.Raw.QPoint (Finset.{0} Tiling.RationalPolygonal.Raw.QPoint)
+      (@Finset.instInsert.{0} Tiling.RationalPolygonal.Raw.QPoint Tiling.RationalPolygonal.Raw.instDecidableEqQPoint)
+      (Tiling.RationalPolygonal.Raw.QTriangle.b t)
+      (@Singleton.singleton.{0, 0} Tiling.RationalPolygonal.Raw.QPoint (Finset.{0} Tiling.RationalPolygonal.Raw.QPoint)
+        (@Finset.instSingleton.{0} Tiling.RationalPolygonal.Raw.QPoint) (Tiling.RationalPolygonal.Raw.QTriangle.c t)))
+def Tiling.RationalPolygonal.Raw.QTriangle.carrier : (t : Tiling.RationalPolygonal.Raw.QTriangle) →
+  Set.{0} Tiling.Plane :=
+fun (t : Tiling.RationalPolygonal.Raw.QTriangle) =>
+  @DFunLike.coe.{1, 1, 1}
+    (@ClosureOperator.{0} (Set.{0} Tiling.Plane)
+      (@PartialOrder.toPreorder.{0} (Set.{0} Tiling.Plane)
+        (@ChainCompletePartialOrder.toPartialOrder.{0} (Set.{0} Tiling.Plane)
+          (@ChainCompletePartialOrder.instOfCompleteLattice.{0} (Set.{0} Tiling.Plane)
+            (@CompleteBooleanAlgebra.toCompleteLattice.{0} (Set.{0} Tiling.Plane)
+              (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{0} (Set.{0} Tiling.Plane)
+                (@Set.instCompleteAtomicBooleanAlgebra.{0} Tiling.Plane)))))))
+    (Set.{0} Tiling.Plane) (fun (x : Set.{0} Tiling.Plane) => Set.{0} Tiling.Plane)
+    (@ClosureOperator.instFunLike.{0} (Set.{0} Tiling.Plane)
+      (@PartialOrder.toPreorder.{0} (Set.{0} Tiling.Plane)
+        (@ChainCompletePartialOrder.toPartialOrder.{0} (Set.{0} Tiling.Plane)
+          (@ChainCompletePartialOrder.instOfCompleteLattice.{0} (Set.{0} Tiling.Plane)
+            (@CompleteBooleanAlgebra.toCompleteLattice.{0} (Set.{0} Tiling.Plane)
+              (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{0} (Set.{0} Tiling.Plane)
+                (@Set.instCompleteAtomicBooleanAlgebra.{0} Tiling.Plane)))))))
+    (@convexHull.{0, 0} Real Tiling.Plane Real.semiring Real.partialOrder Complex.instAddCommMonoid
+      (@NormedSpace.toModule.{0, 0} Real Tiling.Plane Real.normedField
+        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+              (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Tiling.Plane Real.instRCLike
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+          instInnerProductSpaceRealComplex)))
+    (@Insert.insert.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instInsert.{0} Tiling.Plane)
+      (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.QTriangle.a t))
+      (@Insert.insert.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instInsert.{0} Tiling.Plane)
+        (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.QTriangle.b t))
+        (@Singleton.singleton.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instSingletonSet.{0} Tiling.Plane)
+          (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.QTriangle.c t)))))
+def Tiling.RationalPolygonal.Raw.QTriangle.Nondegenerate : (t : Tiling.RationalPolygonal.Raw.QTriangle) → Prop :=
+fun (t : Tiling.RationalPolygonal.Raw.QTriangle) =>
+  @Ne.{1} Real
+    (Tiling.twiceSignedArea (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.QTriangle.a t))
+      (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.QTriangle.b t))
+      (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.QTriangle.c t)))
+    (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+structure Tiling.RationalPolygonal.Raw.Code : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.Code.triangles : List.{0} Tiling.RationalPolygonal.Raw.QTriangle
+constructor:
+  Tiling.RationalPolygonal.Raw.Code.mk (triangles : List.{0} Tiling.RationalPolygonal.Raw.QTriangle) :
+    Tiling.RationalPolygonal.Raw.Code
+def Tiling.RationalPolygonal.Raw.Code.triangleFinset : (C : Tiling.RationalPolygonal.Raw.Code) →
+  Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle :=
+fun (C : Tiling.RationalPolygonal.Raw.Code) =>
+  @List.toFinset.{0} Tiling.RationalPolygonal.Raw.QTriangle Tiling.RationalPolygonal.Raw.instDecidableEqQTriangle
+    (Tiling.RationalPolygonal.Raw.Code.triangles C)
+def Tiling.RationalPolygonal.Raw.Code.support : (C : Tiling.RationalPolygonal.Raw.Code) → Set.{0} Tiling.Plane :=
+fun (C : Tiling.RationalPolygonal.Raw.Code) =>
+  @Set.iUnion.{0, 1} Tiling.Plane Tiling.RationalPolygonal.Raw.QTriangle
+    fun (t : Tiling.RationalPolygonal.Raw.QTriangle) =>
+    @Set.iUnion.{0, 0} Tiling.Plane
+      (@Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+          Tiling.RationalPolygonal.Raw.QTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.QTriangle))
+        (Tiling.RationalPolygonal.Raw.Code.triangleFinset C) t)
+      fun
+        (h :
+          @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle
+            (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+            (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+              Tiling.RationalPolygonal.Raw.QTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.QTriangle))
+            (Tiling.RationalPolygonal.Raw.Code.triangleFinset C) t) =>
+      Tiling.RationalPolygonal.Raw.QTriangle.carrier t
+def Tiling.RationalPolygonal.Raw.Code.coordinates : (C : Tiling.RationalPolygonal.Raw.Code) → Finset.{0} Rat :=
+fun (C : Tiling.RationalPolygonal.Raw.Code) =>
+  @Finset.biUnion.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle Rat instDecidableEqRat
+    (Tiling.RationalPolygonal.Raw.Code.triangleFinset C) fun (t : Tiling.RationalPolygonal.Raw.QTriangle) =>
+    @Finset.biUnion.{0, 0} Tiling.RationalPolygonal.Raw.QPoint Rat instDecidableEqRat
+      (Tiling.RationalPolygonal.Raw.QTriangle.vertices t) Tiling.RationalPolygonal.Raw.QPoint.coordinates
+def Tiling.RationalPolygonal.Raw.Code.commonDenominator : (C : Tiling.RationalPolygonal.Raw.Code) → Nat :=
+fun (C : Tiling.RationalPolygonal.Raw.Code) =>
+  @Finset.lcm.{0, 0} Nat Rat Nat.instCommMonoidWithZero
+    (@instNormalizedGCDMonoidOfStrongNormalizedGCDMonoid.{0} Nat Nat.instCommMonoidWithZero
+      instStrongNormalizedGCDMonoidNat)
+    (Tiling.RationalPolygonal.Raw.Code.coordinates C) Rat.den
+def Tiling.RationalPolygonal.Raw.Code.anchor : (C : Tiling.RationalPolygonal.Raw.Code) →
+  (hne :
+      @Ne.{1} (List.{0} Tiling.RationalPolygonal.Raw.QTriangle) (Tiling.RationalPolygonal.Raw.Code.triangles C)
+        (@List.nil.{0} Tiling.RationalPolygonal.Raw.QTriangle)) →
+    Tiling.RationalPolygonal.Raw.QPoint :=
+fun (C : Tiling.RationalPolygonal.Raw.Code)
+    (hne :
+      @Ne.{1} (List.{0} Tiling.RationalPolygonal.Raw.QTriangle) (Tiling.RationalPolygonal.Raw.Code.triangles C)
+        (@List.nil.{0} Tiling.RationalPolygonal.Raw.QTriangle)) =>
+  Tiling.RationalPolygonal.Raw.QTriangle.a
+    (@List.head.{0} Tiling.RationalPolygonal.Raw.QTriangle (Tiling.RationalPolygonal.Raw.Code.triangles C) hne)
+structure Tiling.RationalPolygonal.Raw.Code.Valid (C : Tiling.RationalPolygonal.Raw.Code) : Prop
+number of parameters: 1
+fields:
+  Tiling.RationalPolygonal.Raw.Code.Valid.nonempty : @Ne.{1} (List.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+      (Tiling.RationalPolygonal.Raw.Code.triangles C) (@List.nil.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+  Tiling.RationalPolygonal.Raw.Code.Valid.nondegenerate : ∀ (t : Tiling.RationalPolygonal.Raw.QTriangle),
+      @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+            Tiling.RationalPolygonal.Raw.QTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.QTriangle))
+          (Tiling.RationalPolygonal.Raw.Code.triangleFinset C) t →
+        Tiling.RationalPolygonal.Raw.QTriangle.Nondegenerate t
+  Tiling.RationalPolygonal.Raw.Code.Valid.pairwiseAEDisjoint : @Set.Pairwise.{0} Tiling.RationalPolygonal.Raw.QTriangle
+      (@SetLike.coe.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle) Tiling.RationalPolygonal.Raw.QTriangle
+        (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+        (Tiling.RationalPolygonal.Raw.Code.triangleFinset C))
+      (@Function.onFun.{1, 1, 1} Tiling.RationalPolygonal.Raw.QTriangle (Set.{0} Tiling.Plane) Prop
+        (@MeasureTheory.AEDisjoint.{0} Tiling.Plane
+          (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Tiling.Plane
+            (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+              instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+              Complex.borelSpace))
+          (@MeasureTheory.MeasureSpace.volume.{0} Tiling.Plane
+            (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+              instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+              Complex.borelSpace)))
+        Tiling.RationalPolygonal.Raw.QTriangle.carrier)
+  Tiling.RationalPolygonal.Raw.Code.Valid.anchor_mem_vertex : @Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane)
+      (@Set.instMembership.{0} Tiling.Plane) (Tiling.vertexSet (Tiling.RationalPolygonal.Raw.Code.support C))
+      (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.Code.anchor C ⋯))
+constructor:
+  Tiling.RationalPolygonal.Raw.Code.Valid.mk {C : Tiling.RationalPolygonal.Raw.Code}
+    (nonempty :
+      @Ne.{1} (List.{0} Tiling.RationalPolygonal.Raw.QTriangle) (Tiling.RationalPolygonal.Raw.Code.triangles C)
+        (@List.nil.{0} Tiling.RationalPolygonal.Raw.QTriangle))
+    (nondegenerate :
+      ∀ (t : Tiling.RationalPolygonal.Raw.QTriangle),
+        @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle
+            (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+            (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+              Tiling.RationalPolygonal.Raw.QTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.QTriangle))
+            (Tiling.RationalPolygonal.Raw.Code.triangleFinset C) t →
+          Tiling.RationalPolygonal.Raw.QTriangle.Nondegenerate t)
+    (pairwiseAEDisjoint :
+      @Set.Pairwise.{0} Tiling.RationalPolygonal.Raw.QTriangle
+        (@SetLike.coe.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.QTriangle) Tiling.RationalPolygonal.Raw.QTriangle
+          (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.QTriangle)
+          (Tiling.RationalPolygonal.Raw.Code.triangleFinset C))
+        (@Function.onFun.{1, 1, 1} Tiling.RationalPolygonal.Raw.QTriangle (Set.{0} Tiling.Plane) Prop
+          (@MeasureTheory.AEDisjoint.{0} Tiling.Plane
+            (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} Tiling.Plane
+              (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+                instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+                Complex.borelSpace))
+            (@MeasureTheory.MeasureSpace.volume.{0} Tiling.Plane
+              (@measureSpaceOfInnerProductSpace.{0} Tiling.Plane Complex.instNormedAddCommGroup
+                instInnerProductSpaceRealComplex Complex.instFiniteDimensionalReal Complex.measurableSpace
+                Complex.borelSpace)))
+          Tiling.RationalPolygonal.Raw.QTriangle.carrier))
+    (anchor_mem_vertex :
+      @Membership.mem.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instMembership.{0} Tiling.Plane)
+        (Tiling.vertexSet (Tiling.RationalPolygonal.Raw.Code.support C))
+        (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.Code.anchor C nonempty))) :
+    Tiling.RationalPolygonal.Raw.Code.Valid C
+structure Tiling.RationalPolygonal.Raw.Code.Input : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.Code.Input.code : Tiling.RationalPolygonal.Raw.Code
+  Tiling.RationalPolygonal.Raw.Code.Input.valid : Tiling.RationalPolygonal.Raw.Code.Valid
+      (Tiling.RationalPolygonal.Raw.Code.Input.code self)
+constructor:
+  Tiling.RationalPolygonal.Raw.Code.Input.mk (code : Tiling.RationalPolygonal.Raw.Code)
+    (valid : Tiling.RationalPolygonal.Raw.Code.Valid code) : Tiling.RationalPolygonal.Raw.Code.Input
+def Tiling.RationalPolygonal.Raw.Code.Input.anchor : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Tiling.RationalPolygonal.Raw.QPoint :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  Tiling.RationalPolygonal.Raw.Code.anchor (Tiling.RationalPolygonal.Raw.Code.Input.code P)
+    (Tiling.RationalPolygonal.Raw.Code.Input.anchor._proof_1 P)
+def Tiling.RationalPolygonal.Raw.Code.Input.denominator : (P : Tiling.RationalPolygonal.Raw.Code.Input) → Nat :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  Tiling.RationalPolygonal.Raw.Code.commonDenominator (Tiling.RationalPolygonal.Raw.Code.Input.code P)
+def Tiling.RationalPolygonal.Raw.Code.Input.triangulation : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Tiling.Triangulation (Tiling.RationalPolygonal.Raw.Code.support (Tiling.RationalPolygonal.Raw.Code.Input.code P)) :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  @Tiling.Triangulation.mk (Tiling.RationalPolygonal.Raw.Code.support (Tiling.RationalPolygonal.Raw.Code.Input.code P))
+    (@Finset.image.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle (Set.{0} Tiling.Plane)
+      (@Set.decidableEq.{0} Tiling.Plane) Tiling.RationalPolygonal.Raw.QTriangle.carrier
+      (Tiling.RationalPolygonal.Raw.Code.triangleFinset (Tiling.RationalPolygonal.Raw.Code.Input.code P)))
+    (Tiling.RationalPolygonal.Raw.Code.Input.triangulation._proof_1 P)
+    (Tiling.RationalPolygonal.Raw.Code.Input.triangulation._proof_2 P)
+    (Tiling.RationalPolygonal.Raw.Code.Input.triangulation._proof_3 P)
+def Tiling.RationalPolygonal.Raw.Code.Input.polygonalRegion : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Tiling.RationalPolygonal.PolygonalRegion :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  Tiling.RationalPolygonal.PolygonalRegion.mk
+    (Tiling.RationalPolygonal.Raw.Code.support (Tiling.RationalPolygonal.Raw.Code.Input.code P))
+    (Tiling.RationalPolygonal.Raw.Code.Input.polygonalRegion._proof_1 P)
+    (Tiling.RationalPolygonal.Raw.Code.Input.polygonalRegion._proof_2 P)
+structure Tiling.RationalPolygonal.Raw.ZPoint : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.ZPoint.x : Int
+  Tiling.RationalPolygonal.Raw.ZPoint.y : Int
+constructor:
+  Tiling.RationalPolygonal.Raw.ZPoint.mk (x y : Int) : Tiling.RationalPolygonal.Raw.ZPoint
+def Tiling.RationalPolygonal.Raw.ZPoint.toPlane : (p : Tiling.RationalPolygonal.Raw.ZPoint) → Tiling.Plane :=
+fun (p : Tiling.RationalPolygonal.Raw.ZPoint) =>
+  @HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+    (Complex.ofReal (@Int.cast.{0} Real Real.instIntCast (Tiling.RationalPolygonal.Raw.ZPoint.x p)))
+    (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+      (Complex.ofReal (@Int.cast.{0} Real Real.instIntCast (Tiling.RationalPolygonal.Raw.ZPoint.y p))) Complex.I)
+def Tiling.RationalPolygonal.Raw.ZPoint.toIntegerPlane : (p : Tiling.RationalPolygonal.Raw.ZPoint) →
+  Tiling.RationalPolygonal.IntegerPlane :=
+fun (p : Tiling.RationalPolygonal.Raw.ZPoint) =>
+  @Matrix.vecCons.{0} Int (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+    (Tiling.RationalPolygonal.Raw.ZPoint.x p)
+    (@Matrix.vecCons.{0} Int (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (Tiling.RationalPolygonal.Raw.ZPoint.y p) (@Matrix.vecEmpty.{0} Int))
+structure Tiling.RationalPolygonal.Raw.ZTriangle : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.ZTriangle.a : Tiling.RationalPolygonal.Raw.ZPoint
+  Tiling.RationalPolygonal.Raw.ZTriangle.b : Tiling.RationalPolygonal.Raw.ZPoint
+  Tiling.RationalPolygonal.Raw.ZTriangle.c : Tiling.RationalPolygonal.Raw.ZPoint
+constructor:
+  Tiling.RationalPolygonal.Raw.ZTriangle.mk (a b c : Tiling.RationalPolygonal.Raw.ZPoint) :
+    Tiling.RationalPolygonal.Raw.ZTriangle
+def Tiling.RationalPolygonal.Raw.ZTriangle.carrier : (t : Tiling.RationalPolygonal.Raw.ZTriangle) →
+  Set.{0} Tiling.Plane :=
+fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @DFunLike.coe.{1, 1, 1}
+    (@ClosureOperator.{0} (Set.{0} Tiling.Plane)
+      (@PartialOrder.toPreorder.{0} (Set.{0} Tiling.Plane)
+        (@ChainCompletePartialOrder.toPartialOrder.{0} (Set.{0} Tiling.Plane)
+          (@ChainCompletePartialOrder.instOfCompleteLattice.{0} (Set.{0} Tiling.Plane)
+            (@CompleteBooleanAlgebra.toCompleteLattice.{0} (Set.{0} Tiling.Plane)
+              (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{0} (Set.{0} Tiling.Plane)
+                (@Set.instCompleteAtomicBooleanAlgebra.{0} Tiling.Plane)))))))
+    (Set.{0} Tiling.Plane) (fun (x : Set.{0} Tiling.Plane) => Set.{0} Tiling.Plane)
+    (@ClosureOperator.instFunLike.{0} (Set.{0} Tiling.Plane)
+      (@PartialOrder.toPreorder.{0} (Set.{0} Tiling.Plane)
+        (@ChainCompletePartialOrder.toPartialOrder.{0} (Set.{0} Tiling.Plane)
+          (@ChainCompletePartialOrder.instOfCompleteLattice.{0} (Set.{0} Tiling.Plane)
+            (@CompleteBooleanAlgebra.toCompleteLattice.{0} (Set.{0} Tiling.Plane)
+              (@CompleteAtomicBooleanAlgebra.toCompleteBooleanAlgebra.{0} (Set.{0} Tiling.Plane)
+                (@Set.instCompleteAtomicBooleanAlgebra.{0} Tiling.Plane)))))))
+    (@convexHull.{0, 0} Real Tiling.Plane Real.semiring Real.partialOrder Complex.instAddCommMonoid
+      (@NormedSpace.toModule.{0, 0} Real Tiling.Plane Real.normedField
+        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+              (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Tiling.Plane Real.instRCLike
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Tiling.Plane
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Tiling.Plane
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Tiling.Plane
+                (@NormedCommRing.toSeminormedCommRing.{0} Tiling.Plane
+                  (@NormedField.toNormedCommRing.{0} Tiling.Plane Complex.instNormedField)))))
+          instInnerProductSpaceRealComplex)))
+    (@Insert.insert.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instInsert.{0} Tiling.Plane)
+      (Tiling.RationalPolygonal.Raw.ZPoint.toPlane (Tiling.RationalPolygonal.Raw.ZTriangle.a t))
+      (@Insert.insert.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instInsert.{0} Tiling.Plane)
+        (Tiling.RationalPolygonal.Raw.ZPoint.toPlane (Tiling.RationalPolygonal.Raw.ZTriangle.b t))
+        (@Singleton.singleton.{0, 0} Tiling.Plane (Set.{0} Tiling.Plane) (@Set.instSingletonSet.{0} Tiling.Plane)
+          (Tiling.RationalPolygonal.Raw.ZPoint.toPlane (Tiling.RationalPolygonal.Raw.ZTriangle.c t)))))
+def Tiling.RationalPolygonal.Raw.scaledCoordinate : (D : Nat) → (q : Rat) → Int :=
+fun (D : Nat) (q : Rat) =>
+  @HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (Rat.num q)
+    (@Nat.cast.{0} Int instNatCastInt (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) D (Rat.den q)))
+def Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  (p : Tiling.RationalPolygonal.Raw.QPoint) → Tiling.RationalPolygonal.Raw.ZPoint :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) (p : Tiling.RationalPolygonal.Raw.QPoint) =>
+  Tiling.RationalPolygonal.Raw.ZPoint.mk
+    (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+      (Tiling.RationalPolygonal.Raw.scaledCoordinate (Tiling.RationalPolygonal.Raw.Code.Input.denominator P)
+        (Tiling.RationalPolygonal.Raw.QPoint.x p))
+      (Tiling.RationalPolygonal.Raw.scaledCoordinate (Tiling.RationalPolygonal.Raw.Code.Input.denominator P)
+        (Tiling.RationalPolygonal.Raw.QPoint.x (Tiling.RationalPolygonal.Raw.Code.Input.anchor P))))
+    (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+      (Tiling.RationalPolygonal.Raw.scaledCoordinate (Tiling.RationalPolygonal.Raw.Code.Input.denominator P)
+        (Tiling.RationalPolygonal.Raw.QPoint.y p))
+      (Tiling.RationalPolygonal.Raw.scaledCoordinate (Tiling.RationalPolygonal.Raw.Code.Input.denominator P)
+        (Tiling.RationalPolygonal.Raw.QPoint.y (Tiling.RationalPolygonal.Raw.Code.Input.anchor P))))
+def Tiling.RationalPolygonal.Raw.Code.Input.normalizedTriangle : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  (t : Tiling.RationalPolygonal.Raw.QTriangle) → Tiling.RationalPolygonal.Raw.ZTriangle :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) (t : Tiling.RationalPolygonal.Raw.QTriangle) =>
+  Tiling.RationalPolygonal.Raw.ZTriangle.mk
+    (Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint P (Tiling.RationalPolygonal.Raw.QTriangle.a t))
+    (Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint P (Tiling.RationalPolygonal.Raw.QTriangle.b t))
+    (Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint P (Tiling.RationalPolygonal.Raw.QTriangle.c t))
+def Tiling.RationalPolygonal.Raw.Code.Input.normalizedCode : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  @Finset.image.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle Tiling.RationalPolygonal.Raw.ZTriangle
+    Tiling.RationalPolygonal.Raw.instDecidableEqZTriangle (Tiling.RationalPolygonal.Raw.Code.Input.normalizedTriangle P)
+    (Tiling.RationalPolygonal.Raw.Code.triangleFinset (Tiling.RationalPolygonal.Raw.Code.Input.code P))
+def Tiling.RationalPolygonal.Raw.Code.Input.normalizedCodeSupport : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Set.{0} Tiling.Plane :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  @Set.iUnion.{0, 1} Tiling.Plane Tiling.RationalPolygonal.Raw.ZTriangle
+    fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+    @Set.iUnion.{0, 0} Tiling.Plane
+      (@Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+          Tiling.RationalPolygonal.Raw.ZTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.ZTriangle))
+        (Tiling.RationalPolygonal.Raw.Code.Input.normalizedCode P) t)
+      fun
+        (h :
+          @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle
+            (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+            (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+              Tiling.RationalPolygonal.Raw.ZTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.ZTriangle))
+            (Tiling.RationalPolygonal.Raw.Code.Input.normalizedCode P) t) =>
+      Tiling.RationalPolygonal.Raw.ZTriangle.carrier t
+def Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Tiling.RationalPolygonal.RationalPolygonalRegion :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  let __PolygonalRegion : Tiling.RationalPolygonal.PolygonalRegion :=
+    Tiling.RationalPolygonal.Raw.Code.Input.polygonalRegion P;
+  Tiling.RationalPolygonal.RationalPolygonalRegion.mk __PolygonalRegion
+    (Tiling.RationalPolygonal.Raw.QPoint.toPlane (Tiling.RationalPolygonal.Raw.Code.Input.anchor P))
+    (Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion._proof_1 P)
+    (Tiling.RationalPolygonal.Raw.Code.Input.denominator P) (Tiling.RationalPolygonal.Raw.Code.Input.denominator_pos P)
+    (Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion._proof_2 P)
 def Tiling.RationalPolygonal.discreteCarrier.{u} : {G : Type u} →
   [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → Set.{u} G :=
 fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) =>
@@ -2721,6 +3379,225 @@ def Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile : (K : Til
 fun (K : Tiling.RationalPolygonal.PolygonalRegion) =>
   @Tiling.RationalPolygonal.planarRasterTile (Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount K)
     (Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignatureAt K)
+def Tiling.RationalPolygonal.integerIntervalExec : (lo hi : Int) → Finset.{0} Int :=
+fun (lo hi : Int) =>
+  @Finset.image.{0, 0} Nat Int Int.instDecidableEq
+    (fun (k : Nat) =>
+      @HAdd.hAdd.{0, 0, 0} Int Int Int (@instHAdd.{0} Int Int.instAdd) lo (@Nat.cast.{0} Int instNatCastInt k))
+    (Finset.range
+      (Int.toNat
+        (@HAdd.hAdd.{0, 0, 0} Int Int Int (@instHAdd.{0} Int Int.instAdd)
+          (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) hi lo)
+          (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))))
+def Tiling.RationalPolygonal.gridBoxExec : (x₀ x₁ y₀ y₁ : Int) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (x₀ x₁ y₀ y₁ : Int) =>
+  @Finset.image.{0, 0} (Prod.{0, 0} Int Int) Tiling.RationalPolygonal.IntegerPlane
+    (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+    (fun (p : Prod.{0, 0} Int Int) =>
+      Tiling.RationalPolygonal.latticePoint (@Prod.fst.{0, 0} Int Int p) (@Prod.snd.{0, 0} Int Int p))
+    (@SProd.sprod.{0, 0, 0} (Finset.{0} Int) (Finset.{0} Int) (Finset.{0} (Prod.{0, 0} Int Int))
+      (@Finset.instSProd.{0, 0} Int Int) (Tiling.RationalPolygonal.integerIntervalExec x₀ x₁)
+      (Tiling.RationalPolygonal.integerIntervalExec y₀ y₁))
+def Tiling.RationalPolygonal.markerRingExec : {M : Nat} →
+  (i : Fin M) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun {M : Nat} (i : Fin M) =>
+  @Finset.erase.{0} Tiling.RationalPolygonal.IntegerPlane
+    (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+    (Tiling.RationalPolygonal.gridBoxExec
+      (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)
+          (@OfNat.ofNat.{0} Int (nat_lit 3) (@instOfNat (nat_lit 3))) (@Nat.cast.{0} Int instNatCastInt (@Fin.val M i)))
+        (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Int Int Int (@instHAdd.{0} Int Int.instAdd)
+        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)
+          (@OfNat.ofNat.{0} Int (nat_lit 3) (@instOfNat (nat_lit 3))) (@Nat.cast.{0} Int instNatCastInt (@Fin.val M i)))
+        (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+      (@OfNat.ofNat.{0} Int (nat_lit 2) (@instOfNat (nat_lit 2)))
+      (@OfNat.ofNat.{0} Int (nat_lit 4) (@instOfNat (nat_lit 4))))
+    (@Tiling.RationalPolygonal.markerCenter M i)
+def Tiling.RationalPolygonal.markerSquareExec : (M : Nat) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (M : Nat) =>
+  Tiling.RationalPolygonal.gridBoxExec (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+    (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+      (@Nat.cast.{0} Int instNatCastInt (Tiling.RationalPolygonal.markerSide M))
+      (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+    (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+      (@Nat.cast.{0} Int instNatCastInt (Tiling.RationalPolygonal.markerSide M))
+      (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+def Tiling.RationalPolygonal.nonzeroMarkerRingsExec : (M : Nat) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (M : Nat) =>
+  @Finset.biUnion.{0, 0} (Fin M) Tiling.RationalPolygonal.IntegerPlane
+    (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+    (@Finset.univ.{0} (Fin M) (Fin.fintype M)) fun (i : Fin M) =>
+    @ite.{1} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+      (@Eq.{1} Nat (@Fin.val M i) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+      (instDecidableEqNat (@Fin.val M i) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+      (@EmptyCollection.emptyCollection.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+        (@Finset.instEmptyCollection.{0} Tiling.RationalPolygonal.IntegerPlane))
+      (@Tiling.RationalPolygonal.markerRingExec M i)
+def Tiling.RationalPolygonal.markerZeroExec : (M : Nat) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (M : Nat) =>
+  @Finset.erase.{0} Tiling.RationalPolygonal.IntegerPlane
+    (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+    (@Finset.erase.{0} Tiling.RationalPolygonal.IntegerPlane
+      (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+        @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+          (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+      (@Insert.insert.{0, 0} Tiling.RationalPolygonal.IntegerPlane (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+        (@Finset.instInsert.{0} Tiling.RationalPolygonal.IntegerPlane
+          fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+          @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+            (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+        (Tiling.RationalPolygonal.markerNorth M)
+        (@Insert.insert.{0, 0} Tiling.RationalPolygonal.IntegerPlane (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+          (@Finset.instInsert.{0} Tiling.RationalPolygonal.IntegerPlane
+            fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+            @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+              (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+              (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+          (Tiling.RationalPolygonal.markerEast M)
+          (@SDiff.sdiff.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+            (@Finset.instSDiff.{0} Tiling.RationalPolygonal.IntegerPlane
+              fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+              @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+                (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+                (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+            (Tiling.RationalPolygonal.markerSquareExec M) (Tiling.RationalPolygonal.nonzeroMarkerRingsExec M))))
+      Tiling.RationalPolygonal.markerWestHole)
+    Tiling.RationalPolygonal.markerSouthHole
+def Tiling.RationalPolygonal.markerBlockExec : {M : Nat} →
+  (i : Fin M) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun {M : Nat} (i : Fin M) =>
+  @ite.{1} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+    (@Eq.{1} Nat (@Fin.val M i) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (instDecidableEqNat (@Fin.val M i) (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+    (Tiling.RationalPolygonal.markerZeroExec M) (@Tiling.RationalPolygonal.markerRingExec M i)
+def Tiling.RationalPolygonal.markerScaleExec : (M : Nat) →
+  (x : Tiling.RationalPolygonal.IntegerPlane) → Tiling.RationalPolygonal.IntegerPlane :=
+fun (M : Nat) (x : Tiling.RationalPolygonal.IntegerPlane) =>
+  @HSMul.hSMul.{0, 0, 0} Int Tiling.RationalPolygonal.IntegerPlane Tiling.RationalPolygonal.IntegerPlane
+    (@instHSMul.{0, 0} Int Tiling.RationalPolygonal.IntegerPlane
+      (@ZSMul.toSMul.{0} Tiling.RationalPolygonal.IntegerPlane
+        (@SubNegMonoid.toZSMul.{0} Tiling.RationalPolygonal.IntegerPlane
+          (@Pi.subNegMonoid.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+            fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) =>
+            @AddGroup.toSubNegMonoid.{0} Int Int.instAddGroup))))
+    (@Nat.cast.{0} Int instNatCastInt (Tiling.RationalPolygonal.markerSide M)) x
+def Tiling.RationalPolygonal.planarRasterTileArrayExec : (tiles :
+    Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) →
+  Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (tiles : Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+  @Finset.biUnion.{0, 0} (Fin (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles))
+    Tiling.RationalPolygonal.IntegerPlane
+    (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+    (@Finset.univ.{0} (Fin (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles))
+      (Fin.fintype (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles)))
+    fun (i : Fin (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles)) =>
+    @Finset.biUnion.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.RationalPolygonal.IntegerPlane
+      (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+        @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+          (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+          (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+      (@GetElem.getElem.{0, 0, 0} (Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+        (Fin (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles))
+        (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+        (fun (xs : Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+            (i : Fin (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles)) =>
+          @LT.lt.{0} Nat instLTNat
+            (@Fin.val (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles) i)
+            (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) xs))
+        (@Fin.instGetElemFinVal.{0, 0} (Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+          (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+          (fun (xs : Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) (i : Nat) =>
+            @LT.lt.{0} Nat instLTNat i (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) xs))
+          (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles)
+          (@Array.instGetElemNatLtSize.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)))
+        tiles i (Tiling.RationalPolygonal.planarRasterTileArrayExec._proof_2 tiles i))
+      fun (f : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Finset.image.{0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.RationalPolygonal.IntegerPlane
+        (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+          @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+            (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+        (fun (s : Tiling.RationalPolygonal.IntegerPlane) =>
+          @HAdd.hAdd.{0, 0, 0} Tiling.RationalPolygonal.IntegerPlane Tiling.RationalPolygonal.IntegerPlane
+            Tiling.RationalPolygonal.IntegerPlane
+            (@instHAdd.{0} Tiling.RationalPolygonal.IntegerPlane
+              (@Pi.instAdd.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+                fun (i : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instAdd))
+            (Tiling.RationalPolygonal.markerScaleExec
+              (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles) f)
+            s)
+        (@Tiling.RationalPolygonal.markerBlockExec
+          (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles) i)
+structure Tiling.RationalPolygonal.NonemptyPlanarRasterFamily : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.tiles : Array.{0}
+      (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+  Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.size_pos : @LT.lt.{0} Nat instLTNat
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+        (Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.tiles self))
+  Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.first_nonempty : @Finset.Nonempty.{0}
+      Tiling.RationalPolygonal.IntegerPlane
+      (@GetElem.getElem.{0, 0, 0} (Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) Nat
+        (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+        (fun (xs : Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) (i : Nat) =>
+          @LT.lt.{0} Nat instLTNat i (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) xs))
+        (@Array.instGetElemNatLtSize.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+        (Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.tiles self)
+        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)
+constructor:
+  Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.mk
+    (tiles : Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+    (size_pos :
+      @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) tiles))
+    (first_nonempty :
+      @Finset.Nonempty.{0} Tiling.RationalPolygonal.IntegerPlane
+        (@GetElem.getElem.{0, 0, 0} (Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) Nat
+          (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+          (fun (xs : Array.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) (i : Nat) =>
+            @LT.lt.{0} Nat instLTNat i (@Array.size.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) xs))
+          (@Array.instGetElemNatLtSize.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) tiles
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) size_pos)) :
+    Tiling.RationalPolygonal.NonemptyPlanarRasterFamily
+def Tiling.RationalPolygonal.planarRasterTileExec : (input : Tiling.RationalPolygonal.NonemptyPlanarRasterFamily) →
+  Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (input : Tiling.RationalPolygonal.NonemptyPlanarRasterFamily) =>
+  Tiling.RationalPolygonal.planarRasterTileArrayExec (Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.tiles input)
 def Tiling.RationalPolygonal.quakeGraph.{u} : {G : Type u} →
   [AddCommGroup.{u} G] → (F : Finset.{u} G) → (T : Set.{u} G) → (v : G) → SimpleGraph.{u} (@Set.Elem.{u} G T) :=
 fun {G : Type u} [inst : AddCommGroup.{u} G] (F : Finset.{u} G) (T : Set.{u} G) (v : G) =>
@@ -3944,6 +4821,785 @@ fun {K : Tiling.RationalPolygonal.PolygonalRegion} {T : Set.{0} Tiling.Plane}
     (@Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.assembledQuakePart_pairwiseDisjoint K T R u
       hTiles D)
     (@Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.iUnion_assembledQuakePart K T R u hTiles D)
+def Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangles : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  List.{0} Tiling.RationalPolygonal.Raw.ZTriangle :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  @List.map.{0, 0} Tiling.RationalPolygonal.Raw.QTriangle Tiling.RationalPolygonal.Raw.ZTriangle
+    (Tiling.RationalPolygonal.Raw.Code.Input.normalizedTriangle P)
+    (Tiling.RationalPolygonal.Raw.Code.triangles (Tiling.RationalPolygonal.Raw.Code.Input.code P))
+def Tiling.RationalPolygonal.Raw.Compiler.intRange : (lo hi : Int) → List.{0} Int :=
+fun (lo hi : Int) =>
+  @ite.{1} (List.{0} Int) (@LE.le.{0} Int Int.instLEInt lo hi) (Int.decLe lo hi)
+    (@List.map.{0, 0} Nat Int
+      (fun (n : Nat) =>
+        @HAdd.hAdd.{0, 0, 0} Int Int Int (@instHAdd.{0} Int Int.instAdd) lo (@Nat.cast.{0} Int instNatCastInt n))
+      (List.range
+        (Int.toNat
+          (@HAdd.hAdd.{0, 0, 0} Int Int Int (@instHAdd.{0} Int Int.instAdd)
+            (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) hi lo)
+            (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))))
+    (@List.nil.{0} Int)
+def Tiling.RationalPolygonal.Raw.Compiler.xCoordinates : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  List.{0} Int :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @List.flatMap.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle Int
+    (fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+      @List.cons.{0} Int (Tiling.RationalPolygonal.Raw.ZPoint.x (Tiling.RationalPolygonal.Raw.ZTriangle.a t))
+        (@List.cons.{0} Int (Tiling.RationalPolygonal.Raw.ZPoint.x (Tiling.RationalPolygonal.Raw.ZTriangle.b t))
+          (@List.cons.{0} Int (Tiling.RationalPolygonal.Raw.ZPoint.x (Tiling.RationalPolygonal.Raw.ZTriangle.c t))
+            (@List.nil.{0} Int))))
+    ts
+def Tiling.RationalPolygonal.Raw.Compiler.yCoordinates : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  List.{0} Int :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @List.flatMap.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle Int
+    (fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+      @List.cons.{0} Int (Tiling.RationalPolygonal.Raw.ZPoint.y (Tiling.RationalPolygonal.Raw.ZTriangle.a t))
+        (@List.cons.{0} Int (Tiling.RationalPolygonal.Raw.ZPoint.y (Tiling.RationalPolygonal.Raw.ZTriangle.b t))
+          (@List.cons.{0} Int (Tiling.RationalPolygonal.Raw.ZPoint.y (Tiling.RationalPolygonal.Raw.ZTriangle.c t))
+            (@List.nil.{0} Int))))
+    ts
+def Tiling.RationalPolygonal.Raw.Compiler.minCoord : (xs : List.{0} Int) → Int :=
+fun (xs : List.{0} Int) =>
+  @List.foldl.{0, 0} Int Int (@Min.min.{0} Int Int.instMin) (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+    xs
+def Tiling.RationalPolygonal.Raw.Compiler.maxCoord : (xs : List.{0} Int) → Int :=
+fun (xs : List.{0} Int) =>
+  @List.foldl.{0, 0} Int Int (@Max.max.{0} Int Int.instMax) (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+    xs
+def Tiling.RationalPolygonal.Raw.Compiler.offsetWindow : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  List.{0} Tiling.RationalPolygonal.Raw.ZPoint :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @List.flatMap.{0, 0} Int Tiling.RationalPolygonal.Raw.ZPoint
+    (fun (x : Int) =>
+      @List.map.{0, 0} Int Tiling.RationalPolygonal.Raw.ZPoint
+        (fun (y : Int) => Tiling.RationalPolygonal.Raw.ZPoint.mk x y)
+        (Tiling.RationalPolygonal.Raw.Compiler.intRange
+          (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+            (Tiling.RationalPolygonal.Raw.Compiler.minCoord (Tiling.RationalPolygonal.Raw.Compiler.yCoordinates ts))
+            (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+          (Tiling.RationalPolygonal.Raw.Compiler.maxCoord (Tiling.RationalPolygonal.Raw.Compiler.yCoordinates ts))))
+    (Tiling.RationalPolygonal.Raw.Compiler.intRange
+      (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)
+        (Tiling.RationalPolygonal.Raw.Compiler.minCoord (Tiling.RationalPolygonal.Raw.Compiler.xCoordinates ts))
+        (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1))))
+      (Tiling.RationalPolygonal.Raw.Compiler.maxCoord (Tiling.RationalPolygonal.Raw.Compiler.xCoordinates ts)))
+structure Tiling.RationalPolygonal.Raw.Compiler.ZLine : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.Compiler.ZLine.A : Int
+  Tiling.RationalPolygonal.Raw.Compiler.ZLine.B : Int
+  Tiling.RationalPolygonal.Raw.Compiler.ZLine.C : Int
+constructor:
+  Tiling.RationalPolygonal.Raw.Compiler.ZLine.mk (A B C : Int) : Tiling.RationalPolygonal.Raw.Compiler.ZLine
+def Tiling.RationalPolygonal.Raw.Compiler.ZLine.eval : (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (p : Prod.{0, 0} Rat Rat) → Rat :=
+fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) (p : Prod.{0, 0} Rat Rat) =>
+  @HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.A l))
+        (@Prod.fst.{0, 0} Rat Rat p))
+      (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+        (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.B l))
+        (@Prod.snd.{0, 0} Rat Rat p)))
+    (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.C l))
+def Tiling.RationalPolygonal.Raw.Compiler.edgeLine : (z p q : Tiling.RationalPolygonal.Raw.ZPoint) →
+  Tiling.RationalPolygonal.Raw.Compiler.ZLine :=
+fun (z p q : Tiling.RationalPolygonal.Raw.ZPoint) =>
+  have A : Int :=
+    @HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) (Tiling.RationalPolygonal.Raw.ZPoint.y q)
+      (Tiling.RationalPolygonal.Raw.ZPoint.y p);
+  have B : Int :=
+    @HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) (Tiling.RationalPolygonal.Raw.ZPoint.x p)
+      (Tiling.RationalPolygonal.Raw.ZPoint.x q);
+  have px : Int :=
+    @HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) (Tiling.RationalPolygonal.Raw.ZPoint.x p)
+      (Tiling.RationalPolygonal.Raw.ZPoint.x z);
+  have py : Int :=
+    @HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub) (Tiling.RationalPolygonal.Raw.ZPoint.y p)
+      (Tiling.RationalPolygonal.Raw.ZPoint.y z);
+  Tiling.RationalPolygonal.Raw.Compiler.ZLine.mk A B
+    (@Neg.neg.{0} Int Int.instNegInt
+      (@HAdd.hAdd.{0, 0, 0} Int Int Int (@instHAdd.{0} Int Int.instAdd)
+        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) A px)
+        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) B py)))
+def Tiling.RationalPolygonal.Raw.Compiler.translatedEdgeLines : (t : Tiling.RationalPolygonal.Raw.ZTriangle) →
+  (z : Tiling.RationalPolygonal.Raw.ZPoint) → List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine :=
+fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) (z : Tiling.RationalPolygonal.Raw.ZPoint) =>
+  @List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+    (Tiling.RationalPolygonal.Raw.Compiler.edgeLine z (Tiling.RationalPolygonal.Raw.ZTriangle.a t)
+      (Tiling.RationalPolygonal.Raw.ZTriangle.b t))
+    (@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+      (Tiling.RationalPolygonal.Raw.Compiler.edgeLine z (Tiling.RationalPolygonal.Raw.ZTriangle.b t)
+        (Tiling.RationalPolygonal.Raw.ZTriangle.c t))
+      (@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+        (Tiling.RationalPolygonal.Raw.Compiler.edgeLine z (Tiling.RationalPolygonal.Raw.ZTriangle.c t)
+          (Tiling.RationalPolygonal.Raw.ZTriangle.a t))
+        (@List.nil.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)))
+def Tiling.RationalPolygonal.Raw.Compiler.arrangementLines : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @List.flatMap.{0, 0} Tiling.RationalPolygonal.Raw.ZPoint Tiling.RationalPolygonal.Raw.Compiler.ZLine
+    (fun (z : Tiling.RationalPolygonal.Raw.ZPoint) =>
+      @List.flatMap.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle Tiling.RationalPolygonal.Raw.Compiler.ZLine
+        (fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+          Tiling.RationalPolygonal.Raw.Compiler.translatedEdgeLines t z)
+        ts)
+    (Tiling.RationalPolygonal.Raw.Compiler.offsetWindow ts)
+def Tiling.RationalPolygonal.Raw.Compiler.sideConstraint : (positive : Bool) →
+  (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) → Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+fun (positive : Bool) (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+  @ite.{1} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality (@Eq.{1} Bool positive Bool.true)
+    (instDecidableEqBool positive Bool.true)
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk
+      (@Neg.neg.{0} Rat Rat.instNeg
+        (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.A l)))
+      (@Neg.neg.{0} Rat Rat.instNeg
+        (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.B l)))
+      (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.C l)))
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk
+      (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.A l))
+      (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.B l))
+      (@Neg.neg.{0} Rat Rat.instNeg
+        (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.C l))))
+def Tiling.RationalPolygonal.Raw.Compiler.openUnitSquare : List.{0}
+  Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+@List.cons.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+  (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk
+    (@Neg.neg.{0} Rat Rat.instNeg (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+    (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+    (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+  (@List.cons.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+    (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk
+      (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+      (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+      (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+    (@List.cons.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+      (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk
+        (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+        (@Neg.neg.{0} Rat Rat.instNeg (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+        (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+      (@List.cons.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+        (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.mk
+          (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))
+          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+          (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+        (@List.nil.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality))))
+structure Tiling.RationalPolygonal.Raw.Compiler.SignCell : Type
+number of parameters: 0
+fields:
+  Tiling.RationalPolygonal.Raw.Compiler.SignCell.system : List.{0}
+      Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+  Tiling.RationalPolygonal.Raw.Compiler.SignCell.sample : Prod.{0, 0} Rat Rat
+constructor:
+  Tiling.RationalPolygonal.Raw.Compiler.SignCell.mk
+    (system : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (sample : Prod.{0, 0} Rat Rat) :
+    Tiling.RationalPolygonal.Raw.Compiler.SignCell
+def Tiling.RationalPolygonal.Raw.Compiler.cellOfSystem? : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @Option.map.{0, 0} (Prod.{0, 0} Rat Rat) Tiling.RationalPolygonal.Raw.Compiler.SignCell
+    (fun (p : Prod.{0, 0} Rat Rat) => Tiling.RationalPolygonal.Raw.Compiler.SignCell.mk qs p)
+    (Tiling.RationalPolygonal.LinearFeasibility.solve qs)
+def Tiling.RationalPolygonal.Raw.Compiler.refineCell : (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) → List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell :=
+fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+  @List.filterMap.{0, 0} (Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+    Tiling.RationalPolygonal.Raw.Compiler.SignCell (@id.{1} (Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell))
+    (@List.cons.{0} (Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+      (Tiling.RationalPolygonal.Raw.Compiler.cellOfSystem?
+        (@List.cons.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.false l)
+          (Tiling.RationalPolygonal.Raw.Compiler.SignCell.system cell)))
+      (@List.cons.{0} (Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+        (Tiling.RationalPolygonal.Raw.Compiler.cellOfSystem?
+          (@List.cons.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+            (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.true l)
+            (Tiling.RationalPolygonal.Raw.Compiler.SignCell.system cell)))
+        (@List.nil.{0} (Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell))))
+def Tiling.RationalPolygonal.Raw.Compiler.refineCells : (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (cells : List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell) →
+    List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell :=
+fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+    (cells : List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+  @List.flatMap.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.SignCell Tiling.RationalPolygonal.Raw.Compiler.SignCell
+    (Tiling.RationalPolygonal.Raw.Compiler.refineCell l) cells
+def Tiling.RationalPolygonal.Raw.Compiler.refineLines : (cells :
+    List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell) →
+  (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+    List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell :=
+fun (cells : List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+    (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+  @List.foldl.{0, 0} (List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+    Tiling.RationalPolygonal.Raw.Compiler.ZLine
+    (fun (cs : List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+        (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+      Tiling.RationalPolygonal.Raw.Compiler.refineCells l cs)
+    cells ls
+def Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells : (ls :
+    List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell :=
+fun (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+  Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells.match_1.{1}
+    (fun (x : Option.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+      List.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+    (Tiling.RationalPolygonal.Raw.Compiler.cellOfSystem? Tiling.RationalPolygonal.Raw.Compiler.openUnitSquare)
+    (fun (_ : Unit) => @List.nil.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell)
+    fun (base : Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+    Tiling.RationalPolygonal.Raw.Compiler.refineLines
+      (@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell base
+        (@List.nil.{0} Tiling.RationalPolygonal.Raw.Compiler.SignCell))
+      ls
+def Tiling.RationalPolygonal.Raw.Compiler.Covers : (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) → Prop :=
+fun (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+    (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  ∀ (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine),
+    @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+        (List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+        (@List.instMembership.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) ls l →
+      Or
+        (@Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) qs
+          (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.false l))
+        (@Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) qs
+          (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.true l))
+def Tiling.RationalPolygonal.Raw.Compiler.addOffset : (p : Prod.{0, 0} Rat Rat) →
+  (z : Tiling.RationalPolygonal.Raw.ZPoint) → Prod.{0, 0} Rat Rat :=
+fun (p : Prod.{0, 0} Rat Rat) (z : Tiling.RationalPolygonal.Raw.ZPoint) =>
+  @Prod.mk.{0, 0} Rat Rat
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) (@Prod.fst.{0, 0} Rat Rat p)
+      (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.ZPoint.x z)))
+    (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd) (@Prod.snd.{0, 0} Rat Rat p)
+      (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.ZPoint.y z)))
+def Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ : (a b p : Prod.{0, 0} Rat Rat) → Rat :=
+fun (a b p : Prod.{0, 0} Rat Rat) =>
+  @HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+    (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+      (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub) (@Prod.fst.{0, 0} Rat Rat b)
+        (@Prod.fst.{0, 0} Rat Rat a))
+      (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub) (@Prod.snd.{0, 0} Rat Rat p)
+        (@Prod.snd.{0, 0} Rat Rat a)))
+    (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+      (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub) (@Prod.snd.{0, 0} Rat Rat b)
+        (@Prod.snd.{0, 0} Rat Rat a))
+      (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub) (@Prod.fst.{0, 0} Rat Rat p)
+        (@Prod.fst.{0, 0} Rat Rat a)))
+def Tiling.RationalPolygonal.Raw.Compiler.zpointQ : (p : Tiling.RationalPolygonal.Raw.ZPoint) → Prod.{0, 0} Rat Rat :=
+fun (p : Tiling.RationalPolygonal.Raw.ZPoint) =>
+  @Prod.mk.{0, 0} Rat Rat (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.ZPoint.x p))
+    (@Int.cast.{0} Rat Rat.instIntCast (Tiling.RationalPolygonal.Raw.ZPoint.y p))
+def Tiling.RationalPolygonal.Raw.Compiler.pointInTriangle : (p : Prod.{0, 0} Rat Rat) →
+  (t : Tiling.RationalPolygonal.Raw.ZTriangle) → Bool :=
+fun (p : Prod.{0, 0} Rat Rat) (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  have s₀ : Rat :=
+    Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ
+      (Tiling.RationalPolygonal.Raw.Compiler.zpointQ (Tiling.RationalPolygonal.Raw.ZTriangle.a t))
+      (Tiling.RationalPolygonal.Raw.Compiler.zpointQ (Tiling.RationalPolygonal.Raw.ZTriangle.b t)) p;
+  have s₁ : Rat :=
+    Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ
+      (Tiling.RationalPolygonal.Raw.Compiler.zpointQ (Tiling.RationalPolygonal.Raw.ZTriangle.b t))
+      (Tiling.RationalPolygonal.Raw.Compiler.zpointQ (Tiling.RationalPolygonal.Raw.ZTriangle.c t)) p;
+  have s₂ : Rat :=
+    Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ
+      (Tiling.RationalPolygonal.Raw.Compiler.zpointQ (Tiling.RationalPolygonal.Raw.ZTriangle.c t))
+      (Tiling.RationalPolygonal.Raw.Compiler.zpointQ (Tiling.RationalPolygonal.Raw.ZTriangle.a t)) p;
+  @Decidable.decide
+    (Or
+      (And (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₀)
+        (And (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₁)
+          (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₂)))
+      (And (@LE.le.{0} Rat Rat.instLE s₀ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (And (@LE.le.{0} Rat Rat.instLE s₁ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+          (@LE.le.{0} Rat Rat.instLE s₂ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))))))
+    (@instDecidableOr
+      (And (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₀)
+        (And (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₁)
+          (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₂)))
+      (And (@LE.le.{0} Rat Rat.instLE s₀ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (And (@LE.le.{0} Rat Rat.instLE s₁ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+          (@LE.le.{0} Rat Rat.instLE s₂ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))))
+      (@instDecidableAnd (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₀)
+        (And (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₁)
+          (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₂))
+        (Rat.instDecidableLe (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₀)
+        (@instDecidableAnd
+          (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₁)
+          (@LE.le.{0} Rat Rat.instLE (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₂)
+          (Rat.instDecidableLe (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₁)
+          (Rat.instDecidableLe (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))) s₂)))
+      (@instDecidableAnd (@LE.le.{0} Rat Rat.instLE s₀ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (And (@LE.le.{0} Rat Rat.instLE s₁ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+          (@LE.le.{0} Rat Rat.instLE s₂ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))))
+        (Rat.instDecidableLe s₀ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+        (@instDecidableAnd
+          (@LE.le.{0} Rat Rat.instLE s₁ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+          (@LE.le.{0} Rat Rat.instLE s₂ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+          (Rat.instDecidableLe s₁ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0))))
+          (Rat.instDecidableLe s₂ (@OfNat.ofNat.{0} Rat (nat_lit 0) (@Rat.instOfNat (nat_lit 0)))))))
+def Tiling.RationalPolygonal.Raw.Compiler.pointInRegion : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  (p : Prod.{0, 0} Rat Rat) → Bool :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) (p : Prod.{0, 0} Rat Rat) =>
+  @List.any.{0} Tiling.RationalPolygonal.Raw.ZTriangle ts fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+    Tiling.RationalPolygonal.Raw.Compiler.pointInTriangle p t
+def Tiling.RationalPolygonal.Raw.Compiler.sampleSignature : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  (zs : List.{0} Tiling.RationalPolygonal.Raw.ZPoint) →
+    (p : Prod.{0, 0} Rat Rat) → Finset.{0} Tiling.RationalPolygonal.IntegerPlane :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) (zs : List.{0} Tiling.RationalPolygonal.Raw.ZPoint)
+    (p : Prod.{0, 0} Rat Rat) =>
+  @List.toFinset.{0} Tiling.RationalPolygonal.IntegerPlane
+    (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+      @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+        (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+        (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+    (@List.map.{0, 0} Tiling.RationalPolygonal.Raw.ZPoint Tiling.RationalPolygonal.IntegerPlane
+      Tiling.RationalPolygonal.Raw.ZPoint.toIntegerPlane
+      (@List.filter.{0} Tiling.RationalPolygonal.Raw.ZPoint
+        (fun (z : Tiling.RationalPolygonal.Raw.ZPoint) =>
+          Tiling.RationalPolygonal.Raw.Compiler.pointInRegion ts (Tiling.RationalPolygonal.Raw.Compiler.addOffset p z))
+        zs))
+def Tiling.RationalPolygonal.Raw.Compiler.signatureFamily : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  have zs : List.{0} Tiling.RationalPolygonal.Raw.ZPoint := Tiling.RationalPolygonal.Raw.Compiler.offsetWindow ts;
+  @List.eraseDups.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+    (@instBEqOfDecidableEq.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+      fun (a b : Finset.{0} Tiling.RationalPolygonal.IntegerPlane) =>
+      @Finset.decidableEq.{0} Tiling.RationalPolygonal.IntegerPlane
+        (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+          @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+            (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+            (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+        a b)
+    (@List.map.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.SignCell (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+      (fun (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+        Tiling.RationalPolygonal.Raw.Compiler.sampleSignature ts zs
+          (Tiling.RationalPolygonal.Raw.Compiler.SignCell.sample cell))
+      (Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells
+        (Tiling.RationalPolygonal.Raw.Compiler.arrangementLines ts)))
+def Tiling.RationalPolygonal.Raw.Compiler.firstNonempty : List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) →
+  Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) :=
+fun (x : List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+  @List.brecOn.{1, 0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+    (fun (x : List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+      Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+    x Tiling.RationalPolygonal.Raw.Compiler.firstNonempty._f
+def Tiling.RationalPolygonal.Raw.Compiler.nonemptyFirst : (family :
+    List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) →
+  List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) :=
+fun (family : List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+  Tiling.RationalPolygonal.Raw.Compiler.nonemptyFirst.match_1.{1}
+    (fun (x : Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+      List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+    (Tiling.RationalPolygonal.Raw.Compiler.firstNonempty family) (fun (_ : Unit) => family)
+    fun (F : Finset.{0} Tiling.RationalPolygonal.IntegerPlane) =>
+    @List.cons.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) F
+      (@List.erase.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+        (@instBEqOfDecidableEq.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+          fun (a b : Finset.{0} Tiling.RationalPolygonal.IntegerPlane) =>
+          @Finset.decidableEq.{0} Tiling.RationalPolygonal.IntegerPlane
+            (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+              @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+                (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+                (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+            a b)
+        family F)
+def Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily? : (family :
+    List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) →
+  Option.{0} Tiling.RationalPolygonal.NonemptyPlanarRasterFamily :=
+fun (family : List.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+  Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily?.match_1.{1}
+    (fun (x : Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)) =>
+      Option.{0} Tiling.RationalPolygonal.NonemptyPlanarRasterFamily)
+    (Tiling.RationalPolygonal.Raw.Compiler.firstNonempty family)
+    (fun
+        (h :
+          @Eq.{1} (Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+            (Tiling.RationalPolygonal.Raw.Compiler.firstNonempty family)
+            (@Option.none.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))) =>
+      @Option.none.{0} Tiling.RationalPolygonal.NonemptyPlanarRasterFamily)
+    fun (F : Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+      (h :
+        @Eq.{1} (Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+          (Tiling.RationalPolygonal.Raw.Compiler.firstNonempty family)
+          (@Option.some.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) F)) =>
+    @Option.some.{0} Tiling.RationalPolygonal.NonemptyPlanarRasterFamily
+      (Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.mk
+        (@List.toArray.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+          (@List.cons.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) F
+            (@List.erase.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+              (@instBEqOfDecidableEq.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+                fun (a b : Finset.{0} Tiling.RationalPolygonal.IntegerPlane) =>
+                @Finset.decidableEq.{0} Tiling.RationalPolygonal.IntegerPlane
+                  (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+                    @Fintype.decidablePiFintype.{0, 0}
+                      (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+                      (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) =>
+                        Int.instDecidableEq)
+                      (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+                  a b)
+              family F)))
+        (Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily?._proof_1 family F)
+        (Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily?._proof_2 family F h))
+def Tiling.RationalPolygonal.Raw.Compiler.rasterTileFromTriangles? : (ts :
+    List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @Option.map.{0, 0} Tiling.RationalPolygonal.NonemptyPlanarRasterFamily
+    (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) Tiling.RationalPolygonal.planarRasterTileExec
+    (Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily?
+      (Tiling.RationalPolygonal.Raw.Compiler.signatureFamily ts))
+def Tiling.RationalPolygonal.Raw.Compiler.compileRaster? : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Option.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane) :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  Tiling.RationalPolygonal.Raw.Compiler.rasterTileFromTriangles?
+    (Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangles P)
+def Tiling.RationalPolygonal.Raw.Compiler.sampleToPlane : (p : Prod.{0, 0} Rat Rat) → Tiling.Plane :=
+fun (p : Prod.{0, 0} Rat Rat) =>
+  @HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)
+    (Complex.ofReal (@Rat.cast.{0} Real Real.instRatCast (@Prod.fst.{0, 0} Rat Rat p)))
+    (@HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul)
+      (Complex.ofReal (@Rat.cast.{0} Real Real.instRatCast (@Prod.snd.{0, 0} Rat Rat p))) Complex.I)
+def Tiling.RationalPolygonal.Raw.Compiler.ZLine.evalPlane : (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (p : Tiling.Plane) → Real :=
+fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) (p : Tiling.Plane) =>
+  @HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@Int.cast.{0} Real Real.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.A l)) (Complex.re p))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@Int.cast.{0} Real Real.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.B l)) (Complex.im p)))
+    (@Int.cast.{0} Real Real.instIntCast (Tiling.RationalPolygonal.Raw.Compiler.ZLine.C l))
+def Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign : (x y : Real) → Prop :=
+fun (x y : Real) =>
+  Or
+    (And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) x)
+      (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) y))
+    (And (@LT.lt.{0} Real Real.instLT x (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)))
+      (@LT.lt.{0} Real Real.instLT y (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))))
+def Tiling.RationalPolygonal.Raw.SemanticBridge.planeEval : (A B C : Int) → (u : Tiling.Plane) → Real :=
+fun (A B C : Int) (u : Tiling.Plane) =>
+  @HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Int.cast.{0} Real Real.instIntCast A)
+        (Complex.re u))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Int.cast.{0} Real Real.instIntCast B)
+        (Complex.im u)))
+    (@Int.cast.{0} Real Real.instIntCast C)
+def Tiling.RationalPolygonal.Raw.SemanticBridge.lineZeroSet : (A B C : Int) → Set.{0} Tiling.Plane :=
+fun (A B C : Int) =>
+  @Set.ofPred.{0} Tiling.Plane fun (u : Tiling.Plane) =>
+    @Eq.{1} Real (Tiling.RationalPolygonal.Raw.SemanticBridge.planeEval A B C u)
+      (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+def Tiling.RationalPolygonal.Raw.SemanticBridge.rationalPlanePoint : (p : Prod.{0, 0} Rat Rat) → Tiling.Plane :=
+fun (p : Prod.{0, 0} Rat Rat) =>
+  @DFunLike.coe.{1, 1, 1}
+    (@ContinuousLinearEquiv.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+      (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+      (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+      (@RingHomInvPair.ids.{0} Real Real.semiring) (@RingHomInvPair.ids.{0} Real Real.semiring) (Prod.{0, 0} Real Real)
+      (@instTopologicalSpaceProd.{0, 0} Real Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)))
+      (@Prod.instAddCommMonoid.{0, 0} Real Real Real.instAddCommMonoid Real.instAddCommMonoid) Complex
+      (@UniformSpace.toTopologicalSpace.{0} Complex
+        (@PseudoMetricSpace.toUniformSpace.{0} Complex
+          (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+            (@SeminormedCommRing.toSeminormedRing.{0} Complex
+              (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField))))))
+      Complex.instAddCommMonoid
+      (@Prod.instModule.{0, 0, 0} Real Real Real Real.semiring Real.instAddCommMonoid Real.instAddCommMonoid
+        (@Semiring.toModule.{0} Real Real.semiring) (@Semiring.toModule.{0} Real Real.semiring))
+      (@NormedSpace.toModule.{0, 0} Real Complex Real.normedField
+        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+              (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+        (@NormedSpace.complexToReal.{0} Complex
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+                (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+          (@NormedField.toNormedSpace.{0} Complex Complex.instNormedField))))
+    (Prod.{0, 0} Real Real) (fun (x : Prod.{0, 0} Real Real) => Complex)
+    (@EquivLike.toFunLike.{1, 1, 1}
+      (@ContinuousLinearEquiv.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+        (@RingHomInvPair.ids.{0} Real Real.semiring) (@RingHomInvPair.ids.{0} Real Real.semiring)
+        (Prod.{0, 0} Real Real)
+        (@instTopologicalSpaceProd.{0, 0} Real Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)))
+        (@Prod.instAddCommMonoid.{0, 0} Real Real Real.instAddCommMonoid Real.instAddCommMonoid) Complex
+        (@UniformSpace.toTopologicalSpace.{0} Complex
+          (@PseudoMetricSpace.toUniformSpace.{0} Complex
+            (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+              (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField))))))
+        Complex.instAddCommMonoid
+        (@Prod.instModule.{0, 0, 0} Real Real Real Real.semiring Real.instAddCommMonoid Real.instAddCommMonoid
+          (@Semiring.toModule.{0} Real Real.semiring) (@Semiring.toModule.{0} Real Real.semiring))
+        (@NormedSpace.toModule.{0, 0} Real Complex Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+                (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+          (@NormedSpace.complexToReal.{0} Complex
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+                  (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                    (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+            (@NormedField.toNormedSpace.{0} Complex Complex.instNormedField))))
+      (Prod.{0, 0} Real Real) Complex
+      (@ContinuousLinearEquiv.equivLike.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+        (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+        (@RingHomInvPair.ids.{0} Real Real.semiring) (@RingHomInvPair.ids.{0} Real Real.semiring)
+        (Prod.{0, 0} Real Real)
+        (@instTopologicalSpaceProd.{0, 0} Real Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)))
+        (@Prod.instAddCommMonoid.{0, 0} Real Real Real.instAddCommMonoid Real.instAddCommMonoid) Complex
+        (@UniformSpace.toTopologicalSpace.{0} Complex
+          (@PseudoMetricSpace.toUniformSpace.{0} Complex
+            (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+              (@SeminormedCommRing.toSeminormedRing.{0} Complex
+                (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField))))))
+        Complex.instAddCommMonoid
+        (@Prod.instModule.{0, 0, 0} Real Real Real Real.semiring Real.instAddCommMonoid Real.instAddCommMonoid
+          (@Semiring.toModule.{0} Real Real.semiring) (@Semiring.toModule.{0} Real Real.semiring))
+        (@NormedSpace.toModule.{0, 0} Real Complex Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+                (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+          (@NormedSpace.complexToReal.{0} Complex
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+                  (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                    (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+            (@NormedField.toNormedSpace.{0} Complex Complex.instNormedField)))))
+    (@ContinuousLinearEquiv.symm.{0, 0, 0, 0} Real Real Real.semiring Real.semiring
+      (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+      (@RingHom.id.{0} Real (@Semiring.toNonAssocSemiring.{0} Real Real.semiring))
+      (@RingHomInvPair.ids.{0} Real Real.semiring) (@RingHomInvPair.ids.{0} Real Real.semiring) Complex
+      (@UniformSpace.toTopologicalSpace.{0} Complex
+        (@PseudoMetricSpace.toUniformSpace.{0} Complex
+          (@SeminormedRing.toPseudoMetricSpace.{0} Complex
+            (@SeminormedCommRing.toSeminormedRing.{0} Complex
+              (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField))))))
+      Complex.instAddCommMonoid (Prod.{0, 0} Real Real)
+      (@instTopologicalSpaceProd.{0, 0} Real Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)))
+      (@Prod.instAddCommMonoid.{0, 0} Real Real Real.instAddCommMonoid Real.instAddCommMonoid)
+      (@NormedSpace.toModule.{0, 0} Real Complex Real.normedField
+        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+              (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+        (@NormedSpace.complexToReal.{0} Complex
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Complex
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Complex
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Complex
+                (@NormedCommRing.toSeminormedCommRing.{0} Complex
+                  (@NormedField.toNormedCommRing.{0} Complex Complex.instNormedField)))))
+          (@NormedField.toNormedSpace.{0} Complex Complex.instNormedField)))
+      (@Prod.instModule.{0, 0, 0} Real Real Real Real.semiring Real.instAddCommMonoid Real.instAddCommMonoid
+        (@Semiring.toModule.{0} Real Real.semiring) (@Semiring.toModule.{0} Real Real.semiring))
+      Complex.equivRealProdCLM)
+    (@Prod.mk.{0, 0} Real Real (@Rat.cast.{0} Real Real.instRatCast (@Prod.fst.{0, 0} Rat Rat p))
+      (@Rat.cast.{0} Real Real.instRatCast (@Prod.snd.{0, 0} Rat Rat p)))
+def Tiling.RationalPolygonal.Raw.Compiler.ZLine.zeroSet : (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  Set.{0} Tiling.Plane :=
+fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+  Tiling.RationalPolygonal.Raw.SemanticBridge.lineZeroSet (Tiling.RationalPolygonal.Raw.Compiler.ZLine.A l)
+    (Tiling.RationalPolygonal.Raw.Compiler.ZLine.B l) (Tiling.RationalPolygonal.Raw.Compiler.ZLine.C l)
+def Tiling.RationalPolygonal.Raw.Compiler.exceptionalSet : (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  Set.{0} Tiling.Plane :=
+fun (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+  @Set.iUnion.{0, 1} Tiling.Plane Tiling.RationalPolygonal.Raw.Compiler.ZLine
+    fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+    @Set.iUnion.{0, 0} Tiling.Plane
+      (@Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+        (Finset.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+          Tiling.RationalPolygonal.Raw.Compiler.ZLine
+          (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine))
+        (@List.toFinset.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+          Tiling.RationalPolygonal.Raw.Compiler.instDecidableEqZLine ls)
+        l)
+      fun
+        (h :
+          @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+            (Finset.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+            (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+              Tiling.RationalPolygonal.Raw.Compiler.ZLine
+              (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine))
+            (@List.toFinset.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+              Tiling.RationalPolygonal.Raw.Compiler.instDecidableEqZLine ls)
+            l) =>
+      Tiling.RationalPolygonal.Raw.Compiler.ZLine.zeroSet l
+def Tiling.RationalPolygonal.Raw.Compiler.satisfiesPlane : (q :
+    Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  (u : Tiling.Plane) → Prop :=
+fun (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) (u : Tiling.Plane) =>
+  @LT.lt.{0} Real Real.instLT
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@Rat.cast.{0} Real Real.instRatCast (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a q))
+        (Complex.re u))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@Rat.cast.{0} Real Real.instRatCast (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b q))
+        (Complex.im u)))
+    (@Rat.cast.{0} Real Real.instRatCast (Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c q))
+def Tiling.RationalPolygonal.Raw.Compiler.realCell : (qs :
+    List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) →
+  Set.{0} Tiling.Plane :=
+fun (qs : List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) =>
+  @Set.ofPred.{0} Tiling.Plane fun (u : Tiling.Plane) =>
+    ∀ (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality),
+      @Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality) qs q →
+        Tiling.RationalPolygonal.Raw.Compiler.satisfiesPlane q u
+def Tiling.RationalPolygonal.Raw.Compiler.Controls : (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) → Prop :=
+fun (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+    (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+  ∀ (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine),
+    @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+        (List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+        (@List.instMembership.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) ls l →
+      Or
+        (@Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (Tiling.RationalPolygonal.Raw.Compiler.SignCell.system cell)
+          (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.false l))
+        (@Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (Tiling.RationalPolygonal.Raw.Compiler.SignCell.system cell)
+          (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.true l))
+def Tiling.RationalPolygonal.Raw.Compiler.SupportedBy : (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) → Prop :=
+fun (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+    (cell : Tiling.RationalPolygonal.Raw.Compiler.SignCell) =>
+  ∀ (q : Tiling.RationalPolygonal.LinearFeasibility.StrictInequality),
+    @Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+        (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+        (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+        (Tiling.RationalPolygonal.Raw.Compiler.SignCell.system cell) q →
+      Or
+        (@Membership.mem.{0, 0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+          (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          (@List.instMembership.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+          Tiling.RationalPolygonal.Raw.Compiler.openUnitSquare q)
+        (@Exists.{1} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+          fun (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+          And
+            (@Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+              (List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine)
+              (@List.instMembership.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) ls l)
+            (Or
+              (@Eq.{1} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality q
+                (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.false l))
+              (@Eq.{1} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality q
+                (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.true l))))
+def Tiling.RationalPolygonal.Raw.Compiler.sideConstraintAt : (u : Tiling.Plane) →
+  (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) → Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+fun (u : Tiling.Plane) (l : Tiling.RationalPolygonal.Raw.Compiler.ZLine) =>
+  @ite.{1} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+    (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+      (Tiling.RationalPolygonal.Raw.Compiler.ZLine.evalPlane l u))
+    (Real.decidableLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+      (Tiling.RationalPolygonal.Raw.Compiler.ZLine.evalPlane l u))
+    (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.true l)
+    (Tiling.RationalPolygonal.Raw.Compiler.sideConstraint Bool.false l)
+def Tiling.RationalPolygonal.Raw.Compiler.signSystemAt : (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) →
+  (u : Tiling.Plane) → List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality :=
+fun (ls : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine) (u : Tiling.Plane) =>
+  @HAppend.hAppend.{0, 0, 0} (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+    (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+    (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+    (@instHAppendOfAppend.{0} (List.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality)
+      (@List.instAppend.{0} Tiling.RationalPolygonal.LinearFeasibility.StrictInequality))
+    Tiling.RationalPolygonal.Raw.Compiler.openUnitSquare
+    (@List.map.{0, 0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+      Tiling.RationalPolygonal.LinearFeasibility.StrictInequality
+      (Tiling.RationalPolygonal.Raw.Compiler.sideConstraintAt u) ls)
+def Tiling.RationalPolygonal.Raw.Compiler.triangleUnion : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  Set.{0} Tiling.Plane :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @Set.iUnion.{0, 1} Tiling.Plane Tiling.RationalPolygonal.Raw.ZTriangle
+    fun (t : Tiling.RationalPolygonal.Raw.ZTriangle) =>
+    @Set.iUnion.{0, 0} Tiling.Plane
+      (@Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+        (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+          Tiling.RationalPolygonal.Raw.ZTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.ZTriangle))
+        (@List.toFinset.{0} Tiling.RationalPolygonal.Raw.ZTriangle Tiling.RationalPolygonal.Raw.instDecidableEqZTriangle
+          ts)
+        t)
+      fun
+        (h :
+          @Membership.mem.{0, 0} Tiling.RationalPolygonal.Raw.ZTriangle
+            (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+            (@SetLike.instMembership.{0, 0} (Finset.{0} Tiling.RationalPolygonal.Raw.ZTriangle)
+              Tiling.RationalPolygonal.Raw.ZTriangle (@Finset.instSetLike.{0} Tiling.RationalPolygonal.Raw.ZTriangle))
+            (@List.toFinset.{0} Tiling.RationalPolygonal.Raw.ZTriangle
+              Tiling.RationalPolygonal.Raw.instDecidableEqZTriangle ts)
+            t) =>
+      Tiling.RationalPolygonal.Raw.ZTriangle.carrier t
+def Tiling.RationalPolygonal.Raw.Compiler.unitBoundaryLines : List.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine :=
+@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+  (Tiling.RationalPolygonal.Raw.Compiler.ZLine.mk (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))
+    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+    (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+  (@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+    (Tiling.RationalPolygonal.Raw.Compiler.ZLine.mk (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))
+      (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+      (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))
+    (@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+      (Tiling.RationalPolygonal.Raw.Compiler.ZLine.mk (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+        (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))
+        (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0))))
+      (@List.cons.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine
+        (Tiling.RationalPolygonal.Raw.Compiler.ZLine.mk (@OfNat.ofNat.{0} Int (nat_lit 0) (@instOfNat (nat_lit 0)))
+          (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))
+          (@Neg.neg.{0} Int Int.instNegInt (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))))
+        (@List.nil.{0} Tiling.RationalPolygonal.Raw.Compiler.ZLine))))
+def Tiling.RationalPolygonal.Raw.Compiler.totalExceptionalSet : (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) →
+  Set.{0} Tiling.Plane :=
+fun (ts : List.{0} Tiling.RationalPolygonal.Raw.ZTriangle) =>
+  @Union.union.{0} (Set.{0} Tiling.Plane) (@Set.instUnion.{0} Tiling.Plane)
+    (Tiling.RationalPolygonal.Raw.Compiler.exceptionalSet (Tiling.RationalPolygonal.Raw.Compiler.arrangementLines ts))
+    (Tiling.RationalPolygonal.Raw.Compiler.exceptionalSet Tiling.RationalPolygonal.Raw.Compiler.unitBoundaryLines)
 structure Tiling.RationalPolygonal.RasterPresentation : Type
 number of parameters: 0
 fields:
@@ -3997,3 +5653,41 @@ fun (K : Tiling.RationalPolygonal.RationalPolygonalRegion) =>
   Tiling.RationalPolygonal.RasterPresentation.mk
     (Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile
       (Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedRegion K))
+def Tiling.RationalPolygonal.Raw.Decision.rawTileDecision : (P : Tiling.RationalPolygonal.Raw.Code.Input) → Bool :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  Tiling.RationalPolygonal.Raw.Decision.rawTileDecision.match_1.{1}
+    (fun (x : Option.{0} Tiling.RationalPolygonal.NonemptyPlanarRasterFamily) => Bool)
+    (Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily?
+      (Tiling.RationalPolygonal.Raw.Compiler.signatureFamily
+        (Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangles P)))
+    (fun (_ : Unit) => Bool.false) fun (input : Tiling.RationalPolygonal.NonemptyPlanarRasterFamily) =>
+    TranslationalTilings.planarTileDecision (Tiling.RationalPolygonal.planarRasterTileExec input)
+def Tiling.RationalPolygonal.Raw.Decision.SignatureFamilyCorrect : (P : Tiling.RationalPolygonal.Raw.Code.Input) →
+  Prop :=
+fun (P : Tiling.RationalPolygonal.Raw.Code.Input) =>
+  @Eq.{1} (Finset.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane))
+    (@List.toFinset.{0} (Finset.{0} Tiling.RationalPolygonal.IntegerPlane)
+      (fun (a b : Finset.{0} Tiling.RationalPolygonal.IntegerPlane) =>
+        @Finset.decidableEq.{0} Tiling.RationalPolygonal.IntegerPlane
+          (fun (a b : Tiling.RationalPolygonal.IntegerPlane) =>
+            @Fintype.decidablePiFintype.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int)
+              (fun (a : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) => Int.instDecidableEq)
+              (Fin.fintype (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))) a b)
+          a b)
+      (Tiling.RationalPolygonal.Raw.Compiler.signatureFamily
+        (Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangles P)))
+    (Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures
+      (Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedRegion
+        (Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion P)))
+def Tiling.RationalPolygonal.Raw.Decision.DecidesRawTileability : (algorithm :
+    Tiling.RationalPolygonal.Raw.Code.Input → Bool) →
+  Prop :=
+fun (algorithm : Tiling.RationalPolygonal.Raw.Code.Input → Bool) =>
+  ∀ (P : Tiling.RationalPolygonal.Raw.Code.Input),
+    Iff (@Eq.{1} Bool (algorithm P) Bool.true)
+      (@Exists.{1} (Set.{0} Tiling.Plane) fun (T : Set.{0} Tiling.Plane) =>
+        Tiling.RationalPolygonal.PolygonalRegion.Tiles
+          (Tiling.RationalPolygonal.RationalPolygonalRegion.toPolygonalRegion
+            (Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion P))
+          T)
