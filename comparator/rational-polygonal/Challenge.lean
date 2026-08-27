@@ -16,8 +16,8 @@ objects.
 2. Double periodicity means invariance under two linearly
    independent translation vectors.
 3. A polygonal region is a finite almost-disjoint union of nondegenerate closed triangles.
-4. Rationality is expressed intrinsically, after translating one vertex to the origin and
-   clearing all vertex denominators at once.
+4. A rational polygon is a nonempty set admitting a triangulation whose displayed vertices have
+   rational coordinates.
 
 Closed triangles are convenient Lean objects.  The paper uses bounded open polygonal sets, but a
 polygonal set and its interior differ only on finitely many line segments, hence on a null set.
@@ -37,8 +37,8 @@ abbrev Plane := ℂ
 /-- The translates `t + Ω`, for `t ∈ T`, form a packing: two distinct copies of the tile `Ω`
 overlap only on a set of Lebesgue measure zero. -/
 def Packing (Ω T : Set Plane) : Prop :=
-  ∀ ⦃s⦄, s ∈ T → ∀ ⦃t⦄, t ∈ T → s ≠ t →
-    volume ((s +ᵥ Ω) ∩ (t +ᵥ Ω)) = 0
+  ∀ t₁ ∈ T, ∀ t₂ ∈ T, t₁ ≠ t₂ →
+    volume ((t₁ +ᵥ Ω) ∩ (t₂ +ᵥ Ω)) = 0
 
 /-- The translates of `Ω` by `T` cover almost every point of the plane. -/
 def Covering (Ω T : Set Plane) : Prop :=
@@ -55,12 +55,11 @@ def Tiling (Ω T : Set Plane) : Prop :=
 def PeriodicBy (A : Set Plane) (h : Plane) : Prop :=
   ∀ x, x + h ∈ A ↔ x ∈ A
 
-/-- A planar translation set is doubly periodic when it has two nonparallel periods.
-
-The displayed determinant is nonzero exactly when the two vectors are linearly independent. -/
+/-- A planar translation set is doubly periodic when it has two linearly independent real
+translation periods. -/
 def Periodic (A : Set Plane) : Prop :=
   ∃ h₁ h₂ : Plane,
-    h₁.re * h₂.im - h₁.im * h₂.re ≠ 0 ∧ PeriodicBy A h₁ ∧ PeriodicBy A h₂
+    LinearIndependent ℝ ![h₁, h₂] ∧ PeriodicBy A h₁ ∧ PeriodicBy A h₂
 
 /-! ## 2. Polygonal tiles -/
 
@@ -72,51 +71,52 @@ def twiceSignedArea (a b c : Plane) : ℝ :=
 def IsTriangle (s : Set Plane) : Prop :=
   ∃ a b c : Plane, twiceSignedArea a b c ≠ 0 ∧ s = convexHull ℝ {a, b, c}
 
+/-- A triangle, bundled together with the fact that its three vertices are noncollinear. -/
+def Triangle := {s : Set Plane // IsTriangle s}
+
+/-- Regard a bundled triangle as its underlying subset of the plane. -/
+instance : Coe Triangle (Set Plane) := ⟨Subtype.val⟩
+
 /-- A finite decomposition of `Ω` into triangles whose distinct interiors overlap only on a
 null set. Exact union is used for the closed representatives. -/
 structure Triangulation (Ω : Set Plane) where
   /-- The finitely many triangular pieces. -/
-  pieces : Finset (Set Plane)
-  /-- Every piece is a nondegenerate triangle. -/
-  isTriangle : ∀ t ∈ pieces, IsTriangle t
+  pieces : Finset Triangle
   /-- Distinct triangles intersect only on a null set. -/
-  nullOverlap : ∀ ⦃s⦄, s ∈ pieces → ∀ ⦃t⦄, t ∈ pieces → s ≠ t →
-    volume (s ∩ t) = 0
+  nullOverlap : ∀ t₁ ∈ pieces, ∀ t₂ ∈ pieces, t₁ ≠ t₂ →
+    volume ((t₁ : Set Plane) ∩ (t₂ : Set Plane)) = 0
   /-- The pieces have union exactly `Ω`. -/
-  sUnion_eq : ⋃₀ (pieces : Set (Set Plane)) = Ω
+  sUnion_eq : (⋃ t ∈ pieces, (t : Set Plane)) = Ω
 
 /-- A planar set is polygonal when it can be written as a finite union of nondegenerate
 triangles, with overlaps allowed only along null boundaries. -/
 def Polygonal (Ω : Set Plane) : Prop :=
   Nonempty (Triangulation Ω)
 
-/-- The intrinsic vertices of a polygonal set.
-
-A point is intrinsic when every triangulation sees it as an extreme point of one of its triangle
-pieces. Quantifying over every triangulation makes this independent of arbitrary added diagonals
-or subdivisions. -/
-def intrinsicVertices (Ω : Set Plane) : Set Plane :=
-  {x | ∀ triangulation : Triangulation Ω,
-    ∃ t ∈ triangulation.pieces, x ∈ t.extremePoints ℝ}
-
 /-! ## 3. Rational polygonal tiles -/
 
-/-- A planar point with integer real and imaginary coordinates. -/
-def IsIntegerPoint (z : Plane) : Prop :=
-  ∃ m n : ℤ, z = (m : ℝ) + (n : ℝ) * Complex.I
+/-- A point of the plane whose two coordinates are rational numbers. -/
+def IsRationalPoint (z : Plane) : Prop :=
+  ∃ x y : ℚ, z.re = x ∧ z.im = y
 
-/-- A translation-invariant common-denominator presentation of a rational polygon.
+/-- A triangle is rational when it admits three noncollinear rational vertices. -/
+def IsRationalTriangle (t : Triangle) : Prop :=
+  ∃ a b c : Plane,
+    IsRationalPoint a ∧ IsRationalPoint b ∧ IsRationalPoint c ∧
+      twiceSignedArea a b c ≠ 0 ∧ (t : Set Plane) = convexHull ℝ {a, b, c}
 
-The chosen `anchor` is an intrinsic vertex. After moving it to the origin, multiplication by one
-positive natural number sends every intrinsic vertex into `ℤ²`. This is equivalent to saying
-that every difference of two polygon vertices has rational coordinates, but records the common
-denominator needed by the normalization argument. -/
+/-- A triangle bundled together with a rational choice of its vertices. -/
+def RationalTriangle := {t : Triangle // IsRationalTriangle t}
+
+/-- A triangulation all of whose triangular pieces are rational. -/
+structure RationalTriangulation (Ω : Set Plane) extends Triangulation Ω where
+  /-- Every triangle in the decomposition has rational vertices. -/
+  rational : ∀ t ∈ pieces, IsRationalTriangle t
+
+/-- A nonempty planar set is a rational polygon when it has a finite triangulation into rational
+triangles. -/
 def RationalPolygon (Ω : Set Plane) : Prop :=
-  Polygonal Ω ∧ Ω.Nonempty ∧
-    ∃ anchor : Plane, anchor ∈ intrinsicVertices Ω ∧
-      ∃ denominator : ℕ, 0 < denominator ∧
-        ∀ w ∈ intrinsicVertices Ω,
-          IsIntegerPoint ((denominator : ℝ) • (w - anchor))
+  Ω.Nonempty ∧ Nonempty (RationalTriangulation Ω)
 
 /-! ## 4. The periodic tiling theorem -/
 
