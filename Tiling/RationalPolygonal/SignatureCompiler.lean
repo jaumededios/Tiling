@@ -24,7 +24,9 @@ executable milestone.
 
 namespace Tiling.RationalPolygonal.Raw.Compiler
 
+open Function MeasureTheory Set
 open LinearFeasibility
+open scoped Pointwise
 
 /-- The normalized integer triangles obtained from a valid raw input. -/
 def normalizedTriangles (P : Code.Input) : List ZTriangle :=
@@ -130,6 +132,13 @@ def translatedEdgeLines (t : ZTriangle) (z : ZPoint) : List ZLine :=
 /-- All translated triangle-edge lines considered by the executable compiler. -/
 def arrangementLines (ts : List ZTriangle) : List ZLine :=
   (offsetWindow ts).flatMap fun z ↦ ts.flatMap fun t ↦ translatedEdgeLines t z
+
+/-- Every listed edge of a listed translated triangle occurs in the full arrangement. -/
+theorem mem_arrangementLines_of_mem {ts : List ZTriangle} {z : ZPoint} {t : ZTriangle}
+    {l : ZLine} (hz : z ∈ offsetWindow ts) (ht : t ∈ ts)
+    (hl : l ∈ translatedEdgeLines t z) : l ∈ arrangementLines ts := by
+  simp only [arrangementLines, List.mem_flatMap]
+  exact ⟨z, hz, t, ht, hl⟩
 
 /-- The strict rational inequality selecting one of the two sides of an affine line. -/
 def sideConstraint (positive : Bool) (l : ZLine) : StrictInequality :=
@@ -339,6 +348,90 @@ theorem feasibleSignCells_sound {ls : List ZLine} {cell : SignCell}
       rw [hs.1]
       exact hs.2
 
+/-- A strict system covers a list of lines when it contains a side constraint for every line. -/
+def Covers (ls : List ZLine) (qs : List StrictInequality) : Prop :=
+  ∀ l ∈ ls, sideConstraint false l ∈ qs ∨ sideConstraint true l ∈ qs
+
+/-- A child produced by one refinement has the corresponding side constraint at the head of its
+system. -/
+theorem mem_refineCell_system {l : ZLine} {cell child : SignCell}
+    (hchild : child ∈ refineCell l cell) :
+    child.system = sideConstraint false l :: cell.system ∨
+      child.system = sideConstraint true l :: cell.system := by
+  rw [refineCell, List.mem_filterMap] at hchild
+  obtain ⟨o, ho, hid⟩ := hchild
+  have ho' : o = cellOfSystem? (sideConstraint false l :: cell.system) ∨
+      o = cellOfSystem? (sideConstraint true l :: cell.system) := by
+    simpa only [List.mem_cons, List.not_mem_nil, or_false] using ho
+  change o = some child at hid
+  rcases ho' with ho' | ho'
+  · rw [ho'] at hid
+    exact Or.inl (cellOfSystem_sound hid).1
+  · rw [ho'] at hid
+    exact Or.inr (cellOfSystem_sound hid).1
+
+/-- One refinement extends line coverage by the newly processed line. -/
+theorem mem_refineCell_covers {covered : List ZLine} {l : ZLine}
+    {cell child : SignCell} (hcovered : Covers covered cell.system)
+    (hchild : child ∈ refineCell l cell) : Covers (l :: covered) child.system := by
+  rcases mem_refineCell_system hchild with hsys | hsys
+  · rw [hsys]
+    intro k hk
+    have hk' : k = l ∨ k ∈ covered := by simpa only [List.mem_cons] using hk
+    rcases hk' with rfl | hk
+    · exact Or.inl (by simp)
+    · rcases hcovered k hk with h | h
+      · exact Or.inl (by simp only [List.mem_cons]; exact Or.inr h)
+      · exact Or.inr (by simp only [List.mem_cons]; exact Or.inr h)
+  · rw [hsys]
+    intro k hk
+    have hk' : k = l ∨ k ∈ covered := by simpa only [List.mem_cons] using hk
+    rcases hk' with rfl | hk
+    · exact Or.inr (by simp)
+    · rcases hcovered k hk with h | h
+      · exact Or.inl (by simp only [List.mem_cons]; exact Or.inr h)
+      · exact Or.inr (by simp only [List.mem_cons]; exact Or.inr h)
+
+/-- Bulk refinement extends line coverage by the newly processed line. -/
+theorem mem_refineCells_covers {covered : List ZLine} {l : ZLine}
+    {cells : List SignCell} {child : SignCell}
+    (hcovered : ∀ cell ∈ cells, Covers covered cell.system)
+    (hchild : child ∈ refineCells l cells) : Covers (l :: covered) child.system := by
+  simp only [refineCells, List.mem_flatMap] at hchild
+  obtain ⟨cell, hcell, hc⟩ := hchild
+  exact mem_refineCell_covers (hcovered cell hcell) hc
+
+/-- A final cell covers every line processed by `refineLines`, in reverse processing order. -/
+theorem mem_refineLines_covers {covered : List ZLine} {cells : List SignCell}
+    {ls : List ZLine} {child : SignCell}
+    (hcovered : ∀ cell ∈ cells, Covers covered cell.system)
+    (hchild : child ∈ refineLines cells ls) :
+    Covers (ls.reverse ++ covered) child.system := by
+  induction ls generalizing covered cells with
+  | nil =>
+      simp only [refineLines, List.foldl_nil] at hchild
+      simpa using hcovered child hchild
+  | cons l ls ih =>
+      rw [refineLines, List.foldl_cons] at hchild
+      have h := ih (covered := l :: covered)
+        (fun cell hcell ↦ mem_refineCells_covers hcovered hcell) hchild
+      simpa [List.reverse_cons, List.append_assoc] using h
+
+/-- Every final feasible sign cell contains a positive- or negative-side constraint for each
+processed arrangement line. -/
+theorem feasibleSignCells_covers {ls : List ZLine} {cell : SignCell}
+    (hcell : cell ∈ feasibleSignCells ls) : Covers ls cell.system := by
+  unfold feasibleSignCells at hcell
+  cases hbase : cellOfSystem? openUnitSquare with
+  | none => simp [hbase] at hcell
+  | some base =>
+      rw [hbase] at hcell
+      have h := mem_refineLines_covers (covered := [])
+        (fun _ _ ↦ by intro l hl; simp at hl) hcell
+      intro l hl
+      apply h l
+      simpa using hl
+
 /-- Add an integral lattice offset to a rational point. -/
 def addOffset (p : ℚ × ℚ) (z : ZPoint) : ℚ × ℚ :=
   (p.1 + z.x, p.2 + z.y)
@@ -419,5 +512,457 @@ def rasterTileFromTriangles? (ts : List ZTriangle) : Option (Finset IntegerPlane
 nonempty.  Totality and semantic correctness are intentionally deferred to the geometric bridge. -/
 def compileRaster? (P : Code.Input) : Option (Finset IntegerPlane) :=
   rasterTileFromTriangles? (normalizedTriangles P)
+
+/-! ## Exact triangle-membership bridge -/
+
+/-- Regard a rational coordinate pair as a point of the real plane. -/
+def sampleToPlane (p : ℚ × ℚ) : Plane :=
+  (p.1 : ℝ) + (p.2 : ℝ) * Complex.I
+
+/-- The real part of an embedded rational sample is its first coordinate. -/
+@[simp]
+theorem sampleToPlane_re (p : ℚ × ℚ) : (sampleToPlane p).re = p.1 := by
+  simp [sampleToPlane]
+
+/-- The imaginary part of an embedded rational sample is its second coordinate. -/
+@[simp]
+theorem sampleToPlane_im (p : ℚ × ℚ) : (sampleToPlane p).im = p.2 := by
+  simp [sampleToPlane]
+
+/-- Embedding commutes with addition of an integral lattice offset. -/
+theorem sampleToPlane_addOffset (p : ℚ × ℚ) (z : ZPoint) :
+    sampleToPlane (addOffset p z) = sampleToPlane p + integerPoint z.toIntegerPlane := by
+  apply Complex.ext <;> simp [sampleToPlane, addOffset, ZPoint.toIntegerPlane]
+
+private theorem twiceSignedArea_cyclic (a b c : Plane) :
+    twiceSignedArea b c a = twiceSignedArea a b c := by
+  simp only [twiceSignedArea]
+  ring
+
+private theorem twiceSignedArea_cyclic' (a b c : Plane) :
+    twiceSignedArea c a b = twiceSignedArea a b c := by
+  rw [twiceSignedArea_cyclic, twiceSignedArea_cyclic]
+
+private theorem convex_twiceSignedArea_nonneg (a b : Plane) :
+    Convex ℝ {p : Plane | 0 ≤ twiceSignedArea a b p} := by
+  intro x hx y hy u v hu hv huv
+  change 0 ≤ twiceSignedArea a b x at hx
+  change 0 ≤ twiceSignedArea a b y at hy
+  change 0 ≤ twiceSignedArea a b (u • x + v • y)
+  have hformula :
+      twiceSignedArea a b (u • x + v • y) =
+        u * twiceSignedArea a b x + v * twiceSignedArea a b y := by
+    simp only [twiceSignedArea, Complex.add_re, Complex.add_im, Complex.smul_re,
+      Complex.smul_im, smul_eq_mul]
+    have hv_eq : v = 1 - u := by linarith
+    rw [hv_eq]
+    ring
+  rw [hformula]
+  exact add_nonneg (mul_nonneg hu hx) (mul_nonneg hv hy)
+
+private theorem convex_twiceSignedArea_nonpos (a b : Plane) :
+    Convex ℝ {p : Plane | twiceSignedArea a b p ≤ 0} := by
+  intro x hx y hy u v hu hv huv
+  change twiceSignedArea a b x ≤ 0 at hx
+  change twiceSignedArea a b y ≤ 0 at hy
+  change twiceSignedArea a b (u • x + v • y) ≤ 0
+  have hformula :
+      twiceSignedArea a b (u • x + v • y) =
+        u * twiceSignedArea a b x + v * twiceSignedArea a b y := by
+    simp only [twiceSignedArea, Complex.add_re, Complex.add_im, Complex.smul_re,
+      Complex.smul_im, smul_eq_mul]
+    have hv_eq : v = 1 - u := by linarith
+    rw [hv_eq]
+    ring
+  rw [hformula]
+  exact add_nonpos (mul_nonpos_of_nonneg_of_nonpos hu hx)
+    (mul_nonpos_of_nonneg_of_nonpos hv hy)
+
+private theorem twiceSignedArea_nonneg_on_convexHull (a b c : Plane)
+    (harea : 0 ≤ twiceSignedArea a b c) :
+    ∀ p ∈ convexHull ℝ ({a, b, c} : Set Plane), 0 ≤ twiceSignedArea a b p := by
+  apply convexHull_min
+  · intro p hp
+    change 0 ≤ twiceSignedArea a b p
+    rcases hp with rfl | rfl | rfl
+    · simp [twiceSignedArea]
+    · simp only [twiceSignedArea]
+      ring_nf
+      exact le_rfl
+    · exact harea
+  · exact convex_twiceSignedArea_nonneg a b
+
+private theorem twiceSignedArea_nonpos_on_convexHull (a b c : Plane)
+    (harea : twiceSignedArea a b c ≤ 0) :
+    ∀ p ∈ convexHull ℝ ({a, b, c} : Set Plane), twiceSignedArea a b p ≤ 0 := by
+  apply convexHull_min
+  · intro p hp
+    change twiceSignedArea a b p ≤ 0
+    rcases hp with rfl | rfl | rfl
+    · simp [twiceSignedArea]
+    · simp only [twiceSignedArea]
+      ring_nf
+      exact le_rfl
+    · exact harea
+  · exact convex_twiceSignedArea_nonpos a b
+
+private theorem mem_convexHull_three_signs_of_mem {a b c p : Plane}
+    (hp : p ∈ convexHull ℝ ({a, b, c} : Set Plane)) :
+    (0 ≤ twiceSignedArea a b p ∧ 0 ≤ twiceSignedArea b c p ∧
+        0 ≤ twiceSignedArea c a p) ∨
+      (twiceSignedArea a b p ≤ 0 ∧ twiceSignedArea b c p ≤ 0 ∧
+        twiceSignedArea c a p ≤ 0) := by
+  by_cases harea : 0 ≤ twiceSignedArea a b c
+  · left
+    have hcyclic₁ : ({b, c, a} : Set Plane) = {a, b, c} := by
+      ext x
+      simp only [mem_insert_iff, mem_singleton_iff]
+      tauto
+    have hcyclic₂ : ({c, a, b} : Set Plane) = {a, b, c} := by
+      ext x
+      simp only [mem_insert_iff, mem_singleton_iff]
+      tauto
+    exact ⟨twiceSignedArea_nonneg_on_convexHull a b c harea p hp,
+      twiceSignedArea_nonneg_on_convexHull b c a
+        (by rwa [twiceSignedArea_cyclic]) p (by rwa [hcyclic₁]),
+      twiceSignedArea_nonneg_on_convexHull c a b
+        (by rwa [twiceSignedArea_cyclic']) p (by rwa [hcyclic₂])⟩
+  · right
+    have harea' : twiceSignedArea a b c ≤ 0 := le_of_lt (lt_of_not_ge harea)
+    have hcyclic₁ : ({b, c, a} : Set Plane) = {a, b, c} := by
+      ext x
+      simp only [mem_insert_iff, mem_singleton_iff]
+      tauto
+    have hcyclic₂ : ({c, a, b} : Set Plane) = {a, b, c} := by
+      ext x
+      simp only [mem_insert_iff, mem_singleton_iff]
+      tauto
+    exact ⟨twiceSignedArea_nonpos_on_convexHull a b c harea' p hp,
+      twiceSignedArea_nonpos_on_convexHull b c a
+        (by rwa [twiceSignedArea_cyclic]) p (by rwa [hcyclic₁]),
+      twiceSignedArea_nonpos_on_convexHull c a b
+        (by rwa [twiceSignedArea_cyclic']) p (by rwa [hcyclic₂])⟩
+
+private theorem mem_convexHull_three_of_signs {a b c p : Plane}
+    (harea : twiceSignedArea a b c ≠ 0)
+    (hsigns :
+      (0 ≤ twiceSignedArea a b p ∧ 0 ≤ twiceSignedArea b c p ∧
+          0 ≤ twiceSignedArea c a p) ∨
+        (twiceSignedArea a b p ≤ 0 ∧ twiceSignedArea b c p ≤ 0 ∧
+          twiceSignedArea c a p ≤ 0)) :
+    p ∈ convexHull ℝ ({a, b, c} : Set Plane) := by
+  have hsum :
+      twiceSignedArea a b p + twiceSignedArea b c p + twiceSignedArea c a p =
+        twiceSignedArea a b c := by
+    simp only [twiceSignedArea]
+    ring
+  rcases hsigns with hnonneg | hnonpos
+  · have harea_pos : 0 < twiceSignedArea a b c := by
+      have harea_nonneg : 0 ≤ twiceSignedArea a b c := by linarith
+      exact lt_of_le_of_ne harea_nonneg harea.symm
+    let w : Fin 3 → ℝ := ![
+      twiceSignedArea b c p / twiceSignedArea a b c,
+      twiceSignedArea c a p / twiceSignedArea a b c,
+      twiceSignedArea a b p / twiceSignedArea a b c]
+    let z : Fin 3 → Plane := ![a, b, c]
+    refine mem_convexHull_of_exists_fintype w z ?_ ?_ ?_ ?_
+    · intro i
+      fin_cases i
+      · exact div_nonneg hnonneg.2.1 harea_pos.le
+      · exact div_nonneg hnonneg.2.2 harea_pos.le
+      · exact div_nonneg hnonneg.1 harea_pos.le
+    · rw [Fin.sum_univ_three]
+      simp only [Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val, w]
+      rw [← add_div, ← add_div]
+      have hsum' :
+          twiceSignedArea b c p + twiceSignedArea c a p + twiceSignedArea a b p =
+            twiceSignedArea a b c := by linarith [hsum]
+      rw [hsum', div_self harea]
+    · intro i
+      fin_cases i <;> simp [z]
+    · apply Complex.ext
+      · rw [Fin.sum_univ_three]
+        simp [w, z, Complex.add_re]
+        field_simp [harea]
+        simp only [twiceSignedArea]
+        ring
+      · rw [Fin.sum_univ_three]
+        simp [w, z, Complex.add_im]
+        field_simp [harea]
+        simp only [twiceSignedArea]
+        ring
+  · have harea_neg : twiceSignedArea a b c < 0 := by
+      have harea_nonpos : twiceSignedArea a b c ≤ 0 := by linarith
+      exact lt_of_le_of_ne harea_nonpos harea
+    let w : Fin 3 → ℝ := ![
+      twiceSignedArea b c p / twiceSignedArea a b c,
+      twiceSignedArea c a p / twiceSignedArea a b c,
+      twiceSignedArea a b p / twiceSignedArea a b c]
+    let z : Fin 3 → Plane := ![a, b, c]
+    refine mem_convexHull_of_exists_fintype w z ?_ ?_ ?_ ?_
+    · intro i
+      fin_cases i
+      · exact div_nonneg_of_nonpos hnonpos.2.1 harea_neg.le
+      · exact div_nonneg_of_nonpos hnonpos.2.2 harea_neg.le
+      · exact div_nonneg_of_nonpos hnonpos.1 harea_neg.le
+    · rw [Fin.sum_univ_three]
+      simp only [Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val, w]
+      rw [← add_div, ← add_div]
+      have hsum' :
+          twiceSignedArea b c p + twiceSignedArea c a p + twiceSignedArea a b p =
+            twiceSignedArea a b c := by linarith [hsum]
+      rw [hsum', div_self harea]
+    · intro i
+      fin_cases i <;> simp [z]
+    · apply Complex.ext
+      · rw [Fin.sum_univ_three]
+        simp [w, z, Complex.add_re]
+        field_simp [harea]
+        simp only [twiceSignedArea]
+        ring
+      · rw [Fin.sum_univ_three]
+        simp [w, z, Complex.add_im]
+        field_simp [harea]
+        simp only [twiceSignedArea]
+        ring
+
+/-- A point belongs to a nondegenerate closed triangle exactly when its three oriented edge areas
+are all weakly nonnegative or all weakly nonpositive. -/
+theorem mem_convexHull_three_iff_signs {a b c p : Plane}
+    (harea : twiceSignedArea a b c ≠ 0) :
+    p ∈ convexHull ℝ ({a, b, c} : Set Plane) ↔
+      (0 ≤ twiceSignedArea a b p ∧ 0 ≤ twiceSignedArea b c p ∧
+          0 ≤ twiceSignedArea c a p) ∨
+        (twiceSignedArea a b p ≤ 0 ∧ twiceSignedArea b c p ≤ 0 ∧
+          twiceSignedArea c a p ≤ 0) := by
+  constructor
+  · exact mem_convexHull_three_signs_of_mem
+  · exact mem_convexHull_three_of_signs harea
+
+/-- Embedding an integral point through rational coordinates agrees with its direct embedding. -/
+@[simp]
+theorem sampleToPlane_zpointQ (p : ZPoint) :
+    sampleToPlane (zpointQ p) = p.toPlane := by
+  apply Complex.ext <;> simp [sampleToPlane, zpointQ, ZPoint.toPlane]
+
+/-- Rational twice-area casts exactly to the real-plane signed-area expression. -/
+theorem twiceAreaQ_cast (a b p : ℚ × ℚ) :
+    (twiceAreaQ a b p : ℝ) =
+      twiceSignedArea (sampleToPlane a) (sampleToPlane b) (sampleToPlane p) := by
+  simp only [twiceAreaQ, twiceSignedArea, sampleToPlane_re, sampleToPlane_im]
+  push_cast
+  rfl
+
+/-- The rational orientation of integral endpoints casts to their real-plane orientation. -/
+theorem twiceAreaQ_zpointQ_cast (a b : ZPoint) (p : ℚ × ℚ) :
+    (twiceAreaQ (zpointQ a) (zpointQ b) p : ℝ) =
+      twiceSignedArea a.toPlane b.toPlane (sampleToPlane p) := by
+  rw [twiceAreaQ_cast, sampleToPlane_zpointQ, sampleToPlane_zpointQ]
+
+/-- The executable orientation test agrees with convex-hull membership for a nondegenerate
+integer triangle. -/
+theorem pointInTriangle_eq_true_iff_mem_carrier {p : ℚ × ℚ} {t : ZTriangle}
+    (harea : twiceAreaQ (zpointQ t.a) (zpointQ t.b) (zpointQ t.c) ≠ 0) :
+    pointInTriangle p t = true ↔ sampleToPlane p ∈ t.carrier := by
+  rw [ZTriangle.carrier, mem_convexHull_three_iff_signs]
+  · simp only [pointInTriangle]
+    simp only [decide_eq_true_eq]
+    rw [← twiceAreaQ_zpointQ_cast, ← twiceAreaQ_zpointQ_cast,
+      ← twiceAreaQ_zpointQ_cast]
+    norm_cast
+  · rw [← sampleToPlane_zpointQ t.c, ← twiceAreaQ_zpointQ_cast]
+    exact_mod_cast harea
+
+/-- Away from zero, the weak common-sign test is equivalent to the strict common-sign test. -/
+theorem weak_signs_iff_strict_signs_of_ne {α : Type*} [LinearOrder α] [Zero α]
+    {s₀ s₁ s₂ : α} (h₀ : s₀ ≠ 0) (h₁ : s₁ ≠ 0) (h₂ : s₂ ≠ 0) :
+    ((0 ≤ s₀ ∧ 0 ≤ s₁ ∧ 0 ≤ s₂) ∨ (s₀ ≤ 0 ∧ s₁ ≤ 0 ∧ s₂ ≤ 0)) ↔
+      ((0 < s₀ ∧ 0 < s₁ ∧ 0 < s₂) ∨ (s₀ < 0 ∧ s₁ < 0 ∧ s₂ < 0)) := by
+  constructor
+  · rintro (hpos | hneg)
+    · left
+      exact ⟨lt_of_le_of_ne hpos.1 h₀.symm,
+        lt_of_le_of_ne hpos.2.1 h₁.symm, lt_of_le_of_ne hpos.2.2 h₂.symm⟩
+    · right
+      exact ⟨lt_of_le_of_ne hneg.1 h₀,
+        lt_of_le_of_ne hneg.2.1 h₁, lt_of_le_of_ne hneg.2.2 h₂⟩
+  · rintro (hpos | hneg)
+    · exact Or.inl ⟨hpos.1.le, hpos.2.1.le, hpos.2.2.le⟩
+    · exact Or.inr ⟨hneg.1.le, hneg.2.1.le, hneg.2.2.le⟩
+
+/-- Away from triangle edges, the executable triangle test is the strict common-sign test. -/
+theorem pointInTriangle_eq_true_iff_strict_signs {p : ℚ × ℚ} {t : ZTriangle}
+    (h₀ : twiceAreaQ (zpointQ t.a) (zpointQ t.b) p ≠ 0)
+    (h₁ : twiceAreaQ (zpointQ t.b) (zpointQ t.c) p ≠ 0)
+    (h₂ : twiceAreaQ (zpointQ t.c) (zpointQ t.a) p ≠ 0) :
+    pointInTriangle p t = true ↔
+      ((0 < twiceAreaQ (zpointQ t.a) (zpointQ t.b) p ∧
+          0 < twiceAreaQ (zpointQ t.b) (zpointQ t.c) p ∧
+          0 < twiceAreaQ (zpointQ t.c) (zpointQ t.a) p) ∨
+        (twiceAreaQ (zpointQ t.a) (zpointQ t.b) p < 0 ∧
+          twiceAreaQ (zpointQ t.b) (zpointQ t.c) p < 0 ∧
+          twiceAreaQ (zpointQ t.c) (zpointQ t.a) p < 0)) := by
+  simp only [pointInTriangle, decide_eq_true_eq]
+  exact weak_signs_iff_strict_signs_of_ne h₀ h₁ h₂
+
+/-- A translated integral edge-line evaluation is the negative rational orientation area. -/
+theorem edgeLine_eval_eq_neg_twiceAreaQ (z a b : ZPoint) (p : ℚ × ℚ) :
+    (edgeLine z a b).eval p =
+      -twiceAreaQ (zpointQ a) (zpointQ b) (addOffset p z) := by
+  simp only [edgeLine, ZLine.eval, twiceAreaQ, zpointQ, addOffset]
+  push_cast
+  ring
+
+/-- Evaluate the same integral affine line on an arbitrary real-plane point. -/
+def ZLine.evalPlane (l : ZLine) (p : Plane) : ℝ :=
+  l.A * p.re + l.B * p.im + l.C
+
+/-- Real evaluation at an embedded rational sample is the cast of rational evaluation. -/
+theorem ZLine.evalPlane_sampleToPlane (l : ZLine) (p : ℚ × ℚ) :
+    l.evalPlane (sampleToPlane p) = (l.eval p : ℝ) := by
+  simp only [ZLine.evalPlane, ZLine.eval, sampleToPlane_re, sampleToPlane_im]
+  push_cast
+  rfl
+
+/-- A translated edge-line evaluation is the negative real-plane signed area. -/
+theorem edgeLine_evalPlane_eq_neg_twiceSignedArea (z a b : ZPoint) (p : Plane) :
+    (edgeLine z a b).evalPlane p =
+      -twiceSignedArea a.toPlane b.toPlane (p + integerPoint z.toIntegerPlane) := by
+  rw [z.integerPoint_toIntegerPlane]
+  simp [ZLine.evalPlane, edgeLine, twiceSignedArea, ZPoint.toPlane]
+  ring
+
+/-- Two nonzero real numbers lie on the same strict side of zero. -/
+def SameStrictSign (x y : ℝ) : Prop :=
+  (0 < x ∧ 0 < y) ∨ (x < 0 ∧ y < 0)
+
+namespace SameStrictSign
+
+/-- The left member of a same-strict-sign pair is nonzero. -/
+theorem left_ne {x y : ℝ} (h : SameStrictSign x y) : x ≠ 0 := by
+  rcases h with h | h
+  · exact ne_of_gt h.1
+  · exact ne_of_lt h.1
+
+/-- The right member of a same-strict-sign pair is nonzero. -/
+theorem right_ne {x y : ℝ} (h : SameStrictSign x y) : y ≠ 0 := by
+  rcases h with h | h
+  · exact ne_of_gt h.2
+  · exact ne_of_lt h.2
+
+/-- Same-strict-sign numbers are positive simultaneously. -/
+theorem pos_iff {x y : ℝ} (h : SameStrictSign x y) : 0 < x ↔ 0 < y := by
+  rcases h with h | h
+  · exact iff_of_true h.1 h.2
+  · constructor <;> intro hpos <;> linarith
+
+/-- Same-strict-sign numbers are negative simultaneously. -/
+theorem neg_iff {x y : ℝ} (h : SameStrictSign x y) : x < 0 ↔ y < 0 := by
+  rcases h with h | h
+  · constructor <;> intro hneg <;> linarith
+  · exact iff_of_true h.1 h.2
+
+/-- Simultaneous negation preserves the same-strict-sign relation. -/
+theorem neg_iff_neg {x y : ℝ} :
+    SameStrictSign (-x) (-y) ↔ SameStrictSign x y := by
+  simp only [SameStrictSign, neg_pos, neg_lt_zero]
+  tauto
+
+end SameStrictSign
+
+/-- Any two rational points satisfying a covered strict system lie on the same strict side of
+every covered line. -/
+theorem sameStrictSign_eval_of_satisfies {ls : List ZLine}
+    {qs : List StrictInequality} {p q : ℚ × ℚ} (hcover : Covers ls qs)
+    (hp : SatisfiesAll qs p) (hq : SatisfiesAll qs q) {l : ZLine} (hl : l ∈ ls) :
+    SameStrictSign (l.eval p : ℝ) (l.eval q : ℝ) := by
+  rcases hcover l hl with hneg | hpos
+  · right
+    have hpneg := (sideConstraint_false_satisfies_iff l p).mp (hp _ hneg)
+    have hqneg := (sideConstraint_false_satisfies_iff l q).mp (hq _ hneg)
+    exact ⟨by exact_mod_cast hpneg, by exact_mod_cast hqneg⟩
+  · left
+    have hppos := (sideConstraint_true_satisfies_iff l p).mp (hp _ hpos)
+    have hqpos := (sideConstraint_true_satisfies_iff l q).mp (hq _ hpos)
+    exact ⟨by exact_mod_cast hppos, by exact_mod_cast hqpos⟩
+
+/-- Any two rational points satisfying one final feasible cell have matching strict signs on
+every processed line. -/
+theorem sameStrictSign_eval_of_cell_system {ls : List ZLine} {cell : SignCell}
+    {p q : ℚ × ℚ} (hcell : cell ∈ feasibleSignCells ls)
+    (hp : SatisfiesAll cell.system p) (hq : SatisfiesAll cell.system q)
+    {l : ZLine} (hl : l ∈ ls) :
+    SameStrictSign (l.eval p : ℝ) (l.eval q : ℝ) :=
+  sameStrictSign_eval_of_satisfies (feasibleSignCells_covers hcell) hp hq hl
+
+/-- The solver sample and every represented point have matching strict signs on every processed
+line. -/
+theorem sameStrictSign_sample_of_cell {ls : List ZLine} {cell : SignCell}
+    {p : ℚ × ℚ} (hcell : cell ∈ feasibleSignCells ls)
+    (hp : SatisfiesAll cell.system p) {l : ZLine} (hl : l ∈ ls) :
+    SameStrictSign (l.eval cell.sample : ℝ) (l.eval p : ℝ) :=
+  sameStrictSign_eval_of_cell_system hcell (feasibleSignCells_sound hcell) hp hl
+
+/-- Two points with matching strict signs on all three edges have equivalent membership in a
+nondegenerate triangle. -/
+theorem mem_convexHull_three_iff_of_sameStrictSign {a b c u v : Plane}
+    (harea : twiceSignedArea a b c ≠ 0)
+    (h₀ : SameStrictSign (twiceSignedArea a b u) (twiceSignedArea a b v))
+    (h₁ : SameStrictSign (twiceSignedArea b c u) (twiceSignedArea b c v))
+    (h₂ : SameStrictSign (twiceSignedArea c a u) (twiceSignedArea c a v)) :
+    u ∈ convexHull ℝ ({a, b, c} : Set Plane) ↔
+      v ∈ convexHull ℝ ({a, b, c} : Set Plane) := by
+  rw [mem_convexHull_three_iff_signs harea, mem_convexHull_three_iff_signs harea,
+    weak_signs_iff_strict_signs_of_ne h₀.left_ne h₁.left_ne h₂.left_ne,
+    weak_signs_iff_strict_signs_of_ne h₀.right_ne h₁.right_ne h₂.right_ne,
+    h₀.pos_iff, h₁.pos_iff, h₂.pos_iff, h₀.neg_iff, h₁.neg_iff, h₂.neg_iff]
+
+/-- Matching strict translated-edge signs transfer exact triangle membership from a real point
+to the executable rational orientation test. -/
+theorem mem_carrier_iff_pointInTriangle_of_same_strict_edge_signs
+    {u : Plane} {p : ℚ × ℚ} {z : ZPoint} {t : ZTriangle}
+    (harea : twiceAreaQ (zpointQ t.a) (zpointQ t.b) (zpointQ t.c) ≠ 0)
+    (h₀ : SameStrictSign ((edgeLine z t.a t.b).evalPlane u)
+      ((edgeLine z t.a t.b).eval p : ℝ))
+    (h₁ : SameStrictSign ((edgeLine z t.b t.c).evalPlane u)
+      ((edgeLine z t.b t.c).eval p : ℝ))
+    (h₂ : SameStrictSign ((edgeLine z t.c t.a).evalPlane u)
+      ((edgeLine z t.c t.a).eval p : ℝ)) :
+    u + integerPoint z.toIntegerPlane ∈ t.carrier ↔
+      pointInTriangle (addOffset p z) t = true := by
+  have harea_real : twiceSignedArea t.a.toPlane t.b.toPlane t.c.toPlane ≠ 0 := by
+    rw [← sampleToPlane_zpointQ t.c, ← twiceAreaQ_zpointQ_cast]
+    exact_mod_cast harea
+  have hedge₀u := edgeLine_evalPlane_eq_neg_twiceSignedArea z t.a t.b u
+  have hedge₁u := edgeLine_evalPlane_eq_neg_twiceSignedArea z t.b t.c u
+  have hedge₂u := edgeLine_evalPlane_eq_neg_twiceSignedArea z t.c t.a u
+  have hedge₀p := edgeLine_evalPlane_eq_neg_twiceSignedArea z t.a t.b (sampleToPlane p)
+  have hedge₁p := edgeLine_evalPlane_eq_neg_twiceSignedArea z t.b t.c (sampleToPlane p)
+  have hedge₂p := edgeLine_evalPlane_eq_neg_twiceSignedArea z t.c t.a (sampleToPlane p)
+  rw [← sampleToPlane_addOffset] at hedge₀p hedge₁p hedge₂p
+  have h₀' : SameStrictSign
+      (twiceSignedArea t.a.toPlane t.b.toPlane (u + integerPoint z.toIntegerPlane))
+      (twiceSignedArea t.a.toPlane t.b.toPlane (sampleToPlane (addOffset p z))) := by
+    rw [← SameStrictSign.neg_iff_neg]
+    rw [← hedge₀u, ← hedge₀p, ZLine.evalPlane_sampleToPlane]
+    exact h₀
+  have h₁' : SameStrictSign
+      (twiceSignedArea t.b.toPlane t.c.toPlane (u + integerPoint z.toIntegerPlane))
+      (twiceSignedArea t.b.toPlane t.c.toPlane (sampleToPlane (addOffset p z))) := by
+    rw [← SameStrictSign.neg_iff_neg]
+    rw [← hedge₁u, ← hedge₁p, ZLine.evalPlane_sampleToPlane]
+    exact h₁
+  have h₂' : SameStrictSign
+      (twiceSignedArea t.c.toPlane t.a.toPlane (u + integerPoint z.toIntegerPlane))
+      (twiceSignedArea t.c.toPlane t.a.toPlane (sampleToPlane (addOffset p z))) := by
+    rw [← SameStrictSign.neg_iff_neg]
+    rw [← hedge₂u, ← hedge₂p, ZLine.evalPlane_sampleToPlane]
+    exact h₂
+  calc
+    u + integerPoint z.toIntegerPlane ∈ t.carrier ↔
+        sampleToPlane (addOffset p z) ∈ t.carrier := by
+      exact mem_convexHull_three_iff_of_sameStrictSign harea_real h₀' h₁' h₂'
+    _ ↔ pointInTriangle (addOffset p z) t = true :=
+      (pointInTriangle_eq_true_iff_mem_carrier harea).symm
 
 end Tiling.RationalPolygonal.Raw.Compiler
