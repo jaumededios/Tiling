@@ -1,0 +1,13 @@
+import GreenfeldTaoSolution
+
+/-!
+A quick trust audit for the six comparator theorems. The official Comparator run additionally
+checks that their statements are exactly the Mathlib-only challenge statements.
+-/
+
+#print axioms GreenfeldTaoComparator.level_one_tilings_are_weakly_periodic
+#print axioms GreenfeldTaoComparator.tilings_have_finitely_many_period_directions
+#print axioms GreenfeldTaoComparator.higher_level_tilings_need_not_be_weakly_periodic
+#print axioms GreenfeldTaoComparator.tileable_periodic_sets_have_periodic_tilings
+#print axioms GreenfeldTaoComparator.planar_tileability_is_decidable
+#print axioms GreenfeldTaoComparator.structure_of_periodic_representation_count

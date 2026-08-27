@@ -72,6 +72,17 @@ def WeaklyPeriodic (A : Set Plane) : Prop :=
     Set.PairwiseDisjoint Set.univ part ∧
     (⋃ i, part i) = A
 
+/-- The coset `x + Λ` of a sublattice `Λ`. -/
+def latticeCoset (Λ : AddSubgroup Plane) (x : Plane) : Set Plane :=
+  {y | y - x ∈ Λ}
+
+/-- On every coset of `Λ`, membership in `A` is preserved by at least one vector from the finite
+family `period`. The chosen vector may depend on the coset. -/
+def PeriodicOnEachCoset (A : Set Plane) (Λ : AddSubgroup Plane)
+    {m : ℕ} (period : Fin m → Plane) : Prop :=
+  ∀ x, ∃ j, ∀ y,
+    y + period j ∈ A ∩ latticeCoset Λ x ↔ y ∈ A ∩ latticeCoset Λ x
+
 /-! ## 3. The planar structure theorems -/
 
 /-- **Greenfeld--Tao Theorem 1.3(i), qualitative form.**
@@ -82,6 +93,20 @@ theorem level_one_tilings_are_weakly_periodic
     {F : Finset Plane} {A E : Set Plane}
     (hF : F.Nonempty) (hE : Periodic E) (hTiles : Tiles F A E) :
     WeaklyPeriodic A := by
+  sorry
+
+/-- **Greenfeld--Tao Theorem 1.4, qualitative form.**
+
+After translating the tile so that it contains the origin, every level-one tiling of a periodic
+target is periodic along at most `|F| - 1` directions, coset by coset. The production theorem also
+gives explicit bounds for the sublattice and periods; they are deliberately omitted here. -/
+theorem tilings_have_finitely_many_period_directions
+    {F : Finset Plane} {A E : Set Plane}
+    (hzero : 0 ∈ F) (hcard : 1 < F.card)
+    (hE : Periodic E) (hTiles : Tiles F A E) :
+    ∃ (m : ℕ) (period : Fin m → Plane) (Λ : AddSubgroup Plane),
+      0 < m ∧ m ≤ F.card - 1 ∧
+      (∀ j, period j ≠ 0) ∧ PeriodicOnEachCoset A Λ period := by
   sorry
 
 /-- **Greenfeld--Tao Theorem 1.3(ii).**
