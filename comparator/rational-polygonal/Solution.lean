@@ -1,11 +1,4 @@
-import Mathlib.Analysis.Complex.Convex
-import Mathlib.Analysis.Convex.Extreme
-import Mathlib.Analysis.Convex.Measure
-import Mathlib.Analysis.CStarAlgebra.Classes
-import Mathlib.LinearAlgebra.Complex.FiniteDimensional
-import Mathlib.MeasureTheory.Group.Pointwise
-import Mathlib.MeasureTheory.Measure.AEDisjoint
-import Mathlib.MeasureTheory.Measure.Lebesgue.Complex
+import Mathlib
 import Tiling.RationalPolygonal.Main
 
 /-!
@@ -25,93 +18,38 @@ open scoped Pointwise
 
 namespace DeDiosGreenfeldComparator
 
-universe u v
-
-/-! ## 1. Prototiles, packing, covering, and tiling -/
-
-/-- A translational prototile is a nonempty measurable subset of the ambient group.
-
-The label of a tile is deliberately *not* stored here.  Labels live in `PrototileFamily`, so two
-geometrically equal supports may still represent differently decorated prototiles. -/
-structure Prototile (G : Type u) [MeasurableSpace G] where
-  /-- The region occupied before translation. -/
-  support : Set G
-  /-- Measurability makes the almost-disjointness and covering conditions meaningful. -/
-  measurableSet_support : MeasurableSet support
-  /-- Empty sets are excluded from the mathematical notion of a tile. -/
-  nonempty_support : support.Nonempty
-
-/-- A family of prototiles indexed by a label type `ι`. -/
-abbrev PrototileFamily (G : Type u) (ι : Type v) [MeasurableSpace G] :=
-  ι → Prototile G
-
-/-- A placement records a translation vector and the label of the prototile being translated. -/
-abbrev Placement (G : Type u) (ι : Type v) := G × ι
-
-/-- The region occupied by a placed prototile. -/
-def placedTile {G : Type u} {ι : Type v} [NormedAddCommGroup G] [MeasurableSpace G]
-    (F : PrototileFamily G ι) (p : Placement G ι) : Set G :=
-  p.1 +ᵥ (F p.2).support
-
-/-- Distinct placements form a packing when their occupied regions overlap only on null sets. -/
-def IsPacking {G : Type u} {ι : Type v} [NormedAddCommGroup G] [MeasurableSpace G]
-    (μ : Measure G) (F : PrototileFamily G ι) (A : Set (Placement G ι)) : Prop :=
-  A.Pairwise (AEDisjoint μ on placedTile F)
-
-/-- The placements cover when almost every ambient point lies in some placed prototile. -/
-def IsCover {G : Type u} {ι : Type v} [NormedAddCommGroup G] [MeasurableSpace G]
-    (μ : Measure G) (F : PrototileFamily G ι) (A : Set (Placement G ι)) : Prop :=
-  ∀ᵐ x ∂μ, x ∈ ⋃ p : A, placedTile F p
-
-/-- A measurable translational tiling is a countable packing which covers almost everywhere.
-
-Countability is part of the definition because it is the standard locally countable measurable
-tiling model and makes countable-union measure arguments available. -/
-structure IsTiling {G : Type u} {ι : Type v} [NormedAddCommGroup G] [MeasurableSpace G]
-    (μ : Measure G) (F : PrototileFamily G ι) (A : Set (Placement G ι)) : Prop where
-  /-- Only countably many translated copies are used. -/
-  countable : A.Countable
-  /-- Distinct copies have null overlap. -/
-  isPacking : IsPacking μ F A
-  /-- Their union has full measure. -/
-  isCover : IsCover μ F A
-
-/-! ### The monotile specialization used in the theorem -/
-
-/-- Packing by translates of one set `Ω`. -/
-def IsTranslationPacking {G : Type u} [NormedAddCommGroup G] [MeasurableSpace G]
-    (μ : Measure G) (Ω T : Set G) : Prop :=
-  T.Pairwise (AEDisjoint μ on fun t ↦ t +ᵥ Ω)
-
-/-- Almost-everywhere covering by translates of one set `Ω`. -/
-def IsTranslationCover {G : Type u} [NormedAddCommGroup G] [MeasurableSpace G]
-    (μ : Measure G) (Ω T : Set G) : Prop :=
-  ∀ᵐ x ∂μ, x ∈ ⋃ t : T, (t : G) +ᵥ Ω
-
-/-- A translation set `T` tiles the ambient measured group by copies of the monotile `Ω`. -/
-structure TranslationTiling {G : Type u} [NormedAddCommGroup G] [MeasurableSpace G]
-    (μ : Measure G) (Ω T : Set G) : Prop where
-  /-- The translation set is countable. -/
-  countable : T.Countable
-  /-- Distinct translates overlap only on a null set. -/
-  isPacking : IsTranslationPacking μ Ω T
-  /-- The translates cover almost every point. -/
-  isCover : IsTranslationCover μ Ω T
-
-/-! ## 1.1. Periodic translation sets -/
+/-! ## 1. Translational tilings of the plane -/
 
 /-- The real plane, represented by `ℂ` with its usual real two-dimensional geometry. -/
 abbrev Plane := ℂ
+
+/-- The translates `t + Ω`, for `t ∈ T`, form a packing: two distinct copies of the tile `Ω`
+overlap only on a set of Lebesgue measure zero. -/
+def Packing (Ω T : Set Plane) : Prop :=
+  ∀ ⦃s⦄, s ∈ T → ∀ ⦃t⦄, t ∈ T → s ≠ t →
+    volume ((s +ᵥ Ω) ∩ (t +ᵥ Ω)) = 0
+
+/-- The translates of `Ω` by `T` cover almost every point of the plane. -/
+def Covering (Ω T : Set Plane) : Prop :=
+  ∀ᵐ x ∂volume, ∃ t ∈ T, x ∈ t +ᵥ Ω
+
+/-- The set `T` is a translational tiling of the plane by the single tile `Ω`: `T` is countable,
+its translates of `Ω` form a packing, and those translates cover almost every point. -/
+def Tiling (Ω T : Set Plane) : Prop :=
+  T.Countable ∧ Packing Ω T ∧ Covering Ω T
+
+/-! ## 1.1. Periodic translation sets -/
 
 /-- Membership in `A` is unchanged after translation by `h`. -/
 def PeriodicBy (A : Set Plane) (h : Plane) : Prop :=
   ∀ x, x + h ∈ A ↔ x ∈ A
 
-/-- A planar translation set is doubly periodic when it has two linearly independent real
-periods.  Linear independence rules out both a zero period and two collinear periods. -/
+/-- A planar translation set is doubly periodic when it has two nonparallel periods.
+
+The displayed determinant is nonzero exactly when the two vectors are linearly independent. -/
 def Periodic (A : Set Plane) : Prop :=
   ∃ h₁ h₂ : Plane,
-    LinearIndependent ℝ ![h₁, h₂] ∧ PeriodicBy A h₁ ∧ PeriodicBy A h₂
+    h₁.re * h₂.im - h₁.im * h₂.re ≠ 0 ∧ PeriodicBy A h₁ ∧ PeriodicBy A h₂
 
 /-! ## 2. Polygonal tiles -/
 
@@ -124,14 +62,15 @@ def IsTriangle (s : Set Plane) : Prop :=
   ∃ a b c : Plane, twiceSignedArea a b c ≠ 0 ∧ s = convexHull ℝ {a, b, c}
 
 /-- A finite decomposition of `Ω` into triangles whose distinct interiors overlap only on a
-null set.  Exact union is used for the closed representatives. -/
+null set. Exact union is used for the closed representatives. -/
 structure Triangulation (Ω : Set Plane) where
   /-- The finitely many triangular pieces. -/
   pieces : Finset (Set Plane)
   /-- Every piece is a nondegenerate triangle. -/
   isTriangle : ∀ t ∈ pieces, IsTriangle t
   /-- Distinct triangles intersect only on a null set. -/
-  pairwiseAEDisjoint : (pieces : Set (Set Plane)).Pairwise (AEDisjoint volume)
+  nullOverlap : ∀ ⦃s⦄, s ∈ pieces → ∀ ⦃t⦄, t ∈ pieces → s ≠ t →
+    volume (s ∩ t) = 0
   /-- The pieces have union exactly `Ω`. -/
   sUnion_eq : ⋃₀ (pieces : Set (Set Plane)) = Ω
 
@@ -143,7 +82,7 @@ def Polygonal (Ω : Set Plane) : Prop :=
 /-- The intrinsic vertices of a polygonal set.
 
 A point is intrinsic when every triangulation sees it as an extreme point of one of its triangle
-pieces.  Quantifying over every triangulation makes this independent of arbitrary added diagonals
+pieces. Quantifying over every triangulation makes this independent of arbitrary added diagonals
 or subdivisions. -/
 def intrinsicVertices (Ω : Set Plane) : Set Plane :=
   {x | ∀ triangulation : Triangulation Ω,
@@ -157,8 +96,8 @@ def IsIntegerPoint (z : Plane) : Prop :=
 
 /-- A translation-invariant common-denominator presentation of a rational polygon.
 
-The chosen `anchor` is an intrinsic vertex.  After moving it to the origin, multiplication by one
-positive natural number sends every intrinsic vertex into `ℤ²`.  This is equivalent to saying
+The chosen `anchor` is an intrinsic vertex. After moving it to the origin, multiplication by one
+positive natural number sends every intrinsic vertex into `ℤ²`. This is equivalent to saying
 that every difference of two polygon vertices has rational coordinates, but records the common
 denominator needed by the normalization argument. -/
 def RationalPolygon (Ω : Set Plane) : Prop :=
@@ -184,7 +123,9 @@ def toProductionTriangulation {Ω : Set Plane} (τ : Triangulation Ω) :
     intro t ht
     simpa [IsTriangle, twiceSignedArea, Tiling.IsTriangle, Tiling.twiceSignedArea] using
       τ.isTriangle t ht
-  pairwiseAEDisjoint := τ.pairwiseAEDisjoint
+  pairwiseAEDisjoint := by
+    intro s hs t ht hst
+    exact τ.nullOverlap hs ht hst
   sUnion_eq := τ.sUnion_eq
 
 /-- Read a production triangulation using the comparator's independent structure. -/
@@ -195,7 +136,9 @@ def ofProductionTriangulation {Ω : Set Plane} (τ : Tiling.Triangulation Ω) :
     intro t ht
     simpa [IsTriangle, twiceSignedArea, Tiling.IsTriangle, Tiling.twiceSignedArea] using
       τ.isTriangle t ht
-  pairwiseAEDisjoint := τ.pairwiseAEDisjoint
+  nullOverlap := by
+    intro s hs t ht hst
+    exact τ.pairwiseAEDisjoint hs ht hst
   sUnion_eq := τ.sUnion_eq
 
 /-- The independently defined intrinsic vertices are exactly the production vertex set.
@@ -230,33 +173,30 @@ theorem production_isIntegerPoint_of_isIntegerPoint {z : Plane}
 /-- Convert the comparator's direct monotile tiling relation to the unit-labelled production
 relation. -/
 theorem toProductionTiling (K : Tiling.RationalPolygonal.PolygonalRegion)
-    {T : Set Plane} (hT : TranslationTiling volume K.support T) :
+    {T : Set Plane} (hT : Tiling K.support T) :
     K.Tiles T := by
   refine
-    { countable := K.placements_countable hT.countable
+    { countable := K.placements_countable hT.1
       isPacking := ?_
       isCover := ?_ }
   · intro p hp q hq hpq
-    apply hT.isPacking hp hq
+    apply hT.2.1 hp hq
     intro hpqfst
     apply hpq
     apply Prod.ext
     · exact hpqfst
     · exact Subsingleton.elim _ _
-  · filter_upwards [hT.isCover] with x hx
-    obtain ⟨t, hxt⟩ := Set.mem_iUnion.mp hx
+  · filter_upwards [hT.2.2] with x hx
+    obtain ⟨t, ht, hxt⟩ := hx
     apply Set.mem_iUnion.mpr
-    refine ⟨⟨((t : Plane), ()), t.property⟩, ?_⟩
+    refine ⟨⟨(t, ()), ht⟩, ?_⟩
     exact hxt
 
 /-- Convert a production monotile tiling back to the direct comparator relation. -/
 theorem ofProductionTiling (K : Tiling.RationalPolygonal.PolygonalRegion)
     {T : Set Plane} (hT : K.Tiles T) :
-    TranslationTiling volume K.support T := by
-  refine
-    { countable := hT.countable
-      isPacking := ?_
-      isCover := ?_ }
+    Tiling K.support T := by
+  refine ⟨hT.countable, ?_, ?_⟩
   · intro s hs t ht hst
     have hplacements :
         AEDisjoint volume
@@ -268,9 +208,37 @@ theorem ofProductionTiling (K : Tiling.RationalPolygonal.PolygonalRegion)
     exact hplacements
   · filter_upwards [hT.isCover] with x hx
     obtain ⟨p, hxp⟩ := Set.mem_iUnion.mp hx
-    apply Set.mem_iUnion.mpr
-    refine ⟨⟨p.1.1, p.property⟩, ?_⟩
-    exact hxp
+    exact ⟨p.1.1, p.property, hxp⟩
+
+/-- Translate the production library's linear-independence formulation of double periodicity into
+the nonzero-determinant formulation displayed in the challenge. -/
+theorem periodic_of_production {A : Set Plane}
+    (hA : Tiling.RationalPolygonal.DoublyPeriodic A) : Periodic A := by
+  obtain ⟨h₁, h₂, hlinear, hperiod₁, hperiod₂⟩ := hA
+  refine ⟨h₁, h₂, ?_, hperiod₁, hperiod₂⟩
+  rw [linearIndependent_fin2] at hlinear
+  obtain ⟨h₂ne, hnotMultiple⟩ := hlinear
+  intro hdet
+  by_cases hre : h₂.re = 0
+  · have him : h₂.im ≠ 0 := by
+      intro him
+      apply h₂ne
+      apply Complex.ext <;> simp [hre, him]
+    have h₁re : h₁.re = 0 := by
+      have hdet' := hdet
+      rw [hre, mul_zero, sub_zero] at hdet'
+      exact (mul_eq_zero.mp hdet').resolve_right him
+    apply hnotMultiple (h₁.im / h₂.im)
+    apply Complex.ext
+    · simp [hre, h₁re]
+    · simp [div_mul_cancel₀ _ him]
+  · apply hnotMultiple (h₁.re / h₂.re)
+    apply Complex.ext
+    · simp [div_mul_cancel₀ _ hre]
+    · simp only [Complex.smul_im, smul_eq_mul]
+      rw [div_mul_eq_mul_div, div_eq_iff hre]
+      change h₁.re * h₂.im = h₁.im * h₂.re
+      exact sub_eq_zero.mp hdet
 
 /-! ## The theorem bridge -/
 
@@ -308,12 +276,12 @@ region, applies paper Theorem 1.1, and converts the returned tiling back to the 
 Mathlib-only vocabulary. -/
 theorem periodic_tiling_of_rational_polygon
     (Ω : Set Plane) (hΩ : RationalPolygon Ω) :
-    (∃ T : Set Plane, TranslationTiling volume Ω T) →
-      ∃ T : Set Plane, Periodic T ∧ TranslationTiling volume Ω T := by
+    (∃ T : Set Plane, Tiling Ω T) →
+      ∃ T : Set Plane, Periodic T ∧ Tiling Ω T := by
   intro htileable
   obtain ⟨K, hK⟩ := exists_productionRegion hΩ
   obtain ⟨T, hT⟩ := htileable
-  have hT' : TranslationTiling volume K.support T := by
+  have hT' : Tiling K.support T := by
     simpa only [hK] using hT
   have hproductionTileable :
       ∃ T : Set Plane, K.toPolygonalRegion.Tiles T :=
@@ -321,7 +289,7 @@ theorem periodic_tiling_of_rational_polygon
   obtain ⟨S, hStiles, hSperiodic⟩ :=
     (Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1 K).mp
       hproductionTileable
-  refine ⟨S, hSperiodic, ?_⟩
+  refine ⟨S, periodic_of_production hSperiodic, ?_⟩
   simpa only [hK] using ofProductionTiling K.toPolygonalRegion hStiles
 
 end DeDiosGreenfeldComparator

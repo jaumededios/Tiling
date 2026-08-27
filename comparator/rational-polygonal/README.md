@@ -7,13 +7,12 @@ mathematician can audit **what is claimed** without reading or trusting any file
 
 ## What the trusted statement says
 
-`Challenge.lean` imports only eight named Mathlib modules and develops the entire vocabulary from
+`Challenge.lean` imports only `Mathlib` and develops the entire vocabulary from
 first principles before displaying the theorem:
 
-1. a prototile is a nonempty measurable set;
-2. placements form a tiling when they are countable, pairwise almost-everywhere disjoint, and cover
-   almost every point;
-3. a monotile tiling specializes this definition to one set and a set of translation vectors;
+1. `Packing Ω T` says distinct translates `t + Ω` overlap only on null sets;
+2. `Covering Ω T` says those translates cover almost every point;
+3. `Tiling Ω T` combines those conditions with countability of `T`;
 4. a planar translation set is periodic when two linearly independent vectors preserve membership;
 5. a polygonal set is a finite almost-disjoint union of nondegenerate closed triangles;
 6. its intrinsic vertices are those seen by every triangulation;
@@ -24,8 +23,8 @@ The headline proposition is therefore literally:
 
 ```lean
 ∀ (Ω : Set Plane), RationalPolygon Ω →
-  (∃ T : Set Plane, TranslationTiling volume Ω T) →
-    ∃ T : Set Plane, Periodic T ∧ TranslationTiling volume Ω T
+  (∃ T : Set Plane, Tiling Ω T) →
+    ∃ T : Set Plane, Periodic T ∧ Tiling Ω T
 ```
 
 This is the forward implication of paper Theorem 1.1. The reverse implication is tautological.
