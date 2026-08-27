@@ -33,7 +33,7 @@ The paper uses bounded open polygonal regions whereas the shim uses their regula
 finite polygon boundaries have Lebesgue measure zero, and the tiling relation is explicitly an
 almost-everywhere relation, so the two representatives have the same tilings.
 
-## Why there are three Lean modules
+## Why there are two Lean modules
 
 | file | role | trusted by the comparator? |
 |---|---|---|
