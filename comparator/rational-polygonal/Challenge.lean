@@ -10,6 +10,8 @@ solution's transitive axiom closure independently.
 
 namespace DeDiosGreenfeldComparator
 
+open MeasureTheory
+
 /-- **Periodic tiling theorem for rational polygonal sets.**
 
 If the rational polygonal set `Ω` tiles the real plane by translations at all, then it also tiles
