@@ -27,7 +27,7 @@ Because packing and covering below are measure-theoretic, this choice does not c
 open Function MeasureTheory Set
 open scoped Pointwise
 
-namespace DeDiosGreenfeldComparator
+namespace DeDiosPontGrebikGreenfeldMadridComparator
 
 /-! ## 1. Translational tilings of the plane -/
 
@@ -131,4 +131,4 @@ theorem periodic_tiling_of_rational_polygon
       ∃ T : Set Plane, Periodic T ∧ Tiling Ω T := by
   sorry
 
-end DeDiosGreenfeldComparator
+end DeDiosPontGrebikGreenfeldMadridComparator

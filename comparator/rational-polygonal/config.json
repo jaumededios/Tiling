@@ -2,7 +2,7 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "DeDiosGreenfeldComparator.periodic_tiling_of_rational_polygon"
+    "DeDiosPontGrebikGreenfeldMadridComparator.periodic_tiling_of_rational_polygon"
   ],
   "permitted_axioms": [
     "propext",

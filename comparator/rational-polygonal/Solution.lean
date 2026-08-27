@@ -16,7 +16,7 @@ project's geometry and invokes the formalized de Dios Pont--Grebík--Greenfeld--
 open Function MeasureTheory Set
 open scoped Pointwise
 
-namespace DeDiosGreenfeldComparator
+namespace DeDiosPontGrebikGreenfeldMadridComparator
 
 /-! ## 1. Translational tilings of the plane -/
 
@@ -107,9 +107,9 @@ triangles. -/
 def RationalPolygon (Ω : Set Plane) : Prop :=
   Ω.Nonempty ∧ Nonempty (RationalTriangulation Ω)
 
-end DeDiosGreenfeldComparator
+end DeDiosPontGrebikGreenfeldMadridComparator
 
-namespace DeDiosGreenfeldComparator
+namespace DeDiosPontGrebikGreenfeldMadridComparator
 
 namespace ProductionBridge
 
@@ -461,4 +461,4 @@ theorem periodic_tiling_of_rational_polygon
   refine ⟨S, periodic_of_production hSperiodic, ?_⟩
   simpa only [hK] using ofProductionTiling K.toPolygonalRegion hStiles
 
-end DeDiosGreenfeldComparator
+end DeDiosPontGrebikGreenfeldMadridComparator
