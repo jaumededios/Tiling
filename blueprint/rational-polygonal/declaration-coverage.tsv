@@ -1,0 +1,875 @@
+module	source	line	kind	name	paper_item	status
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	22	abbrev	Tiling.Plane	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	25	def	Tiling.twiceSignedArea	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	29	def	Tiling.IsTriangle	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	33	def	Tiling.IsRectangle	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	37	structure	Tiling.Triangulation	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	39	field	Tiling.Triangulation.pieces	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	41	field	Tiling.Triangulation.isTriangle	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	43	field	Tiling.Triangulation.pairwiseAEDisjoint	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	45	field	Tiling.Triangulation.sUnion_eq	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	48	structure	Tiling.Rectangulation	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	50	field	Tiling.Rectangulation.pieces	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	52	field	Tiling.Rectangulation.isRectangle	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	54	field	Tiling.Rectangulation.pairwiseAEDisjoint	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	56	field	Tiling.Rectangulation.sUnion_eq	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	59	def	Tiling.IsPolygonal	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	63	def	Tiling.IsAxisParallel	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	70	def	Tiling.vertexSet	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	75	def	Tiling.IsRationalPoint	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	79	def	Tiling.IsRational	model / geometric support	proved
+Tiling.Geometry.Plane	Tiling/Geometry/Plane.lean	287	theorem	Tiling.IsRectangle.isPolygonal	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	26	def	Tiling.planarCross	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	30	def	Tiling.signedSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	34	def	Tiling.affineLine	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	38	def	Tiling.positiveSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	42	def	Tiling.negativeSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	46	def	Tiling.positiveHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	50	def	Tiling.negativeHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	53	theorem	Tiling.mem_positiveSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	58	theorem	Tiling.mem_negativeSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	63	theorem	Tiling.mem_positiveHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	68	theorem	Tiling.mem_negativeHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	73	theorem	Tiling.mem_affineLine	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	77	theorem	Tiling.signedSide_self	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	80	theorem	Tiling.signedSide_vadd_smul	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	85	theorem	Tiling.mem_affineLine_self	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	88	theorem	Tiling.vadd_smul_mem_affineLine	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	94	theorem	Tiling.mem_affineLine_iff_exists_smul	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	128	theorem	Tiling.affineLine_eq_range	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	140	theorem	Tiling.AffineSubspace.exists_affineLine_eq	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	175	theorem	Tiling.AffineSubspace.exists_ball_frontier_iff_affineLine	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	187	theorem	Tiling.continuous_signedSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	191	theorem	Tiling.continuous_planarCross	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	195	theorem	Tiling.isClosed_affineLine	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	198	theorem	Tiling.isOpen_positiveSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	201	theorem	Tiling.isOpen_negativeSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	204	theorem	Tiling.isClosed_positiveHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	207	theorem	Tiling.isClosed_negativeHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	211	def	Tiling.planarCrossLinear	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	223	def	Tiling.planarCrossCLM	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	226	theorem	Tiling.planarCrossCLM_apply	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	232	theorem	Tiling.AffineSubspace.exists_levelSet_coordinate	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	242	theorem	Tiling.convex_positiveSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	246	theorem	Tiling.convex_negativeSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	250	theorem	Tiling.convex_positiveHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	254	theorem	Tiling.convex_negativeHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	258	theorem	Tiling.isPreconnected_ball_inter_positiveSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	262	theorem	Tiling.isPreconnected_ball_inter_negativeSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	266	theorem	Tiling.signedSide_add_mul_I	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	271	theorem	Tiling.signedSide_add_smul_mul_I	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	276	theorem	Tiling.signedSide_sub_mul_I	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	281	theorem	Tiling.signedSide_sub_smul_mul_I	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	286	theorem	Tiling.positiveSide_nonempty	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	291	theorem	Tiling.negativeSide_nonempty	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	297	theorem	Tiling.isConnected_positiveSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	302	theorem	Tiling.isConnected_negativeSide	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	306	theorem	Tiling.positiveHalfPlane_eq_positiveSide_union_line	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	319	theorem	Tiling.negativeHalfPlane_eq_negativeSide_union_line	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	326	theorem	Tiling.compl_positiveHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	331	theorem	Tiling.compl_negativeHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	339	theorem	Tiling.IsPreconnected.subset_interior_or_subset_interior_compl_of_disjoint_frontier	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	351	theorem	Tiling.IsPreconnected.subset_interior_of_disjoint_frontier_of_mem	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	363	theorem	Tiling.local_levelSet_dichotomy	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	441	theorem	Tiling.local_eq_closedHalfPlane	model / geometric support	proved
+Tiling.Geometry.LocalLine	Tiling/Geometry/LocalLine.lean	526	theorem	Tiling.exists_local_eq_closedHalfPlane_of_affineSubspace	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	24	def	Tiling.BoundaryLocallyStraightAt	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	341	theorem	Tiling.IsTriangle.interior_nonempty	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	355	theorem	Tiling.IsTriangle.isCompact	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	360	theorem	Tiling.IsTriangle.closure_interior	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	369	theorem	Tiling.IsPolygonal.isCompact	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	376	theorem	Tiling.IsPolygonal.isClosed	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	380	theorem	Tiling.IsPolygonal.isBounded	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	385	theorem	Tiling.IsPolygonal.closure_interior	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	408	theorem	Tiling.IsPolygonal.volume_frontier	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	419	theorem	Tiling.IsPolygonal.interior_ae_eq	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	424	theorem	Tiling.IsPolygonal.interior_nonempty	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	432	theorem	Tiling.IsPolygonal.volume_pos	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	443	theorem	Tiling.IsPolygonal.vertexSet_finite	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	453	theorem	Tiling.IsTriangle.vadd	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	475	theorem	Tiling.aedisjoint_vadd	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	489	def	Tiling.Triangulation.vadd	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	530	theorem	Tiling.IsPolygonal.vadd	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	536	theorem	Tiling.IsTriangle.smul	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	558	theorem	Tiling.aedisjoint_smul	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	574	def	Tiling.Triangulation.smul	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	612	theorem	Tiling.IsPolygonal.smul	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	671	theorem	Tiling.vertexSet_vadd	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	716	theorem	Tiling.vertexSet_smul	model / geometric support	proved
+Tiling.Geometry.PolygonalTopology	Tiling/Geometry/PolygonalTopology.lean	769	theorem	Tiling.IsPolygonal.boundaryLocallyStraightAt_of_not_mem_vertexSet	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	27	structure	Tiling.PolygonalProtoTiling	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	29	field	Tiling.PolygonalProtoTiling.prototiles	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	31	field	Tiling.PolygonalProtoTiling.placements	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	33	field	Tiling.PolygonalProtoTiling.isPolygonal	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	40	def	Tiling.PolygonalProtoTiling.withPlacements	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	46	theorem	Tiling.PolygonalProtoTiling.withPlacements_prototiles	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	51	theorem	Tiling.PolygonalProtoTiling.withPlacements_placements	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	56	def	Tiling.PolygonalProtoTiling.placedVertexSet	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	60	def	Tiling.PolygonalProtoTiling.VertexConnected	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	64	theorem	Tiling.PolygonalProtoTiling.vertexConnected_comm	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	70	def	Tiling.PolygonalProtoTiling.EdgeConnected	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	77	theorem	Tiling.PolygonalProtoTiling.edgeConnected_comm	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	84	def	Tiling.PolygonalProtoTiling.SharesNonvertex	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	89	def	Tiling.PolygonalProtoTiling.vertexGraph	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	93	def	Tiling.PolygonalProtoTiling.edgeGraph	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	98	theorem	Tiling.PolygonalProtoTiling.vertexGraph_adj	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	110	theorem	Tiling.PolygonalProtoTiling.edgeGraph_adj	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	121	abbrev	Tiling.PolygonalProtoTiling.SamePlate	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	125	abbrev	Tiling.PolygonalProtoTiling.Plate	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	129	theorem	Tiling.PolygonalProtoTiling.samePlate_iff_component_eq	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	135	def	Tiling.PolygonalProtoTiling.placementCarrier	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	140	theorem	Tiling.PolygonalProtoTiling.mem_placementCarrier_iff	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	154	def	Tiling.PolygonalProtoTiling.plateCarrier	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	159	theorem	Tiling.PolygonalProtoTiling.mem_plateCarrier_iff	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	165	theorem	Tiling.PolygonalProtoTiling.placedTile_subset_plateCarrier	model / geometric support	proved
+Tiling.Geometry.Plate	Tiling/Geometry/Plate.lean	173	theorem	Tiling.PolygonalProtoTiling.plateCarrier_nonempty	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	132	theorem	Tiling.PolygonalProtoTiling.locallyFinite_placedTile	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	146	theorem	Tiling.PolygonalProtoTiling.isClosed_placedTile	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	153	theorem	Tiling.PolygonalProtoTiling.closure_interior_placedTile	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	158	theorem	Tiling.PolygonalProtoTiling.interior_placedTile_disjoint	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	174	theorem	Tiling.PolygonalProtoTiling.placementCarrier_isClosed	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	182	theorem	Tiling.PolygonalProtoTiling.placementCarrier_closure_interior	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	191	theorem	Tiling.PolygonalProtoTiling.iUnion_placedTile_eq_univ	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	207	theorem	Tiling.PolygonalProtoTiling.locallyFinite_plateCarrier	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	219	theorem	Tiling.PolygonalProtoTiling.plateCarrier_isClosed	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	225	theorem	Tiling.PolygonalProtoTiling.plateCarrier_closure_interior	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	231	theorem	Tiling.PolygonalProtoTiling.iUnion_plateCarrier_eq_univ	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	248	theorem	Tiling.PolygonalProtoTiling.placementCarrier_aedisjoint	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	263	theorem	Tiling.PolygonalProtoTiling.plateCarrier_aedisjoint	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	500	theorem	Tiling.PolygonalProtoTiling.frontier_placementCarrier_compl	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	546	theorem	Tiling.PolygonalProtoTiling.isPolygonal_placedTile	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	551	theorem	Tiling.PolygonalProtoTiling.vertexSet_placedTile	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	558	theorem	Tiling.PolygonalProtoTiling.vertexSet_placedTile'	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	563	theorem	Tiling.PolygonalProtoTiling.placedTile_boundaryLocallyStraightAt_of_not_mem_placedVertexSet	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	574	theorem	Tiling.PolygonalProtoTiling.exists_vertices_across_of_local_tile_geometry	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	678	theorem	Tiling.PolygonalProtoTiling.exists_vertices_across_of_not_boundaryLocallyStraightAt	model / geometric support	proved
+Tiling.Geometry.PackingTopology	Tiling/Geometry/PackingTopology.lean	691	theorem	Tiling.PolygonalProtoTiling.plateCarrier_boundaryLocallyStraightAt	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	302	theorem	Tiling.exists_common_stabilizer_direction	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	399	def	Tiling.PolygonalProtoTiling.shiftedPlacement	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	404	theorem	Tiling.PolygonalProtoTiling.shiftedPlacement_translation	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	410	theorem	Tiling.PolygonalProtoTiling.shiftedPlacement_label	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	415	def	Tiling.PolygonalProtoTiling.shiftComponents	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	420	theorem	Tiling.PolygonalProtoTiling.shiftComponents_prototiles	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	425	theorem	Tiling.PolygonalProtoTiling.mem_shiftComponents_placements_iff	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	432	def	Tiling.PolygonalProtoTiling.shiftedVertex	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	437	theorem	Tiling.PolygonalProtoTiling.shiftedVertex_val	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	442	theorem	Tiling.PolygonalProtoTiling.shiftedVertex_surjective	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	448	theorem	Tiling.PolygonalProtoTiling.placedTile_shiftedPlacement	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	457	theorem	Tiling.PolygonalProtoTiling.placedVertexSet_shiftedVertex	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	465	theorem	Tiling.PolygonalProtoTiling.shiftedVertex_injective_of_component_eq	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	480	def	Tiling.PolygonalProtoTiling.shiftedVertexHom	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	501	theorem	Tiling.PolygonalProtoTiling.shiftComponents_zero_placements	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	511	structure	Tiling.PolygonalProtoTiling.IsSlidingDirection	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	512	field	Tiling.PolygonalProtoTiling.IsSlidingDirection.ne_zero	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	513	field	Tiling.PolygonalProtoTiling.IsSlidingDirection.invariant	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	521	theorem	Tiling.PolygonalProtoTiling.IsSlidingDirection.vadd_plateCarrier	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	534	theorem	Tiling.PolygonalProtoTiling.IsSlidingDirection.isTiling_shiftComponents	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	579	theorem	Tiling.PolygonalProtoTiling.isTiling_shiftComponents_zero	model / geometric support	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	589	theorem	Tiling.PolygonalProtoTiling.exists_isSlidingDirection	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Sliding	Tiling/Geometry/Sliding.lean	601	theorem	Tiling.PolygonalProtoTiling.exists_sliding_direction	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Connected	Tiling/Geometry/Connected.lean	68	theorem	Tiling.PolygonalProtoTiling.exists_distinct_plate_carrier_contact	model / geometric support	proved
+Tiling.Geometry.Connected	Tiling/Geometry/Connected.lean	95	theorem	Tiling.PolygonalProtoTiling.exists_placedVertex_on_invariant_contact_line	model / geometric support	proved
+Tiling.Geometry.Connected	Tiling/Geometry/Connected.lean	425	theorem	Tiling.PolygonalProtoTiling.IsSlidingDirection.exists_connected_component_shift	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.Geometry.Connected	Tiling/Geometry/Connected.lean	437	theorem	Tiling.PolygonalProtoTiling.exists_connected_shift	model / geometric support	proved
+Tiling.Geometry.Connected	Tiling/Geometry/Connected.lean	450	theorem	Tiling.PolygonalProtoTiling.exists_connected_tiling	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	24	abbrev	Tiling.RationalPolygonal.IntegerPlane	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	27	def	Tiling.RationalPolygonal.integerPoint	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	31	def	Tiling.RationalPolygonal.integerPointHom	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	39	theorem	Tiling.RationalPolygonal.integerPointHom_apply	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	43	theorem	Tiling.RationalPolygonal.integerPoint_zero	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	47	theorem	Tiling.RationalPolygonal.integerPoint_add	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	52	theorem	Tiling.RationalPolygonal.integerPoint_sub	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	57	theorem	Tiling.RationalPolygonal.integerPoint_re	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	61	theorem	Tiling.RationalPolygonal.integerPoint_im	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	65	theorem	Tiling.RationalPolygonal.integerPoint_injective	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	77	theorem	Tiling.RationalPolygonal.integerPoint_isClosedEmbedding	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	98	theorem	Tiling.RationalPolygonal.finite_integerPoint_preimage_of_isCompact	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	105	def	Tiling.RationalPolygonal.integerLattice	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	110	theorem	Tiling.RationalPolygonal.mem_integerLattice_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	119	def	Tiling.RationalPolygonal.IsIntegerPoint	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	123	structure	Tiling.RationalPolygonal.PolygonalRegion	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	125	field	Tiling.RationalPolygonal.PolygonalRegion.support	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	127	field	Tiling.RationalPolygonal.PolygonalRegion.isPolygonal	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	129	field	Tiling.RationalPolygonal.PolygonalRegion.nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	134	def	Tiling.RationalPolygonal.PolygonalRegion.openCarrier	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	138	theorem	Tiling.RationalPolygonal.PolygonalRegion.openCarrier_ae_eq	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	143	def	Tiling.RationalPolygonal.PolygonalRegion.prototile	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	149	def	Tiling.RationalPolygonal.PolygonalRegion.prototileFamily	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	153	def	Tiling.RationalPolygonal.PolygonalRegion.placements	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	157	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_placements_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	163	theorem	Tiling.RationalPolygonal.PolygonalRegion.placedTile_eq	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	168	theorem	Tiling.RationalPolygonal.PolygonalRegion.placements_countable	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	186	def	Tiling.RationalPolygonal.PolygonalRegion.Tiles	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	190	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.countable	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	207	def	Tiling.RationalPolygonal.SetPeriodicBy	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	211	def	Tiling.RationalPolygonal.SinglyPeriodic	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	215	structure	Tiling.RationalPolygonal.WeakPeriodicDecomposition	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	217	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.numberOfParts	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	219	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.part	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	221	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.period	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	223	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.period_ne_zero	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	225	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.periodic_part	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	227	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.pairwiseDisjoint	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	229	field	Tiling.RationalPolygonal.WeakPeriodicDecomposition.iUnion_parts	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	232	def	Tiling.RationalPolygonal.WeaklyPeriodic	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	236	def	Tiling.RationalPolygonal.DoublyPeriodic	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	241	theorem	Tiling.RationalPolygonal.setPeriodicBy_vadd	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	249	theorem	Tiling.RationalPolygonal.SinglyPeriodic.vadd	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	256	def	Tiling.RationalPolygonal.IsRelativelyRational	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	261	structure	Tiling.RationalPolygonal.RationalPolygonalRegion	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	263	field	Tiling.RationalPolygonal.RationalPolygonalRegion.anchor	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	265	field	Tiling.RationalPolygonal.RationalPolygonalRegion.anchor_mem_vertex	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	267	field	Tiling.RationalPolygonal.RationalPolygonalRegion.denominator	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	269	field	Tiling.RationalPolygonal.RationalPolygonalRegion.denominator_pos	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	271	field	Tiling.RationalPolygonal.RationalPolygonalRegion.vertex_integral	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	277	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.denominator_cast_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	282	def	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedSupport	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	286	def	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedRegion	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	303	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedRegion_support	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	308	def	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedTranslation	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	312	def	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	317	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.mem_normalizedTranslations_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	324	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedTranslation_injective	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	331	def	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedTranslation	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	336	def	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	341	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.mem_denormalizedTranslations_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	348	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedTranslation_normalizedTranslation	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	356	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedTranslation_denormalizedTranslation	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	365	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedTranslation_injective	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	372	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.mem_denormalizedTranslations_iff_normalizedTranslation_mem	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	383	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedTranslation_add_denormalizedPeriod	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	392	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.setPeriodicBy_denormalizedTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	404	def	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedWeakPeriodicDecomposition	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	444	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.weaklyPeriodic_denormalizedTranslations	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	452	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalized_vertex_integral	model / geometric support	proved
+Tiling.RationalPolygonal.Basic	Tiling/RationalPolygonal/Basic.lean	467	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.isRelativelyRational	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	39	structure	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	41	field	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.a	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	43	field	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.b	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	45	field	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.c	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	50	structure	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	52	field	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.a	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	54	field	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.c	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	58	def	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality.Satisfies	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	62	def	Tiling.RationalPolygonal.LinearFeasibility.StrictInequality1.Satisfies	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	66	def	Tiling.RationalPolygonal.LinearFeasibility.SatisfiesAll	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	70	def	Tiling.RationalPolygonal.LinearFeasibility.SatisfiesAll1	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	74	def	Tiling.RationalPolygonal.LinearFeasibility.upperBound?	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	78	def	Tiling.RationalPolygonal.LinearFeasibility.lowerBound?	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	82	def	Tiling.RationalPolygonal.LinearFeasibility.constantValid	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	86	def	Tiling.RationalPolygonal.LinearFeasibility.lowerBounds	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	90	def	Tiling.RationalPolygonal.LinearFeasibility.upperBounds	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	94	def	Tiling.RationalPolygonal.LinearFeasibility.chooseBetween	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	102	def	Tiling.RationalPolygonal.LinearFeasibility.solve1D	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	197	theorem	Tiling.RationalPolygonal.LinearFeasibility.chooseBetween_sound	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	242	theorem	Tiling.RationalPolygonal.LinearFeasibility.chooseBetween_complete	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	261	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve1D_sound	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	270	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve1D_complete	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	278	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve1D_isSome_iff	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	283	def	Tiling.RationalPolygonal.LinearFeasibility.negativeY	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	287	def	Tiling.RationalPolygonal.LinearFeasibility.positiveY	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	291	def	Tiling.RationalPolygonal.LinearFeasibility.zeroY	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	295	def	Tiling.RationalPolygonal.LinearFeasibility.zeroProjection	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	299	def	Tiling.RationalPolygonal.LinearFeasibility.pairProjection	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	303	def	Tiling.RationalPolygonal.LinearFeasibility.eliminateY	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	308	def	Tiling.RationalPolygonal.LinearFeasibility.verticalBound	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	312	def	Tiling.RationalPolygonal.LinearFeasibility.yLowerBound?	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	316	def	Tiling.RationalPolygonal.LinearFeasibility.yUpperBound?	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	320	def	Tiling.RationalPolygonal.LinearFeasibility.yLowerBounds	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	324	def	Tiling.RationalPolygonal.LinearFeasibility.yUpperBounds	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	328	def	Tiling.RationalPolygonal.LinearFeasibility.solveY	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	332	def	Tiling.RationalPolygonal.LinearFeasibility.solve	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	338	def	Tiling.RationalPolygonal.LinearFeasibility.isFeasible	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	385	theorem	Tiling.RationalPolygonal.LinearFeasibility.eliminateY_spec	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	463	theorem	Tiling.RationalPolygonal.LinearFeasibility.solveY_sound	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	479	theorem	Tiling.RationalPolygonal.LinearFeasibility.solveY_complete	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	490	theorem	Tiling.RationalPolygonal.LinearFeasibility.exists_y_satisfiesAll_iff_eliminateY	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	499	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve_sound	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	518	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve_complete	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	528	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve_isSome_iff	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	533	theorem	Tiling.RationalPolygonal.LinearFeasibility.isFeasible_eq_true_iff	model / geometric support	proved
+Tiling.RationalPolygonal.LinearFeasibility	Tiling/RationalPolygonal/LinearFeasibility.lean	538	theorem	Tiling.RationalPolygonal.LinearFeasibility.solve_eq_none_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	24	structure	Tiling.RationalPolygonal.Raw.QPoint	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	26	field	Tiling.RationalPolygonal.Raw.QPoint.x	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	28	field	Tiling.RationalPolygonal.Raw.QPoint.y	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	34	def	Tiling.RationalPolygonal.Raw.QPoint.toPlane	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	38	theorem	Tiling.RationalPolygonal.Raw.QPoint.toPlane_re	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	42	theorem	Tiling.RationalPolygonal.Raw.QPoint.toPlane_im	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	46	def	Tiling.RationalPolygonal.Raw.QPoint.coordinates	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	50	theorem	Tiling.RationalPolygonal.Raw.QPoint.mem_coordinates_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	57	structure	Tiling.RationalPolygonal.Raw.QTriangle	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	59	field	Tiling.RationalPolygonal.Raw.QTriangle.a	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	61	field	Tiling.RationalPolygonal.Raw.QTriangle.b	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	63	field	Tiling.RationalPolygonal.Raw.QTriangle.c	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	69	def	Tiling.RationalPolygonal.Raw.QTriangle.vertices	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	73	def	Tiling.RationalPolygonal.Raw.QTriangle.carrier	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	77	def	Tiling.RationalPolygonal.Raw.QTriangle.Nondegenerate	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	81	theorem	Tiling.RationalPolygonal.Raw.QTriangle.isTriangle	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	87	structure	Tiling.RationalPolygonal.Raw.Code	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	89	field	Tiling.RationalPolygonal.Raw.Code.triangles	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	95	def	Tiling.RationalPolygonal.Raw.Code.triangleFinset	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	99	def	Tiling.RationalPolygonal.Raw.Code.support	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	103	def	Tiling.RationalPolygonal.Raw.Code.coordinates	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	107	def	Tiling.RationalPolygonal.Raw.Code.commonDenominator	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	111	def	Tiling.RationalPolygonal.Raw.Code.anchor	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	116	structure	Tiling.RationalPolygonal.Raw.Code.Valid	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	117	field	Tiling.RationalPolygonal.Raw.Code.Valid.nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	118	field	Tiling.RationalPolygonal.Raw.Code.Valid.nondegenerate	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	119	field	Tiling.RationalPolygonal.Raw.Code.Valid.pairwiseAEDisjoint	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	121	field	Tiling.RationalPolygonal.Raw.Code.Valid.anchor_mem_vertex	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	124	structure	Tiling.RationalPolygonal.Raw.Code.Input	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	126	field	Tiling.RationalPolygonal.Raw.Code.Input.code	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	128	field	Tiling.RationalPolygonal.Raw.Code.Input.valid	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	133	def	Tiling.RationalPolygonal.Raw.Code.Input.anchor	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	137	def	Tiling.RationalPolygonal.Raw.Code.Input.denominator	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	141	theorem	Tiling.RationalPolygonal.Raw.Code.Input.choose_mem	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	147	theorem	Tiling.RationalPolygonal.Raw.Code.Input.coordinate_mem	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	154	theorem	Tiling.RationalPolygonal.Raw.Code.Input.coordinate_den_dvd	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	160	theorem	Tiling.RationalPolygonal.Raw.Code.Input.point_den_dvd	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	168	theorem	Tiling.RationalPolygonal.Raw.Code.Input.anchor_den_dvd	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	174	theorem	Tiling.RationalPolygonal.Raw.Code.Input.denominator_pos	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	181	def	Tiling.RationalPolygonal.Raw.Code.Input.triangulation	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	202	def	Tiling.RationalPolygonal.Raw.Code.Input.polygonalRegion	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	220	structure	Tiling.RationalPolygonal.Raw.ZPoint	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	222	field	Tiling.RationalPolygonal.Raw.ZPoint.x	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	224	field	Tiling.RationalPolygonal.Raw.ZPoint.y	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	230	def	Tiling.RationalPolygonal.Raw.ZPoint.toPlane	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	234	def	Tiling.RationalPolygonal.Raw.ZPoint.toIntegerPlane	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	238	theorem	Tiling.RationalPolygonal.Raw.ZPoint.integerPoint_toIntegerPlane	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	245	structure	Tiling.RationalPolygonal.Raw.ZTriangle	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	247	field	Tiling.RationalPolygonal.Raw.ZTriangle.a	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	249	field	Tiling.RationalPolygonal.Raw.ZTriangle.b	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	251	field	Tiling.RationalPolygonal.Raw.ZTriangle.c	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	257	def	Tiling.RationalPolygonal.Raw.ZTriangle.carrier	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	263	def	Tiling.RationalPolygonal.Raw.scaledCoordinate	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	267	theorem	Tiling.RationalPolygonal.Raw.scaledCoordinate_cast	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	277	def	Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	282	def	Tiling.RationalPolygonal.Raw.Code.Input.normalizedTriangle	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	288	def	Tiling.RationalPolygonal.Raw.Code.Input.normalizedCode	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	292	def	Tiling.RationalPolygonal.Raw.Code.Input.normalizedCodeSupport	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	296	theorem	Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint_toPlane	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	315	theorem	Tiling.RationalPolygonal.Raw.Code.Input.normalizedTriangle_carrier	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	359	theorem	Tiling.RationalPolygonal.Raw.Code.Input.normalizedPoint_isInteger	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	368	theorem	Tiling.RationalPolygonal.Raw.Code.Input.vertexSet_subset_encodedVertices	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	385	def	Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	397	theorem	Tiling.RationalPolygonal.Raw.Code.Input.rationalPolygonalRegion_support	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	403	theorem	Tiling.RationalPolygonal.Raw.Code.Input.normalizedSupport_eq_iUnion	model / geometric support	proved
+Tiling.RationalPolygonal.RawInput	Tiling/RationalPolygonal/RawInput.lean	432	theorem	Tiling.RationalPolygonal.Raw.Code.Input.normalizedSupport_eq_normalizedCodeSupport	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	24	def	Tiling.RationalPolygonal.discreteCarrier	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	28	theorem	Tiling.RationalPolygonal.mem_discreteCarrier_iff	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	34	theorem	Tiling.RationalPolygonal.existsUnique_tile_representation	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	52	theorem	Tiling.RationalPolygonal.tilesUniverse_of_existsUnique	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	73	def	Tiling.RationalPolygonal.shiftFinset	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	78	theorem	Tiling.RationalPolygonal.mem_shiftFinset_iff	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	93	theorem	Tiling.RationalPolygonal.tilesUniverse_shiftFinset_iff	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	144	theorem	Tiling.RationalPolygonal.translation_eq_of_eq_representations	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	161	def	Tiling.RationalPolygonal.DiscretePeriodicBy	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	165	theorem	Tiling.RationalPolygonal.DiscretePeriodicBy.zsmul	model / geometric support	proved
+Tiling.RationalPolygonal.DiscreteCarrier	Tiling/RationalPolygonal/DiscreteCarrier.lean	173	def	Tiling.RationalPolygonal.quakeTransfer	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	22	def	Tiling.RationalPolygonal.PolygonalRegion.polygonalProtoTiling	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	29	theorem	Tiling.RationalPolygonal.PolygonalRegion.polygonalProtoTiling_prototiles	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	34	theorem	Tiling.RationalPolygonal.PolygonalRegion.polygonalProtoTiling_placements	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	39	def	Tiling.RationalPolygonal.PolygonalRegion.HasIntegerVertices	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	47	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedRegion_hasIntegerVertices	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	52	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalized_placedTile	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	98	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.normalizedRegion_tiles	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	163	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalized_placedTile	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	175	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.tiles_of_normalizedRegion_tiles	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	246	def	Tiling.RationalPolygonal.PolygonalRegion.IsIntegerTiling	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	251	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.vadd	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	361	theorem	Tiling.RationalPolygonal.PolygonalRegion.samePlate_translation_sub_mem_integerLattice	Lemma 2.4	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	370	theorem	Tiling.RationalPolygonal.PolygonalRegion.translations_integer_of_connected	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	383	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_connected_tiling	model / geometric support	proved
+Tiling.RationalPolygonal.IntegerReduction	Tiling/RationalPolygonal/IntegerReduction.lean	408	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_integer_tiling	Lemma 2.2	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	23	def	Tiling.RationalPolygonal.closedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	27	theorem	Tiling.RationalPolygonal.isCompact_closedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	32	theorem	Tiling.RationalPolygonal.volume_closedUnitCell_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	62	def	Tiling.RationalPolygonal.translatedClosedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	66	theorem	Tiling.RationalPolygonal.iUnion_translatedClosedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	91	theorem	Tiling.RationalPolygonal.tilesUniverse_vadd_translationSet_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	135	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.ae_existsUnique_translation	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	176	def	Tiling.RationalPolygonal.PolygonalRegion.latticeSlice	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	180	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_latticeSlice_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	186	theorem	Tiling.RationalPolygonal.PolygonalRegion.latticeSlice_finite	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	201	def	Tiling.RationalPolygonal.PolygonalRegion.signatureWindow	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	205	theorem	Tiling.RationalPolygonal.PolygonalRegion.signatureWindow_finite	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	222	def	Tiling.RationalPolygonal.PolygonalRegion.signature	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	226	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_signature_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	232	def	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	237	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	245	theorem	Tiling.RationalPolygonal.PolygonalRegion.locallyFinite_integerTranslates	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	285	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_closure_interior	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	350	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_eq_of_ae_eq	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	361	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationCarrier_iff_mem_discreteCarrier_signature	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	387	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_add_integerPoint	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	399	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_subset_signatureWindow	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	406	def	Tiling.RationalPolygonal.PolygonalRegion.candidateSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	411	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_mem_candidateSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	420	def	Tiling.RationalPolygonal.PolygonalRegion.signatureFiber	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	424	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_signatureFiber_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	442	theorem	Tiling.RationalPolygonal.PolygonalRegion.measurableSet_signatureFiber	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	493	def	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	498	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_relevantSignatures_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	506	theorem	Tiling.RationalPolygonal.PolygonalRegion.tilesUniverse_relevantSignatures_of_ae	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	519	theorem	Tiling.RationalPolygonal.PolygonalRegion.ae_signature_mem_relevantSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	543	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatures_nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	552	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_nonempty_relevantSignature	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	606	theorem	Tiling.RationalPolygonal.PolygonalRegion.ae_signature_tilesUniverse_of_relevantSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	642	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	689	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_placedTile_integerPoint_iff_signature	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	707	theorem	Tiling.RationalPolygonal.PolygonalRegion.signature_tilesUniverse_iff_unique_translation	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	754	def	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationSet	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	758	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_integerTranslationSet_iff	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	763	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerPoint_image_integerTranslationSet	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	779	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	808	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_of_ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	864	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_ae_signature_tilesUniverse	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	873	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.Raster	Tiling/RationalPolygonal/Raster.lean	887	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_integer_signature_tiling	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	21	def	Tiling.RationalPolygonal.latticePoint	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	24	theorem	Tiling.RationalPolygonal.latticePoint_apply_zero	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	28	theorem	Tiling.RationalPolygonal.latticePoint_apply_one	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	32	def	Tiling.RationalPolygonal.horizontalUnit	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	35	def	Tiling.RationalPolygonal.verticalUnit	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	39	def	Tiling.RationalPolygonal.planeTransferGraph	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	46	def	Tiling.RationalPolygonal.planeTransferComponentTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	52	theorem	Tiling.RationalPolygonal.mem_planeTransferComponentTranslations_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	76	theorem	Tiling.RationalPolygonal.planeTransferComponentCarrier_periodic	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	123	theorem	Tiling.RationalPolygonal.planeTransferGraph_connected	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	206	theorem	Tiling.RationalPolygonal.translations_mem_coset_of_transfer	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	222	def	Tiling.RationalPolygonal.gridBox	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	227	theorem	Tiling.RationalPolygonal.mem_gridBox_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	252	def	Tiling.RationalPolygonal.markerSide	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	255	def	Tiling.RationalPolygonal.markerCenter	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	259	def	Tiling.RationalPolygonal.markerRing	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	264	def	Tiling.RationalPolygonal.markerSquare	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	268	def	Tiling.RationalPolygonal.nonzeroMarkerRings	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	273	def	Tiling.RationalPolygonal.markerEast	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	277	def	Tiling.RationalPolygonal.markerNorth	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	281	def	Tiling.RationalPolygonal.markerWestHole	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	284	def	Tiling.RationalPolygonal.markerSouthHole	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	287	def	Tiling.RationalPolygonal.markerZero	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	293	def	Tiling.RationalPolygonal.modifiedMarkerSquare	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	298	def	Tiling.RationalPolygonal.markerBlock	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	302	def	Tiling.RationalPolygonal.markerUnion	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	306	theorem	Tiling.RationalPolygonal.markerBlock_zero	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	310	theorem	Tiling.RationalPolygonal.markerBlock_of_ne_zero	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	315	theorem	Tiling.RationalPolygonal.markerCenter_mem_markerSquare	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	331	theorem	Tiling.RationalPolygonal.markerRing_card	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	352	theorem	Tiling.RationalPolygonal.markerRing_bounds	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	359	theorem	Tiling.RationalPolygonal.markerRing_disjoint	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	371	theorem	Tiling.RationalPolygonal.markerRing_subset_markerSquare	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	383	theorem	Tiling.RationalPolygonal.markerRing_subset_nonzeroMarkerRings	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	391	theorem	Tiling.RationalPolygonal.protrusions_not_mem_markerRing	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	406	theorem	Tiling.RationalPolygonal.markerZero_disjoint_markerRing	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	423	theorem	Tiling.RationalPolygonal.markerBlock_disjoint	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	517	theorem	Tiling.RationalPolygonal.markerUnion_eq_modifiedMarkerSquare	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	524	def	Tiling.RationalPolygonal.markerLattice	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	535	theorem	Tiling.RationalPolygonal.mem_markerLattice_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	541	theorem	Tiling.RationalPolygonal.markerSquare_tiles_markerLattice	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	607	def	Tiling.RationalPolygonal.markerSquareReplacement	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	839	theorem	Tiling.RationalPolygonal.modifiedMarkerSquare_tiles_markerLattice	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	848	def	Tiling.RationalPolygonal.markerScale	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	852	theorem	Tiling.RationalPolygonal.markerScale_zero	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	856	theorem	Tiling.RationalPolygonal.markerScale_add	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	861	theorem	Tiling.RationalPolygonal.markerScale_sub	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	866	theorem	Tiling.RationalPolygonal.markerScale_injective	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	877	def	Tiling.RationalPolygonal.markerTranslationSet	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	881	def	Tiling.RationalPolygonal.markerPreimage	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	885	theorem	Tiling.RationalPolygonal.mem_markerTranslationSet_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	891	theorem	Tiling.RationalPolygonal.mem_markerPreimage_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	897	theorem	Tiling.RationalPolygonal.markerTranslationSet_markerPreimage_eq_of_subset	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	913	def	Tiling.RationalPolygonal.planarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	920	theorem	Tiling.RationalPolygonal.mem_planarRasterTile_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	946	theorem	Tiling.RationalPolygonal.markerBlock_nonempty	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	961	theorem	Tiling.RationalPolygonal.planarRasterTile_tilesUniverse_of_family	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1011	theorem	Tiling.RationalPolygonal.family_tilesUniverse_of_planarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1082	theorem	Tiling.RationalPolygonal.planarRasterTile_tilesUniverse_iff_family	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1092	theorem	Tiling.RationalPolygonal.exists_family_tiling_of_planarRasterTile_coset	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1120	theorem	Tiling.RationalPolygonal.discreteCarrier_planarRaster_eq_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1226	def	Tiling.RationalPolygonal.coloredRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1233	theorem	Tiling.RationalPolygonal.mem_coloredRasterTile_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1247	def	Tiling.RationalPolygonal.coloredTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1252	theorem	Tiling.RationalPolygonal.mem_coloredTranslations_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1259	theorem	Tiling.RationalPolygonal.fin_cast_zmod_injective	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1269	theorem	Tiling.RationalPolygonal.coloredRasterTile_tilesUniverse_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1352	def	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1356	def	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureAt	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1361	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureAt_mem	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1367	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_relevantSignatureAt_eq	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1377	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureCount_pos	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1383	def	Tiling.RationalPolygonal.PolygonalRegion.relevantColoredRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1388	def	Tiling.RationalPolygonal.PolygonalRegion.distinguishedRelevantSignature	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1394	theorem	Tiling.RationalPolygonal.PolygonalRegion.distinguishedRelevantSignature_nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1399	def	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureZero	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1403	def	Tiling.RationalPolygonal.PolygonalRegion.distinguishedRelevantIndex	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1409	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureAt_distinguishedRelevantIndex	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1417	def	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignaturePermutation	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1422	def	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignatureAt	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1427	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignatureAt_zero_nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1435	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignatureAt_tilesUniverse_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1453	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarSignatureAt_discreteCarrier_eq_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1473	def	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1479	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantSignatureAt_tilesUniverse_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1493	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantColoredRasterTile_tilesUniverse_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1505	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_tilesUniverse_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1516	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_discreteCarrier_eq_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1530	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantColoredRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1540	theorem	Tiling.RationalPolygonal.PolygonalRegion.tiles_integerPoint_image_iff_relevantPlanarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1550	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_ae_eq_of_relevantPlanarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterMarker	Tiling/RationalPolygonal/RasterMarker.lean	1566	theorem	Tiling.RationalPolygonal.PolygonalRegion.relevantPlanarRasterTile_carrier_eq_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	23	def	Tiling.RationalPolygonal.integerIntervalExec	model / geometric support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	27	def	Tiling.RationalPolygonal.gridBoxExec	model / geometric support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	32	def	Tiling.RationalPolygonal.markerRingExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	37	def	Tiling.RationalPolygonal.markerSquareExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	41	def	Tiling.RationalPolygonal.nonzeroMarkerRingsExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	46	def	Tiling.RationalPolygonal.markerZeroExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	52	def	Tiling.RationalPolygonal.markerBlockExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	56	def	Tiling.RationalPolygonal.markerScaleExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	60	def	Tiling.RationalPolygonal.planarRasterTileArrayExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	67	structure	Tiling.RationalPolygonal.NonemptyPlanarRasterFamily	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	69	field	Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.tiles	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	71	field	Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.size_pos	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	73	field	Tiling.RationalPolygonal.NonemptyPlanarRasterFamily.first_nonempty	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	76	def	Tiling.RationalPolygonal.planarRasterTileExec	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	82	theorem	Tiling.RationalPolygonal.mem_integerIntervalExec_iff	model / geometric support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	103	theorem	Tiling.RationalPolygonal.integerIntervalExec_eq	model / geometric support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	109	theorem	Tiling.RationalPolygonal.gridBoxExec_eq	model / geometric support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	114	theorem	Tiling.RationalPolygonal.markerRingExec_eq	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	119	theorem	Tiling.RationalPolygonal.markerSquareExec_eq	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	124	theorem	Tiling.RationalPolygonal.nonzeroMarkerRingsExec_eq	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	129	theorem	Tiling.RationalPolygonal.markerZeroExec_eq	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	134	theorem	Tiling.RationalPolygonal.markerBlockExec_eq	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	139	theorem	Tiling.RationalPolygonal.markerScaleExec_eq	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	144	theorem	Tiling.RationalPolygonal.planarRasterTileArrayExec_eq_planarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	151	theorem	Tiling.RationalPolygonal.planarRasterTileExec_eq_planarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ComputableMarker	Tiling/RationalPolygonal/ComputableMarker.lean	158	theorem	Tiling.RationalPolygonal.planarRasterTileExec_nonempty	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	390	theorem	Tiling.RationalPolygonal.markerBlock_west_filler	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	680	theorem	Tiling.RationalPolygonal.markerBlock_south_filler	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	1180	theorem	Tiling.RationalPolygonal.planarRasterTile_translation_differences_mem_markerLattice	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	1277	theorem	Tiling.RationalPolygonal.exists_family_tiling_of_planarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	1299	theorem	Tiling.RationalPolygonal.exists_scalarPeriodic_family_tiling_of_planarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RasterRigidity	Tiling/RationalPolygonal/RasterRigidity.lean	1350	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_integer_tiling_iff_relevantPlanarRasterTile	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	26	theorem	Tiling.RationalPolygonal.tilesUniverse_weaklyPeriodic	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	42	def	Tiling.RationalPolygonal.quakeGraph	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	47	theorem	Tiling.RationalPolygonal.quakeGraph_shiftFinset	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	88	abbrev	Tiling.RationalPolygonal.QuakePlate	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	92	def	Tiling.RationalPolygonal.quakePlateTranslations	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	98	theorem	Tiling.RationalPolygonal.mem_quakePlateTranslations_iff	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	105	theorem	Tiling.RationalPolygonal.mem_quakePlateTranslations_mk	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	123	theorem	Tiling.RationalPolygonal.quakePlateCarrier_periodic	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	205	theorem	Tiling.RationalPolygonal.quakePlateTranslations_subset_of_mem_periodic	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	225	theorem	Tiling.RationalPolygonal.quakePlate_minimal	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	245	theorem	Tiling.RationalPolygonal.iUnion_quakePlateTranslations	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	258	theorem	Tiling.RationalPolygonal.quakePlateTranslations_pairwiseDisjoint	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	270	theorem	Tiling.RationalPolygonal.quakePlateCarriers_disjoint	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	287	def	Tiling.RationalPolygonal.quakeShiftedTranslations	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	293	theorem	Tiling.RationalPolygonal.mem_quakeShiftedTranslations_iff	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	316	theorem	Tiling.RationalPolygonal.tilesUniverse_quakeShiftedTranslations	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	387	def	Tiling.RationalPolygonal.quakeShiftExcept	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	394	theorem	Tiling.RationalPolygonal.mem_quakeShiftedTranslations_quakeShiftExcept_of_mem	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	408	theorem	Tiling.RationalPolygonal.add_mem_quakeShiftedTranslations_quakeShiftExcept_of_mem	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	424	theorem	Tiling.RationalPolygonal.exists_original_of_mem_quakeShiftedTranslations_quakeShiftExcept	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	450	theorem	Tiling.RationalPolygonal.not_mem_quakePlateCarrier_of_not_mem	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	466	theorem	Tiling.RationalPolygonal.mem_quakePlateTranslations_of_mem_shiftExcept_of_mem_carrier	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	490	def	Tiling.RationalPolygonal.quakeIncompleteOrbit	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.Earthquake	Tiling/RationalPolygonal/Earthquake.lean	608	theorem	Tiling.RationalPolygonal.quakeIncompleteOrbit_periodic_of_repeated_cosetPeriod	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	324	structure	Tiling.RationalPolygonal.UniformQuakePeriodicCover	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	327	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.numberOfParts	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	329	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.number_pos	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	331	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.part	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	333	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.period	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	335	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.period_ne_zero	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	337	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.periodic_part	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	339	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.pairwiseDisjoint	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	341	field	Tiling.RationalPolygonal.UniformQuakePeriodicCover.iUnion_parts	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	345	structure	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	348	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.numberOfParts	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	350	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.number_pos	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	352	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.part	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	354	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.period	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	356	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.period_ne_zero	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	358	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.pairwise_incommensurable	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	360	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.periodic_part	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	362	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.pairwiseDisjoint	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	364	field	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.iUnion_parts	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	398	def	Tiling.RationalPolygonal.UniformQuakePeriodicDecomposition.transportGraph	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	790	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicCover_normalized	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	811	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition_normalized	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	872	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition_of_zero_mem	Definition 4.1 / Lemma 4.2 support	proved
+Tiling.RationalPolygonal.EarthquakeUniform	Tiling/RationalPolygonal/EarthquakeUniform.lean	892	theorem	Tiling.RationalPolygonal.exists_uniformQuakePeriodicDecomposition	Lemma 4.2	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	24	def	Tiling.RationalPolygonal.PolygonalRegion.continuousPlateTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	31	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_continuousPlateTranslations_iff	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	41	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_continuousPlateTranslations_mk	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	50	theorem	Tiling.RationalPolygonal.PolygonalRegion.iUnion_continuousPlateTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	66	theorem	Tiling.RationalPolygonal.PolygonalRegion.continuousPlateTranslations_pairwiseDisjoint	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	82	def	Tiling.RationalPolygonal.PolygonalRegion.translationCarrier	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	86	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_translationCarrier_iff	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	93	theorem	Tiling.RationalPolygonal.PolygonalRegion.translationCarrier_vadd	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	110	theorem	Tiling.RationalPolygonal.PolygonalRegion.integerTranslationCarrier_eq_translationCarrier_image	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	122	theorem	Tiling.RationalPolygonal.PolygonalRegion.signatureCarrier_periodic_of_integerTranslationCarrier	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	135	theorem	Tiling.RationalPolygonal.PolygonalRegion.plateCarrier_eq_translationCarrier	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	171	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.exists_integerSlidingDirection	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	264	def	Tiling.RationalPolygonal.PolygonalRegion.shiftedContinuousPlateTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	271	theorem	Tiling.RationalPolygonal.PolygonalRegion.translationCarrier_shiftedContinuousPlateTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	281	theorem	Tiling.RationalPolygonal.PolygonalRegion.IsSlidingDirection.setPeriodicBy_plateCarrier	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	297	theorem	Tiling.RationalPolygonal.PolygonalRegion.IsSlidingDirection.setPeriodicBy_translatedShiftedPlateCarrier	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	312	def	Tiling.RationalPolygonal.PolygonalRegion.shiftedContinuousTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	318	theorem	Tiling.RationalPolygonal.PolygonalRegion.mem_shiftedContinuousTranslations_iff	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	327	theorem	Tiling.RationalPolygonal.PolygonalRegion.placements_shiftedContinuousTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	360	theorem	Tiling.RationalPolygonal.PolygonalRegion.IsSlidingDirection.tiles_shiftedContinuousTranslations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	376	theorem	Tiling.RationalPolygonal.PolygonalRegion.IsSlidingDirection.shiftedVertex_injective	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	434	theorem	Tiling.RationalPolygonal.PolygonalRegion.IsSlidingDirection.shiftedContinuousPlateTranslations_pairwiseDisjoint	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	485	theorem	Tiling.RationalPolygonal.PolygonalRegion.IsSlidingDirection.exists_connected_shiftedContinuousTranslations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	537	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.exists_connected_shiftedContinuousTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.ContinuousEarthquake	Tiling/RationalPolygonal/ContinuousEarthquake.lean	552	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.exists_integer_connected_shiftedContinuousTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	27	structure	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	29	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.direction	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	31	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.direction_ne_zero	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	33	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.sliding	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	35	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.shift	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	37	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.base	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	39	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.translations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	41	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.plateTranslations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	43	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.shifted_connected	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	47	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.image_translations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	51	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.image_plateTranslations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	55	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.tiles	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	57	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.plate_pairwiseDisjoint	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	59	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.iUnion_plateTranslations	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	61	field	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.signatureCarrier_periodic	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	69	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.plateTranslations_subset	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	77	def	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlatePoint	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	82	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlatePoint_mem	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	90	def	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlateOwner	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	100	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlatePoint_mem_owner	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	110	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.quakePlateTranslations_subset_owner	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.SlidingReduction	Tiling/RationalPolygonal/SlidingReduction.lean	124	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.exists_integerSlidingReduction	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	24	theorem	Tiling.RationalPolygonal.setPeriodicBy_integerPoint_image	model / geometric support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	41	theorem	Tiling.RationalPolygonal.setPeriodicBy_iUnion	model / geometric support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	53	def	Tiling.RationalPolygonal.integerPointWeakPeriodicDecomposition	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	101	theorem	Tiling.RationalPolygonal.weaklyPeriodic_integerPoint_image	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	111	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerPoint_image	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	131	def	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.unshiftedQuakePart	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	141	def	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.assembledQuakePart	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	149	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.unshiftedQuakePart_subset_owner	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	181	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.assembledQuakePart_periodic	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	194	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.assembledQuakePart_pairwiseDisjoint	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	241	theorem	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.iUnion_assembledQuakePart	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	293	def	Tiling.RationalPolygonal.PolygonalRegion.IntegerSlidingReduction.weakPeriodicDecomposition	Lemmas 2.5-2.7 / compatibility	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	313	theorem	Tiling.RationalPolygonal.PolygonalRegion.Tiles.weaklyPeriodic_of_integerVertices	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	329	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.denormalizedTranslations_normalizedTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.WeakPeriodicity	Tiling/RationalPolygonal/WeakPeriodicity.lean	342	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.Tiles.weaklyPeriodic	Theorem 1.2 support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	32	def	Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangles	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	36	def	Tiling.RationalPolygonal.Raw.Compiler.intRange	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	43	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_intRange_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	72	def	Tiling.RationalPolygonal.Raw.Compiler.xCoordinates	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	76	def	Tiling.RationalPolygonal.Raw.Compiler.yCoordinates	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	80	def	Tiling.RationalPolygonal.Raw.Compiler.minCoord	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	84	def	Tiling.RationalPolygonal.Raw.Compiler.maxCoord	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	88	def	Tiling.RationalPolygonal.Raw.Compiler.offsetWindow	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	94	structure	Tiling.RationalPolygonal.Raw.Compiler.ZLine	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	96	field	Tiling.RationalPolygonal.Raw.Compiler.ZLine.A	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	98	field	Tiling.RationalPolygonal.Raw.Compiler.ZLine.B	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	100	field	Tiling.RationalPolygonal.Raw.Compiler.ZLine.C	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	104	def	Tiling.RationalPolygonal.Raw.Compiler.ZLine.eval	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	108	def	Tiling.RationalPolygonal.Raw.Compiler.edgeLine	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	117	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_eval_left	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	123	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_eval_right	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	129	def	Tiling.RationalPolygonal.Raw.Compiler.translatedEdgeLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	133	def	Tiling.RationalPolygonal.Raw.Compiler.arrangementLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	137	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_arrangementLines_of_mem	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	144	def	Tiling.RationalPolygonal.Raw.Compiler.sideConstraint	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	148	theorem	Tiling.RationalPolygonal.Raw.Compiler.sideConstraint_true_satisfies_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	154	theorem	Tiling.RationalPolygonal.Raw.Compiler.sideConstraint_false_satisfies_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	161	def	Tiling.RationalPolygonal.Raw.Compiler.openUnitSquare	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	165	structure	Tiling.RationalPolygonal.Raw.Compiler.SignCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	167	field	Tiling.RationalPolygonal.Raw.Compiler.SignCell.system	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	169	field	Tiling.RationalPolygonal.Raw.Compiler.SignCell.sample	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	173	def	Tiling.RationalPolygonal.Raw.Compiler.cellOfSystem?	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	177	theorem	Tiling.RationalPolygonal.Raw.Compiler.cellOfSystem_sound	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	192	def	Tiling.RationalPolygonal.Raw.Compiler.refineCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	203	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineCell_complete	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	246	def	Tiling.RationalPolygonal.Raw.Compiler.refineCells	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	250	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineCells_complete	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	260	def	Tiling.RationalPolygonal.Raw.Compiler.refineLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	264	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineLines_complete	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	279	def	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	285	theorem	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells_complete	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	298	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineCell_valid	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	317	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineCells_valid	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	324	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineLines_valid	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	336	theorem	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells_sound	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	352	def	Tiling.RationalPolygonal.Raw.Compiler.Covers	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	357	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineCell_system	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	374	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineCell_covers	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	396	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineCells_covers	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	405	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineLines_covers	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	422	theorem	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells_covers	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	436	def	Tiling.RationalPolygonal.Raw.Compiler.addOffset	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	440	def	Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	444	def	Tiling.RationalPolygonal.Raw.Compiler.zpointQ	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	448	def	Tiling.RationalPolygonal.Raw.Compiler.pointInTriangle	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	456	def	Tiling.RationalPolygonal.Raw.Compiler.pointInRegion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	460	def	Tiling.RationalPolygonal.Raw.Compiler.sampleSignature	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	465	def	Tiling.RationalPolygonal.Raw.Compiler.signatureFamily	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	471	def	Tiling.RationalPolygonal.Raw.Compiler.firstNonempty	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	476	theorem	Tiling.RationalPolygonal.Raw.Compiler.firstNonempty_nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	490	def	Tiling.RationalPolygonal.Raw.Compiler.nonemptyFirst	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	496	def	Tiling.RationalPolygonal.Raw.Compiler.nonemptyRasterFamily?	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	508	def	Tiling.RationalPolygonal.Raw.Compiler.rasterTileFromTriangles?	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	513	def	Tiling.RationalPolygonal.Raw.Compiler.compileRaster?	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	519	def	Tiling.RationalPolygonal.Raw.Compiler.sampleToPlane	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	524	theorem	Tiling.RationalPolygonal.Raw.Compiler.sampleToPlane_re	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	529	theorem	Tiling.RationalPolygonal.Raw.Compiler.sampleToPlane_im	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	533	theorem	Tiling.RationalPolygonal.Raw.Compiler.sampleToPlane_addOffset	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	731	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_convexHull_three_iff_signs	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	744	theorem	Tiling.RationalPolygonal.Raw.Compiler.sampleToPlane_zpointQ	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	749	theorem	Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ_cast	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	757	theorem	Tiling.RationalPolygonal.Raw.Compiler.twiceAreaQ_zpointQ_cast	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	764	theorem	Tiling.RationalPolygonal.Raw.Compiler.pointInTriangle_eq_true_iff_mem_carrier	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	777	theorem	Tiling.RationalPolygonal.Raw.Compiler.weak_signs_iff_strict_signs_of_ne	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	794	theorem	Tiling.RationalPolygonal.Raw.Compiler.pointInTriangle_eq_true_iff_strict_signs	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	809	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_eval_eq_neg_twiceAreaQ	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	817	def	Tiling.RationalPolygonal.Raw.Compiler.ZLine.evalPlane	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	821	theorem	Tiling.RationalPolygonal.Raw.Compiler.ZLine.evalPlane_sampleToPlane	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	828	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_evalPlane_eq_neg_twiceSignedArea	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	836	def	Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	842	theorem	Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign.left_ne	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	848	theorem	Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign.right_ne	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	854	theorem	Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign.pos_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	860	theorem	Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign.neg_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	866	theorem	Tiling.RationalPolygonal.Raw.Compiler.SameStrictSign.neg_iff_neg	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	875	theorem	Tiling.RationalPolygonal.Raw.Compiler.sameStrictSign_eval_of_satisfies	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	891	theorem	Tiling.RationalPolygonal.Raw.Compiler.sameStrictSign_eval_of_cell_system	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	900	theorem	Tiling.RationalPolygonal.Raw.Compiler.sameStrictSign_sample_of_cell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	908	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_convexHull_three_iff_of_sameStrictSign	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCompiler	Tiling/RationalPolygonal/SignatureCompiler.lean	922	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_carrier_iff_pointInTriangle_of_same_strict_edge_signs	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	13	def	Tiling.RationalPolygonal.Raw.SemanticBridge.planeEval	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	17	def	Tiling.RationalPolygonal.Raw.SemanticBridge.lineZeroSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	20	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.continuous_planeEval	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	25	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.isClosed_lineZeroSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	29	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.convex_lineZeroSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	39	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.interior_lineZeroSet_eq_empty	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	88	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.volume_lineZeroSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	97	def	Tiling.RationalPolygonal.Raw.SemanticBridge.rationalPlanePoint	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	100	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.rationalPlanePoint_eq	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	105	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.denseRange_rationalPlanePoint	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	118	theorem	Tiling.RationalPolygonal.Raw.SemanticBridge.exists_rational_point_mem	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	251	theorem	Tiling.RationalPolygonal.Raw.Compiler.ZTriangle.coordinate_bounds_of_mem	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	286	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_offsetWindow_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	310	theorem	Tiling.RationalPolygonal.Raw.Compiler.offsetWindow_nodup	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	332	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_offsetWindow_of_add_mem_triangleUnion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	362	theorem	Tiling.RationalPolygonal.Raw.Compiler.add_not_mem_triangleUnion_of_not_mem_offsetWindow	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	370	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_offsetWindow_of_add_mem_triangleUnion_closedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	379	theorem	Tiling.RationalPolygonal.Raw.Compiler.add_not_mem_triangleUnion_of_not_mem_offsetWindow_closedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	387	theorem	Tiling.RationalPolygonal.Raw.Compiler.normalizedRegion_support_eq_list_iUnion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	396	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_offsetWindow_of_add_mem_normalizedSupport	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	405	theorem	Tiling.RationalPolygonal.Raw.Compiler.add_not_mem_normalizedSupport_of_not_mem_offsetWindow	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	414	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_offsetWindow_of_add_mem_normalizedSupport_closedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	423	def	Tiling.RationalPolygonal.Raw.Compiler.ZLine.zeroSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	426	theorem	Tiling.RationalPolygonal.Raw.Compiler.ZLine.volume_zeroSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	431	def	Tiling.RationalPolygonal.Raw.Compiler.exceptionalSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	434	theorem	Tiling.RationalPolygonal.Raw.Compiler.volume_exceptionalSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	443	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_coefficients_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	454	def	Tiling.RationalPolygonal.Raw.Compiler.satisfiesPlane	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	458	def	Tiling.RationalPolygonal.Raw.Compiler.realCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	461	theorem	Tiling.RationalPolygonal.Raw.Compiler.realCell_nil	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	465	theorem	Tiling.RationalPolygonal.Raw.Compiler.realCell_cons	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	470	theorem	Tiling.RationalPolygonal.Raw.Compiler.isOpen_realCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	480	theorem	Tiling.RationalPolygonal.Raw.Compiler.satisfiesPlane_sampleToPlane_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	486	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_realCell_sampleToPlane_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	494	theorem	Tiling.RationalPolygonal.Raw.Compiler.sideConstraint_true_satisfiesPlane_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	500	theorem	Tiling.RationalPolygonal.Raw.Compiler.sideConstraint_false_satisfiesPlane_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	521	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_refineCell_sound	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	533	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_system_of_mem_refineCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	543	theorem	Tiling.RationalPolygonal.Raw.Compiler.sideConstraint_mem_of_mem_refineCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	551	def	Tiling.RationalPolygonal.Raw.Compiler.Controls	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	554	theorem	Tiling.RationalPolygonal.Raw.Compiler.controls_refineCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	567	theorem	Tiling.RationalPolygonal.Raw.Compiler.controls_refineCells	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	575	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineLines_controls_aux	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	588	theorem	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells_controls	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	599	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineCells_sound	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	606	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineLines_sound	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	617	theorem	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCell_open_nonempty_measure_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	630	theorem	Tiling.RationalPolygonal.Raw.Compiler.evalPlane_pos_iff_of_mem_realCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	644	theorem	Tiling.RationalPolygonal.Raw.Compiler.sameStrictSign_of_mem_realCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	657	def	Tiling.RationalPolygonal.Raw.Compiler.SupportedBy	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	661	theorem	Tiling.RationalPolygonal.Raw.Compiler.supportedBy_refineCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	681	theorem	Tiling.RationalPolygonal.Raw.Compiler.supportedBy_refineCells	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	689	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineLines_supportedBy_aux	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	700	theorem	Tiling.RationalPolygonal.Raw.Compiler.feasibleSignCells_supportedBy	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	719	def	Tiling.RationalPolygonal.Raw.Compiler.sideConstraintAt	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	723	def	Tiling.RationalPolygonal.Raw.Compiler.signSystemAt	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	726	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_realCell_signSystemAt	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	747	theorem	Tiling.RationalPolygonal.Raw.Compiler.exists_feasibleSignCell_containing_real_point	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	806	theorem	Tiling.RationalPolygonal.Raw.Compiler.first_edge_ne_of_twiceAreaQ_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	815	theorem	Tiling.RationalPolygonal.Raw.Compiler.second_edge_ne_of_twiceAreaQ_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	825	theorem	Tiling.RationalPolygonal.Raw.Compiler.third_edge_ne_of_twiceAreaQ_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	833	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_first_mem_arrangementLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	839	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_second_mem_arrangementLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	845	theorem	Tiling.RationalPolygonal.Raw.Compiler.edgeLine_third_mem_arrangementLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	852	theorem	Tiling.RationalPolygonal.Raw.Compiler.arrangementLine_coefficients_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	870	theorem	Tiling.RationalPolygonal.Raw.Compiler.volume_exceptionalSet_arrangementLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	879	def	Tiling.RationalPolygonal.Raw.Compiler.triangleUnion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	882	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_triangleUnion_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	888	theorem	Tiling.RationalPolygonal.Raw.Compiler.pointInRegion_sample_iff_mem_triangleUnion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	931	theorem	Tiling.RationalPolygonal.Raw.Compiler.ZPoint.toIntegerPlane_injective	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	940	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_sampleSignature_iff_mem_triangleUnion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	961	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineCells_preserves_constraint	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	969	theorem	Tiling.RationalPolygonal.Raw.Compiler.refineLines_preserves_constraint	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	979	theorem	Tiling.RationalPolygonal.Raw.Compiler.openUnitSquare_subset_feasibleSignCell_system	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	994	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_realCell_openUnitSquare_iff	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1020	theorem	Tiling.RationalPolygonal.Raw.Compiler.realCell_subset_closedUnitCell	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1033	theorem	Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangle_twiceAreaQ_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1066	theorem	Tiling.RationalPolygonal.Raw.Compiler.normalizedTriangles_twiceAreaQ_ne_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1075	theorem	Tiling.RationalPolygonal.Raw.Compiler.normalizedRegion_support_eq_triangleUnion	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1081	def	Tiling.RationalPolygonal.Raw.Compiler.unitBoundaryLines	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1084	theorem	Tiling.RationalPolygonal.Raw.Compiler.volume_unitBoundary	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1098	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_exceptionalSet_of_evalPlane_eq_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1108	def	Tiling.RationalPolygonal.Raw.Compiler.totalExceptionalSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1111	theorem	Tiling.RationalPolygonal.Raw.Compiler.volume_totalExceptionalSet	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1117	theorem	Tiling.RationalPolygonal.Raw.Compiler.exists_mem_not_mem_of_measure_ne_zero_of_measure_zero	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1129	theorem	Tiling.RationalPolygonal.Raw.Compiler.sampleSignature_eq_normalizedRegion_signature	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1155	theorem	Tiling.RationalPolygonal.Raw.Compiler.sampleSignature_mem_relevantSignatures	model / geometric support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1187	theorem	Tiling.RationalPolygonal.Raw.Compiler.mem_signatureFamily_iff_mem_relevantSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.SignatureCorrectness	Tiling/RationalPolygonal/SignatureCorrectness.lean	1270	theorem	Tiling.RationalPolygonal.Raw.Compiler.signatureFamily_toFinset_eq_relevantSignatures	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	22	structure	Tiling.RationalPolygonal.RasterPresentation	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	24	field	Tiling.RationalPolygonal.RasterPresentation.rasterTile	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	31	def	Tiling.RationalPolygonal.RasterPresentation.Represents	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	35	def	Tiling.RationalPolygonal.RasterPresentation.tileDecision	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	39	def	Tiling.RationalPolygonal.RasterPresentation.tileDecisionCost	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	43	theorem	Tiling.RationalPolygonal.RasterPresentation.planarTileDecisionCounted_eq	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	52	theorem	Tiling.RationalPolygonal.RasterPresentation.tileable_iff_canonicalRaster	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	77	theorem	Tiling.RationalPolygonal.RasterPresentation.tileDecision_eq_true_iff	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	88	def	Tiling.RationalPolygonal.RasterPresentation.DecidesTileability	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	95	theorem	Tiling.RationalPolygonal.RasterPresentation.tileDecision_decidesTileability	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	102	theorem	Tiling.RationalPolygonal.RasterPresentation.exists_tileabilityAlgorithm	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	108	def	Tiling.RationalPolygonal.RasterPresentation.tileableDecidable	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	117	def	Tiling.RationalPolygonal.RasterPresentation.canonical	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	121	theorem	Tiling.RationalPolygonal.RasterPresentation.canonical_represents	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Decision	Tiling/RationalPolygonal/Decision.lean	126	theorem	Tiling.RationalPolygonal.RasterPresentation.exists_representation	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	28	def	Tiling.RationalPolygonal.Raw.Decision.rawTileDecision	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	34	theorem	Tiling.RationalPolygonal.Raw.Decision.firstNonempty_mem	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	47	theorem	Tiling.RationalPolygonal.Raw.Decision.firstNonempty_exists_of_exists_nonempty	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	66	theorem	Tiling.RationalPolygonal.Raw.Decision.forall_fin_get_iff_forall_mem	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	77	theorem	Tiling.RationalPolygonal.Raw.Decision.mem_cons_erase_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	90	theorem	Tiling.RationalPolygonal.Raw.Decision.nonemptyRasterFamily_members	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	107	theorem	Tiling.RationalPolygonal.Raw.Decision.nonemptyRasterFamily_tiles_iff	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	128	theorem	Tiling.RationalPolygonal.Raw.Decision.exists_planarRasterTile_tiling_iff_family	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	141	theorem	Tiling.RationalPolygonal.Raw.Decision.relevantSignatures_tileable_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	163	def	Tiling.RationalPolygonal.Raw.Decision.SignatureFamilyCorrect	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	168	theorem	Tiling.RationalPolygonal.Raw.Decision.nonemptyRasterFamily_exists	Lemma 3.1 / raster support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	189	theorem	Tiling.RationalPolygonal.Raw.Decision.rawTileDecision_eq_true_iff	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	224	def	Tiling.RationalPolygonal.Raw.Decision.DecidesRawTileability	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	229	theorem	Tiling.RationalPolygonal.Raw.Decision.rawTileDecision_decidesRawTileability	model / geometric support	proved
+Tiling.RationalPolygonal.RawDecision	Tiling/RationalPolygonal/RawDecision.lean	237	theorem	Tiling.RationalPolygonal.Raw.Decision.exists_rawTileabilityAlgorithm	model / geometric support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	23	theorem	Tiling.RationalPolygonal.doublyPeriodic_integerPoint_image_of_setScalarPeriodic	model / geometric support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	61	theorem	Tiling.RationalPolygonal.PolygonalRegion.exists_doublyPeriodic_integer_tiling_of_tileable_raster	model / geometric support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	88	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.doublyPeriodic_denormalizedTranslations	model / geometric support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	101	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.exists_doublyPeriodic_tiling	model / geometric support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	120	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.tileable_iff_exists_doublyPeriodic_tiling	model / geometric support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	132	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1	Theorem 1.1	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	139	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1_spec	Corollary 1.1 support	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	148	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1	Corollary 1.1	proved
+Tiling.RationalPolygonal.Main	Tiling/RationalPolygonal/Main.lean	155	theorem	Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2	Theorem 1.2	proved

@@ -26,8 +26,11 @@ universe u v
 
 /-- A nonempty measurable set used as a translational prototile. -/
 structure Prototile (E : Type u) [MeasurableSpace E] where
+  /-- The measurable set occupied by the unplaced prototile. -/
   support : Set E
+  /-- The prototile support is measurable. -/
   measurableSet_support : MeasurableSet support
+  /-- Prototiles are not empty. -/
   nonempty_support : support.Nonempty
 
 /-- A labelled family of prototiles.  The type `P` carries identity, orientation, or decoration;
