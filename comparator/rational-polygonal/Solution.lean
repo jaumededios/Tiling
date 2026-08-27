@@ -1,6 +1,7 @@
 import Mathlib.Analysis.Complex.Convex
 import Mathlib.Analysis.Convex.Extreme
 import Mathlib.Analysis.Convex.Measure
+import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.LinearAlgebra.Complex.FiniteDimensional
 import Mathlib.MeasureTheory.Group.Pointwise
 import Mathlib.MeasureTheory.Measure.AEDisjoint

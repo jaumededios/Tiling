@@ -7,7 +7,7 @@ mathematician can audit **what is claimed** without reading or trusting any file
 
 ## What the trusted statement says
 
-`Challenge.lean` imports only seven named Mathlib modules and develops the entire vocabulary from
+`Challenge.lean` imports only eight named Mathlib modules and develops the entire vocabulary from
 first principles before displaying the theorem:
 
 1. a prototile is a nonempty measurable set;
