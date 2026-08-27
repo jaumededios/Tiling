@@ -61,10 +61,28 @@ It is a genuine definition, not a structure field whose specification is assumed
 The construction has no empty-color escape hatch: `relevantSignatures_nonempty` and
 `distinguishedRelevantSignature_nonempty` provide a genuine nonempty zero marker layer.
 
-## Executable boundary
+## Executable raw compiler
 
-`Decision.RasterPresentation` stores the resulting `Finset IntegerPlane`; `Represents P K` states
-that it is definitionally the canonical normalized raster.  `tileDecision` and its exact counted
-cost are executable on this finite data.  Constructing the raster from the semantic real-set
-structure is noncomputable, so a raw rational-coordinate compiler is tracked separately in the
-comparator rather than being silently identified with this stage.
+The effective path begins with the computed integer triangles from `RawInput`:
+
+1. `LinearFeasibility` supplies a verified rational Fourier--Motzkin solver for finite strict
+   systems in two variables.
+2. `SignatureCompiler` computes a finite offset window, all translated triangle-edge lines,
+   feasible strict sign cells in the open unit square, one exact rational sample per cell, and the
+   deduplicated `signatureFamily` of finite lattice signatures.
+3. `SignatureCorrectness` proves
+   `signatureFamily_toFinset_eq_relevantSignatures`: the executable unordered family is exactly
+   the semantic positive-measure family.  The proof includes offset-window completeness, rational
+   density in nonempty open cells, null exceptional boundaries, and exact triangle membership.
+4. `ComputableMarker` proves the executable array-indexed marker constructors extensionally equal
+   the semantic marker geometry.  `nonemptyRasterFamily?` moves a known nonempty signature to color
+   zero, and `planarRasterTileExec` produces the actual finite lattice tile.
+
+The live frontend regression computes the signature family of the normalized unit right triangle:
+the deduplicated family has length `2` and signature cardinalities `[1, 0]`.  It deliberately stops
+before the potentially enormous final exhaustive tiling search.
+
+`Decision.RasterPresentation` remains a useful compiled-backend abstraction.  `Represents P K`
+states that its finite tile is the canonical semantic raster, while `tileDecision` and its exact
+counted cost expose the bounded planar search.  The paper-facing raw algorithm instead lives in
+`RawDecision` and obtains its finite raster by the verified executable pipeline above.

@@ -3,8 +3,8 @@
 This comparator targets de Dios Pont--Grebík--Greenfeld--Madrid,
 *Periodicity and decidability of translational tilings by rational polygonal sets*,
 arXiv:2408.02151v2.  Declaration-level coverage is generated from production by
-`validate.py`; this file records the mathematical correspondence and, in particular, the one
-remaining effective-input boundary.
+`validate.py`; this file records the mathematical correspondence, including the complete
+effective pipeline from finite rational triangulations to the bounded lattice decision.
 
 ## Representation contract
 
@@ -13,6 +13,7 @@ remaining effective-input boundary.
 | Bounded open polygonal set `Ω` | `PolygonalRegion.support`, a nonempty regular-closed finite union of nondegenerate triangles | `PolygonalRegion.openCarrier` and `openCarrier_ae_eq` identify the paper's open carrier with the support for the a.e. tiling relation. |
 | Intrinsic vertices `V(Ω)` | `vertexSet support` | The polygonal topology API proves finiteness and independence from a chosen triangulation. |
 | Relative rationality | `RationalPolygonalRegion` | The structure records an anchor and one positive common denominator; `normalizedRegion` has integral vertices and the forward/inverse affine translation maps transport tilings and periods. |
+| Finite rational polygon input | `Raw.Code.Input`, whose runtime `Raw.Code` is a list of rational triangles and whose `Valid` field is proof-only geometry | `Raw.Code.Input.rationalPolygonalRegion` interprets the code semantically; executable common-denominator normalization is identified with `normalizedRegion` by the `RawInput` support and carrier theorems. |
 | `Ω ⊕ T = ℝ²` a.e. | `PolygonalRegion.Tiles T` | A unit-labelled `Tiling.IsTiling`; `Tiles.countable` and `Tiles.ae_existsUnique_translation` expose the countable unique-representation form. |
 | `F ⊕ A = ℤ²` exactly | `TranslationalTilings.TilesUniverse F A` | The existing exact finite convolution/unique representation API is used by rasterization and earthquakes. |
 | singly/weakly/doubly periodic real set | `SinglyPeriodic`, `WeakPeriodicDecomposition`/`WeaklyPeriodic`, `DoublyPeriodic` | These use genuine real periods; integer-period embeddings and inverse affine transport are proved, not definitional identifications. |
@@ -32,7 +33,7 @@ Lemma 3.1(iii).
 | Definition 1.2(ii) | `Basic`: `WeakPeriodicDecomposition`, `WeaklyPeriodic` | proved |
 | Definition 1.2(iii) | `Basic`: `DoublyPeriodic` | proved |
 | Theorem 1.1 | `Main`: `RationalPolygonalRegion.theorem_1_1` | proved |
-| Corollary 1.1 | `Decision`/`Main`: `RasterPresentation.tileDecision_decidesTileability`, `RationalPolygonalRegion.corollary_1_1` | one executable Boolean algorithm is proved correct for every valid finite compiled raster presentation; the raw finite rational-vertex-to-raster compiler described below remains outside the executable API |
+| Corollary 1.1 | `RawDecision`/`Main`: `Raw.Decision.rawTileDecision_decidesRawTileability`, `RationalPolygonalRegion.corollary_1_1` | proved by one total Boolean on every valid finite rational triangulation; normalization, signature enumeration, marker compilation, and semantic correctness are all in production |
 | Theorem 1.2 | `WeakPeriodicity`/`Main`: `RationalPolygonalRegion.Tiles.weaklyPeriodic`, `RationalPolygonalRegion.theorem_1_2` | proved for every given tiling |
 | Definition 2.1 | `IntegerReduction`: `PolygonalRegion.IsIntegerTiling` | proved definition |
 | Lemma 2.2 | `IntegerReduction`: `PolygonalRegion.exists_integer_tiling` | proved |
@@ -46,7 +47,7 @@ Lemma 3.1(iii).
 | Lemma 3.1(ii) | `RasterMarker`: `tiles_integerPoint_image_iff_relevantPlanarRasterTile` plus exact family decoding | proved |
 | Lemma 3.1(iii) | `RasterMarker`: `relevantPlanarRasterTile_carrier_eq_iff` | proved with literal equality on both raster and continuous carriers |
 | Theorem 4.1 used by the paper | `TranslationalTilings.exists_quantitativeWeakPeriodData` and its validity API | proved upstream and consumed in `EarthquakeUniform` |
-| Definition 4.1 | `Earthquake`: `quakeTransfer`, `quakeGraph`, `QuakePlate`, carrier periodicity and minimality | proved |
+| Definition 4.1 | `DiscreteCarrier`/`Earthquake`: `quakeTransfer`, `quakeGraph`, `QuakePlate`, carrier periodicity and minimality | proved |
 | Lemma 4.2 | `EarthquakeUniform`: `exists_uniformQuakePeriodicDecomposition` | proved, including singleton and normalization cases |
 
 ## Essential non-numbered proof chain
@@ -70,8 +71,14 @@ The headline results additionally use the following genuine declarations.
    continuous plates.
 8. `IntegerSlidingReduction.weakPeriodicDecomposition` unshifts and regroups the uniform quake
    parts, producing a finite disjoint periodic decomposition of the *original* translation set.
-9. `exists_doublyPeriodic_integer_tiling_of_tileable_raster` applies periodic completion to the
-   raster tile and decodes the result, proving Theorem 1.1.
+9. `Raw.Code.Input.normalizedSupport_eq_normalizedCodeSupport`, the verified rational
+   Fourier--Motzkin solver, and `signatureFamily_toFinset_eq_relevantSignatures` prove that the
+   executable normalized triangle compiler enumerates exactly the semantic signature family.
+10. `planarRasterTileExec_eq_planarRasterTile` and
+    `rawTileDecision_decidesRawTileability` connect that family to the rigid marker and bounded
+    lattice decision, proving Corollary 1.1 on raw rational input.
+11. `exists_doublyPeriodic_integer_tiling_of_tileable_raster` applies periodic completion to the
+    semantic raster tile and decodes the result, proving Theorem 1.1.
 
 ## Imported paper-scale results
 
@@ -86,27 +93,26 @@ The development imports the already proved Greenfeld--Tao production API in this
 The generated file `BlueprintValidation.lean` contains only `#check` commands.  No production file
 imports it, and the trust pass accepts only `propext`, `Classical.choice`, and `Quot.sound`.
 
-## Remaining effective-input obligation
+## Executable raw-input closure
 
-The semantic `RationalPolygonalRegion` contains a real set and proof witnesses and therefore is
-not executable data.  Production currently makes the next boundary explicit:
+The semantic `RationalPolygonalRegion` still intentionally contains a real set and proof witnesses;
+it is not treated as runtime data.  Corollary 1.1 instead uses:
 
 ```lean
-structure RasterPresentation where
-  rasterTile : Finset IntegerPlane
-
-RasterPresentation.Represents P K
-RasterPresentation.tileDecision P : Bool
+Raw.Code.Input
+Raw.Decision.rawTileDecision : Raw.Code.Input → Bool
+Raw.Decision.DecidesRawTileability rawTileDecision
 ```
 
-`DecidesTileability` is the universal correctness contract,
-`tileDecision_decidesTileability` supplies its executable witness, and paper-facing
-`corollary_1_1` states the literal existence of that algorithm.  Every semantic region has a valid
-code by `exists_representation`; the search and its counted cost are executable on the code.  The
-paper, however, starts from a
-finite rational polygon description and says to compute the normalization, cell signatures, and
-raster.  A fully literal computational formalization of that sentence still requires an
-executable finite rational-polygon input type and a verified compiler from its vertices/edges to
-`RasterPresentation`.  Until that compiler is implemented or an independent review accepts the
-compiled raster as the formal input representation, Corollary 1.1 is recorded as complete from
-the post-raster finite boundary, not as a bit-level decision procedure on raw vertex lists.
+The runtime code is a finite list of rational triangles.  Its `Valid` field certifies the
+paper-domain geometric assumptions and is proof-only; it contains neither a raster nor an answer.
+`RawInput` computes the anchor, common denominator, and integer triangles.  `SignatureCompiler`
+uses the verified `LinearFeasibility` solver to enumerate rational samples for all strict
+arrangement cells.  `SignatureCorrectness` proves that the resulting unordered signature family
+is exactly `relevantSignatures`; `ComputableMarker` constructs the rigid finite tile; and
+`RawDecision` runs `planarTileDecision` and proves the real-plane tileability equivalence.
+
+The older `RasterPresentation` declarations remain as a reusable compiled-backend API and exact
+cost interface.  They no longer carry the paper-facing Corollary 1.1 claim.  Thus the effective
+input obligation recorded by the initial independent reviews is closed in production, while those
+historical BLOCK reports remain unchanged as reviews of their original sealed snapshot.

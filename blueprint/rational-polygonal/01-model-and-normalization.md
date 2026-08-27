@@ -47,6 +47,29 @@ forward and inverse translation maps and proves transport of:
 The normalizing linear factor is nonzero and positive.  Every use of the inverse map cites that
 fact explicitly.
 
+## Raw rational input and executable normalization
+
+`Raw.Code` is finite runtime data: a list of `Raw.QTriangle` values whose vertices are pairs of
+executable rationals.  `Raw.Code.Valid` contains only proof certificates that the list is nonempty,
+its triangles are nondegenerate and pairwise almost-everywhere disjoint, and the selected anchor is
+an intrinsic vertex.  The paper-facing domain is `Raw.Code.Input`, which packages that proof-only
+validity with the rational code; it contains no raster or decision certificate.
+
+The executable normalization selects the first encoded vertex as anchor, computes the least common
+multiple of every coordinate denominator, and maps each rational triangle to a `Raw.ZTriangle`.
+The exact bridges are:
+
+- `scaledCoordinate_cast`, identifying denominator clearing with real scalar multiplication;
+- `normalizedPoint_toPlane` and `normalizedTriangle_carrier`, identifying computed vertices and
+  triangle carriers with affine normalization;
+- `rationalPolygonalRegion`, interpreting a valid code in the semantic model; and
+- `normalizedSupport_eq_normalizedCodeSupport`, identifying the semantic normalized support with
+  the finite union represented by the computed integer triangles.
+
+The live frontend regression uses coordinates with denominators two and three: it computes common
+denominator `6`, and clears `2/3` and `1/3` to the integers `4` and `2`.  This specifically guards
+the fractional normalization path rather than testing only integral examples.
+
 ## Integer lattice bridge
 
 The discrete plane is `TranslationalTilings.Plane = Fin 2 → ℤ`.  The continuous embedding is the

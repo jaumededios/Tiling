@@ -19,7 +19,8 @@ this repository:
 
 The existing `Tiling.Geometry` development already proves the geometric core of Lemmas 2.5 and
 2.7 in a stronger finite-family form.  The new development completes the monotile/integer wrappers,
-the raster encoding, the discrete earthquake argument, and the three headline results.
+the raster encoding, the executable compiler from rational coordinates, the discrete earthquake
+argument, and the three headline results.
 
 The paper works with bounded open polygonal sets.  `Tiling.Geometry` uses their regular-closed
 representatives (finite unions of closed nondegenerate triangles), because the repository's tiling
@@ -41,15 +42,17 @@ equality.
 - [`04-earthquakes.md`](04-earthquakes.md) specifies the canonical earthquake graph and the proof of
   Lemma 4.2.
 - [`05-main-results.md`](05-main-results.md) assembles Theorems 1.1 and 1.2 and Corollary 1.1.
-- [`declaration-coverage.tsv`](declaration-coverage.tsv) is the generated 20-module public API
+- [`declaration-coverage.tsv`](declaration-coverage.tsv) is the generated 26-module public API
   ledger.  [`validate.py`](validate.py) regenerates it together with the exact signature dump,
   public-definition body dump, `#check` validator, and artifact hashes; `validate.py --check` also
   runs a fresh production build, strict source compilation, documentation lint, and trust gates.
 
-Theorem 1.1 and Theorem 1.2 are proved at the semantic paper level.  The Corollary 1.1 Boolean is
-fully executable on a finite `RasterPresentation`; the comparator separately records that a raw
-rational vertex-list-to-raster compiler is not yet part of the executable API.  This distinction
-is intentional and must be preserved in reviews.
+Theorem 1.1 and Theorem 1.2 are proved at the semantic paper level.  Corollary 1.1 is a total
+Boolean on `Raw.Code.Input`, whose runtime payload is a finite list of rational triangles.  The
+verified pipeline computes common-denominator normalization, all positive-measure signature
+types, an executable rigid marker raster, and the final bounded lattice decision.  The older
+`RasterPresentation` API remains available as a reusable compiled-backend contract, but it is no
+longer the paper-facing input boundary.
 
 ## Primary sources
 

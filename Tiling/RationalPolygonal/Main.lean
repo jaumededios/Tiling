@@ -1,15 +1,15 @@
 import Tiling.RationalPolygonal.RasterRigidity
 import Tiling.RationalPolygonal.WeakPeriodicity
-import Tiling.RationalPolygonal.Decision
+import Tiling.RationalPolygonal.RawDecision
 import TranslationalTilings.Main
 
 /-!
-# Main periodicity results for rational polygonal tilings
+# Main results for rational polygonal tilings
 
 This module combines rational affine normalization, connected integer reduction, the rigid raster
-encoding, and Greenfeld--Tao periodic completion.  Its terminal equivalence is Theorem 1.1 of
-de Dios Pont--Grebík--Greenfeld--Madrid: tileability by a rational polygonal region is equivalent
-to tileability by a doubly periodic translation set.
+encoding, Greenfeld--Tao periodic completion, and the verified executable compiler from finite
+rational triangulations.  It exposes Theorem 1.1, Corollary 1.1, and Theorem 1.2 of de Dios
+Pont--Grebík--Greenfeld--Madrid through their paper-facing semantic and raw-input APIs.
 -/
 
 open Set
@@ -137,18 +137,18 @@ theorem theorem_1_1 (K : RationalPolygonalRegion) :
 
 /-- Pointwise specification of the executable algorithm in paper Corollary 1.1. -/
 theorem corollary_1_1_spec
-    (P : RasterPresentation) (K : RationalPolygonalRegion)
-    (hP : P.Represents K) :
-    P.tileDecision = true ↔
-      ∃ T : Set Plane, K.toPolygonalRegion.Tiles T :=
-  P.tileDecision_eq_true_iff K hP
+    (P : Raw.Code.Input) :
+    Raw.Decision.rawTileDecision P = true ↔
+      ∃ T : Set Plane,
+        P.rationalPolygonalRegion.toPolygonalRegion.Tiles T :=
+  Raw.Decision.rawTileDecision_decidesRawTileability P
 
 /-- **Paper Corollary 1.1.** There is one executable Boolean algorithm which decides whether the
-rational polygonal region represented by any valid finite raster presentation tiles the plane. -/
+rational polygonal region given by any valid finite rational triangulation tiles the plane. -/
 theorem corollary_1_1 :
-    ∃ algorithm : RasterPresentation → Bool,
-      RasterPresentation.DecidesTileability algorithm :=
-  RasterPresentation.exists_tileabilityAlgorithm
+    ∃ algorithm : Raw.Code.Input → Bool,
+      Raw.Decision.DecidesRawTileability algorithm :=
+  Raw.Decision.exists_rawTileabilityAlgorithm
 
 /-- **Paper Theorem 1.2.** Every translation set tiling by a rational polygonal region is weakly
 periodic. -/

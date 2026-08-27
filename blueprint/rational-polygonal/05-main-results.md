@@ -19,27 +19,28 @@ plane iff it admits a doubly periodic translation tiling.
 
 ## Corollary 1.1
 
-The implemented executable layer is:
+The paper-facing executable layer is:
 
 ```lean
-RasterPresentation.tileDecision     : RasterPresentation → Bool
-RasterPresentation.tileDecisionCost : RasterPresentation → ℕ
+Raw.Decision.rawTileDecision : Raw.Code.Input → Bool
 ```
 
-It invokes the bounded exhaustive `planarTileDecision` on the finite raster tile.  The counted
-implementation theorem gives the exact cost, and `tileDecision_eq_true_iff` proves the Boolean is
-true exactly when the represented rational polygonal region tiles the plane.
-`DecidesTileability` packages the universal correctness contract and
-`tileDecision_decidesTileability` proves it for the single executable function.  The terminal
-`RationalPolygonalRegion.corollary_1_1` is the literal existential statement that such an
-algorithm exists; `corollary_1_1_spec` is its pointwise specialization.
+Its input contains a finite list of rational triangles together with proof-only geometric validity.
+Execution computes the common-denominator integer normalization, enumerates the exact semantic
+signature family using the verified rational feasibility solver, moves a nonempty signature to
+marker color zero, constructs the executable planar raster, and invokes the bounded exhaustive
+`planarTileDecision`.
 
-This is an executable decision procedure from the finite raster stage onward.  The semantic
-`RationalPolygonalRegion` is not executable data, and the current `canonical` presentation is
-therefore noncomputable.  To formalize the paper's algorithm literally from raw rational polygon
-vertices, one must still define a finite rational-polygon input and verify the computation of its
-normalization, cell/signature family, and raster.  The comparator treats that as a remaining
-effective-input obligation, not as proof of the wrong statement.
+`Raw.Decision.DecidesRawTileability` is the universal correctness contract, and
+`rawTileDecision_decidesRawTileability` proves it for the total Boolean.  Consequently
+`RationalPolygonalRegion.corollary_1_1` has the literal raw-input existential type, while
+`corollary_1_1_spec` is its pointwise specialization on `Raw.Code.Input`.
+
+`RasterPresentation.tileDecision` and `tileDecisionCost` remain public compiled-backend support,
+with `tileDecision_eq_true_iff` relating a certified compiled raster to its semantic region.  They
+are no longer presented as the paper's input representation.  Validation exercises fractional
+denominator clearing and a complete small signature-family computation, but does not run the
+enormous final tiling search.
 
 ## Theorem 1.2
 

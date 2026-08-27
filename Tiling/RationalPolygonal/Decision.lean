@@ -4,13 +4,14 @@ import TranslationalTilings.Algorithms
 set_option linter.style.header false
 
 /-!
-# Executable tileability decision for compiled rational polygons
+# Compiled raster decision backend
 
 Lean's semantic `RationalPolygonalRegion` stores a real set and proof witnesses, so it is not an
-executable input type.  The effective input to the paper's Corollary 1.1 is the finite lattice tile
-computed by its rasterization stage.  This file makes that compilation boundary explicit: a
-`RasterPresentation` is runtime data, `Represents` certifies which rational region it encodes, and
-`tileDecision` is the actual bounded Boolean search from the planar Greenfeld--Tao development.
+executable input type.  This file isolates the reusable backend after raster compilation: a
+`RasterPresentation` is finite runtime data, `Represents` certifies which semantic rational region
+it encodes, and `tileDecision` is the bounded Boolean search from the planar Greenfeld--Tao
+development.  `RawDecision` supplies the paper-facing executable frontend from rational
+coordinates and delegates its final search to this backend infrastructure.
 -/
 
 open TranslationalTilings
@@ -71,8 +72,8 @@ theorem tileable_iff_canonicalRaster (K : RationalPolygonalRegion) :
     exact ⟨K.denormalizedTranslations (integerPoint '' A),
       K.tiles_of_normalizedRegion_tiles hAtiles⟩
 
-/-- **Paper Corollary 1.1, executable specification.**  On a finite raster presentation of `K`,
-the bounded Boolean search returns true exactly when `K` tiles the real plane by translations. -/
+/-- **Compiled-backend specification.** On a finite raster presentation of `K`, the bounded
+Boolean search returns true exactly when `K` tiles the real plane by translations. -/
 theorem tileDecision_eq_true_iff
     (P : RasterPresentation) (K : RationalPolygonalRegion)
     (hP : P.Represents K) :
