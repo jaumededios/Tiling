@@ -14,10 +14,10 @@ first principles before displaying the theorem:
 2. `Covering Ω T` says those translates cover almost every point;
 3. `Tiling Ω T` combines those conditions with countability of `T`;
 4. a planar translation set is periodic when two linearly independent vectors preserve membership;
-5. a triangle is a nondegenerate convex hull, bundled as an actual mathematical object;
-6. a polygonal set is a finite almost-disjoint collection of such triangles;
-7. a rational triangle has three rational-coordinate vertices;
-8. a rational polygon is a nonempty set admitting a triangulation by rational triangles.
+5. a polygon is a positive-area set expressed as a finite almost-disjoint union of closed
+   triangles (zero-area pieces are permitted and mathematically irrelevant);
+6. a rational triangle has three rational vertices;
+7. a rational polygon is a polygon admitting a triangulation entirely by rational triangles.
 
 The headline proposition is therefore literally:
 
@@ -28,9 +28,9 @@ The headline proposition is therefore literally:
 ```
 
 This is the forward implication of paper Theorem 1.1. The reverse implication is tautological.
-The paper uses bounded open polygonal regions whereas the shim uses their regular-closed supports;
-finite polygon boundaries have Lebesgue measure zero, and the tiling relation is explicitly an
-almost-everywhere relation, so the two representatives have the same tilings.
+The paper uses bounded open polygonal regions whereas the shim uses finite unions of closed
+triangles. Finite polygon boundaries have Lebesgue measure zero, and the tiling relation is
+explicitly an almost-everywhere relation, so the two representatives have the same tilings.
 
 ## Why there are two Lean modules
 
@@ -40,12 +40,12 @@ almost-everywhere relation, so the two representatives have the same tilings.
 | `Solution.lean` | the same definitions and theorem, followed by the bridge to the full project | no; checked |
 
 The definition block is repeated in `Solution.lean`; Comparator checks that the two independently
-elaborated copies are identical. The solution bridge is intentionally explicit. It converts
-bundled triangulations in both directions, derives an intrinsic anchor from a global extreme
-point, clears the finitely many rational vertex denominators, and converts the direct monotile
-packing/covering relation to and from the project's unit-labelled placement relation. Only then
-does it invoke the production theorem. These normalization details are deliberately absent from
-the trusted challenge.
+elaborated copies are identical. The solution bridge is intentionally explicit. It discards only
+degenerate triangular pieces, proves that their union is null, and obtains an almost-everywhere
+equal nondegenerate support. It then constructs the production library's common-denominator data
+from the displayed rational vertices and converts the direct monotile packing/covering relation to
+and from the project's unit-labelled placement relation. Only then does it invoke the production
+theorem. None of this implementation-facing machinery appears in the challenge statement.
 
 ## Quick local checks
 

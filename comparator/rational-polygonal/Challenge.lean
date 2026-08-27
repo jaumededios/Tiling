@@ -15,9 +15,10 @@ objects.
    everywhere.
 2. Double periodicity means invariance under two linearly
    independent translation vectors.
-3. A polygonal region is a finite almost-disjoint union of nondegenerate closed triangles.
-4. A rational polygon is a nonempty set admitting a triangulation whose displayed vertices have
-   rational coordinates.
+3. A polygonal region is a positive-area set written as a finite almost-disjoint union of closed
+   triangles. Degenerate pieces are harmless because they have area zero.
+4. Rationality is a separate extra condition: the triangulation can be chosen with rational
+   vertices.
 
 Closed triangles are convenient Lean objects.  The paper uses bounded open polygonal sets, but a
 polygonal set and its interior differ only on finitely many line segments, hence on a null set.
@@ -63,15 +64,11 @@ def Periodic (A : Set Plane) : Prop :=
 
 /-! ## 2. Polygonal tiles -/
 
-/-- Twice the oriented area of the triangle with vertices `a`, `b`, and `c`. -/
-def twiceSignedArea (a b c : Plane) : ℝ :=
-  (b.re - a.re) * (c.im - a.im) - (b.im - a.im) * (c.re - a.re)
-
-/-- A nondegenerate closed triangle. -/
+/-- A closed triangle, allowing the three vertices to be collinear. -/
 def IsTriangle (s : Set Plane) : Prop :=
-  ∃ a b c : Plane, twiceSignedArea a b c ≠ 0 ∧ s = convexHull ℝ {a, b, c}
+  ∃ a b c : Plane, s = convexHull ℝ {a, b, c}
 
-/-- A triangle, bundled together with the fact that its three vertices are noncollinear. -/
+/-- A closed triangle bundled as a subset of the plane. -/
 def Triangle := {s : Set Plane // IsTriangle s}
 
 /-- Regard a bundled triangle as its underlying subset of the plane. -/
@@ -88,10 +85,10 @@ structure Triangulation (Ω : Set Plane) where
   /-- The pieces have union exactly `Ω`. -/
   sUnion_eq : (⋃ t ∈ pieces, (t : Set Plane)) = Ω
 
-/-- A planar set is polygonal when it can be written as a finite union of nondegenerate
-triangles, with overlaps allowed only along null boundaries. -/
-def Polygonal (Ω : Set Plane) : Prop :=
-  Nonempty (Triangulation Ω)
+/-- A planar polygon is a positive-area set which can be written as a finite union of triangles,
+with overlaps allowed only along null boundaries. -/
+def Polygon (Ω : Set Plane) : Prop :=
+  volume Ω ≠ 0 ∧ Nonempty (Triangulation Ω)
 
 /-! ## 3. Rational polygonal tiles -/
 
@@ -99,11 +96,11 @@ def Polygonal (Ω : Set Plane) : Prop :=
 def IsRationalPoint (z : Plane) : Prop :=
   ∃ x y : ℚ, z.re = x ∧ z.im = y
 
-/-- A triangle is rational when it admits three noncollinear rational vertices. -/
+/-- A triangle is rational when it admits three rational vertices. -/
 def IsRationalTriangle (t : Triangle) : Prop :=
   ∃ a b c : Plane,
     IsRationalPoint a ∧ IsRationalPoint b ∧ IsRationalPoint c ∧
-      twiceSignedArea a b c ≠ 0 ∧ (t : Set Plane) = convexHull ℝ {a, b, c}
+      (t : Set Plane) = convexHull ℝ {a, b, c}
 
 /-- A triangle bundled together with a rational choice of its vertices. -/
 def RationalTriangle := {t : Triangle // IsRationalTriangle t}
@@ -113,10 +110,10 @@ structure RationalTriangulation (Ω : Set Plane) extends Triangulation Ω where
   /-- Every triangle in the decomposition has rational vertices. -/
   rational : ∀ t ∈ pieces, IsRationalTriangle t
 
-/-- A nonempty planar set is a rational polygon when it has a finite triangulation into rational
-triangles. -/
+/-- A rational polygon is a polygon whose triangulation can be chosen with rational vertices.
+The positive-area requirement belongs to `Polygon`; this definition adds only rationality. -/
 def RationalPolygon (Ω : Set Plane) : Prop :=
-  Ω.Nonempty ∧ Nonempty (RationalTriangulation Ω)
+  Polygon Ω ∧ Nonempty (RationalTriangulation Ω)
 
 /-! ## 4. The periodic tiling theorem -/
 

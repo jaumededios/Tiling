@@ -52,15 +52,11 @@ def Periodic (A : Set Plane) : Prop :=
 
 /-! ## 2. Polygonal tiles -/
 
-/-- Twice the oriented area of the triangle with vertices `a`, `b`, and `c`. -/
-def twiceSignedArea (a b c : Plane) : ℝ :=
-  (b.re - a.re) * (c.im - a.im) - (b.im - a.im) * (c.re - a.re)
-
-/-- A nondegenerate closed triangle. -/
+/-- A closed triangle, allowing the three vertices to be collinear. -/
 def IsTriangle (s : Set Plane) : Prop :=
-  ∃ a b c : Plane, twiceSignedArea a b c ≠ 0 ∧ s = convexHull ℝ {a, b, c}
+  ∃ a b c : Plane, s = convexHull ℝ {a, b, c}
 
-/-- A triangle, bundled together with the fact that its three vertices are noncollinear. -/
+/-- A closed triangle bundled as a subset of the plane. -/
 def Triangle := {s : Set Plane // IsTriangle s}
 
 /-- Regard a bundled triangle as its underlying subset of the plane. -/
@@ -77,10 +73,10 @@ structure Triangulation (Ω : Set Plane) where
   /-- The pieces have union exactly `Ω`. -/
   sUnion_eq : (⋃ t ∈ pieces, (t : Set Plane)) = Ω
 
-/-- A planar set is polygonal when it can be written as a finite union of nondegenerate
-triangles, with overlaps allowed only along null boundaries. -/
-def Polygonal (Ω : Set Plane) : Prop :=
-  Nonempty (Triangulation Ω)
+/-- A planar polygon is a positive-area set which can be written as a finite union of triangles,
+with overlaps allowed only along null boundaries. -/
+def Polygon (Ω : Set Plane) : Prop :=
+  volume Ω ≠ 0 ∧ Nonempty (Triangulation Ω)
 
 /-! ## 3. Rational polygonal tiles -/
 
@@ -88,11 +84,11 @@ def Polygonal (Ω : Set Plane) : Prop :=
 def IsRationalPoint (z : Plane) : Prop :=
   ∃ x y : ℚ, z.re = x ∧ z.im = y
 
-/-- A triangle is rational when it admits three noncollinear rational vertices. -/
+/-- A triangle is rational when it admits three rational vertices. -/
 def IsRationalTriangle (t : Triangle) : Prop :=
   ∃ a b c : Plane,
     IsRationalPoint a ∧ IsRationalPoint b ∧ IsRationalPoint c ∧
-      twiceSignedArea a b c ≠ 0 ∧ (t : Set Plane) = convexHull ℝ {a, b, c}
+      (t : Set Plane) = convexHull ℝ {a, b, c}
 
 /-- A triangle bundled together with a rational choice of its vertices. -/
 def RationalTriangle := {t : Triangle // IsRationalTriangle t}
@@ -102,10 +98,10 @@ structure RationalTriangulation (Ω : Set Plane) extends Triangulation Ω where
   /-- Every triangle in the decomposition has rational vertices. -/
   rational : ∀ t ∈ pieces, IsRationalTriangle t
 
-/-- A nonempty planar set is a rational polygon when it has a finite triangulation into rational
-triangles. -/
+/-- A rational polygon is a polygon whose triangulation can be chosen with rational vertices.
+The positive-area requirement belongs to `Polygon`; this definition adds only rationality. -/
 def RationalPolygon (Ω : Set Plane) : Prop :=
-  Ω.Nonempty ∧ Nonempty (RationalTriangulation Ω)
+  Polygon Ω ∧ Nonempty (RationalTriangulation Ω)
 
 end DeDiosPontGrebikGreenfeldMadridComparator
 
@@ -113,116 +109,7 @@ namespace DeDiosPontGrebikGreenfeldMadridComparator
 
 namespace ProductionBridge
 
-/-! ## Polygonal geometry -/
-
-/-- Forget the proof bundled with a comparator triangle. -/
-private def triangleEmbedding : Triangle ↪ Set Plane where
-  toFun := Subtype.val
-  inj' := Subtype.val_injective
-
-@[simp]
-private theorem triangleEmbedding_apply (t : Triangle) :
-    triangleEmbedding t = (t : Set Plane) :=
-  rfl
-
-/-- Turn a comparator triangulation into the production library's triangulation structure. -/
-def toProductionTriangulation {Ω : Set Plane} (τ : Triangulation Ω) :
-    Tiling.Triangulation Ω where
-  pieces := τ.pieces.map triangleEmbedding
-  isTriangle := by
-    intro t ht
-    rw [Finset.mem_map] at ht
-    obtain ⟨triangle, -, rfl⟩ := ht
-    change Tiling.IsTriangle (triangle : Set Plane)
-    simpa [IsTriangle, twiceSignedArea, Tiling.IsTriangle, Tiling.twiceSignedArea] using
-      triangle.property
-  pairwiseAEDisjoint := by
-    intro s hs t ht hst
-    change s ∈ τ.pieces.map triangleEmbedding at hs
-    change t ∈ τ.pieces.map triangleEmbedding at ht
-    rw [Finset.mem_map] at hs ht
-    obtain ⟨s', hs', rfl⟩ := hs
-    obtain ⟨t', ht', rfl⟩ := ht
-    apply τ.nullOverlap s' hs' t' ht'
-    intro hst'
-    exact hst (congrArg Subtype.val hst')
-  sUnion_eq :=
-    calc
-      ⋃₀ ((τ.pieces.map triangleEmbedding : Finset (Set Plane)) : Set (Set Plane)) =
-          ⋃ t ∈ τ.pieces, (t : Set Plane) := by
-            apply Set.Subset.antisymm
-            · intro x hx
-              obtain ⟨s, hs, hxs⟩ := Set.mem_sUnion.mp hx
-              change s ∈ τ.pieces.map triangleEmbedding at hs
-              obtain ⟨triangle, htriangle, rfl⟩ := Finset.mem_map.mp hs
-              exact Set.mem_iUnion.mpr ⟨triangle,
-                Set.mem_iUnion.mpr ⟨htriangle, hxs⟩⟩
-            · intro x hx
-              obtain ⟨triangle, hx⟩ := Set.mem_iUnion.mp hx
-              obtain ⟨htriangle, hx⟩ := Set.mem_iUnion.mp hx
-              apply Set.mem_sUnion.mpr
-              refine ⟨(triangle : Set Plane), ?_, hx⟩
-              change (triangle : Set Plane) ∈ τ.pieces.map triangleEmbedding
-              exact Finset.mem_map.mpr ⟨triangle, htriangle, rfl⟩
-      _ = Ω := τ.sUnion_eq
-
-/-- Bundle a production triangle with its proof of nondegeneracy. -/
-private def productionTriangle {Ω : Set Plane} (τ : Tiling.Triangulation Ω)
-    (t : {s // s ∈ τ.pieces}) : Triangle :=
-  ⟨t.1, by
-    simpa [IsTriangle, twiceSignedArea, Tiling.IsTriangle, Tiling.twiceSignedArea] using
-      τ.isTriangle t.1 t.2⟩
-
-@[simp]
-private theorem productionTriangle_carrier {Ω : Set Plane} (τ : Tiling.Triangulation Ω)
-    (t : {s // s ∈ τ.pieces}) :
-    (productionTriangle τ t : Set Plane) = t.1 :=
-  rfl
-
-/-- The preceding bundling operation is injective because it does not change the carrier. -/
-private def productionTriangleEmbedding {Ω : Set Plane} (τ : Tiling.Triangulation Ω) :
-    {s // s ∈ τ.pieces} ↪ Triangle where
-  toFun := productionTriangle τ
-  inj' := by
-    intro s t hst
-    apply Subtype.ext
-    exact congrArg (fun triangle : Triangle ↦ (triangle : Set Plane)) hst
-
-/-- Read a production triangulation using the comparator's independent structure. -/
-def ofProductionTriangulation {Ω : Set Plane} (τ : Tiling.Triangulation Ω) :
-    Triangulation Ω where
-  pieces := τ.pieces.attach.map (productionTriangleEmbedding τ)
-  nullOverlap := by
-    intro s hs t ht hst
-    rw [Finset.mem_map] at hs ht
-    obtain ⟨s', hs', rfl⟩ := hs
-    obtain ⟨t', ht', rfl⟩ := ht
-    apply τ.pairwiseAEDisjoint s'.property t'.property
-    intro hst'
-    apply hst
-    apply Subtype.ext
-    exact hst'
-  sUnion_eq :=
-    calc
-      (⋃ t ∈ τ.pieces.attach.map (productionTriangleEmbedding τ), (t : Set Plane)) =
-          ⋃₀ (τ.pieces : Set (Set Plane)) := by
-            apply Set.Subset.antisymm
-            · intro x hx
-              obtain ⟨triangle, hx⟩ := Set.mem_iUnion.mp hx
-              obtain ⟨htriangle, hx⟩ := Set.mem_iUnion.mp hx
-              obtain ⟨s, -, hst⟩ := Finset.mem_map.mp htriangle
-              subst triangle
-              exact Set.mem_sUnion.mpr ⟨s.1, s.2, hx⟩
-            · intro x hx
-              obtain ⟨s, hs, hxs⟩ := Set.mem_sUnion.mp hx
-              change s ∈ τ.pieces at hs
-              let triangle : {s // s ∈ τ.pieces} := ⟨s, hs⟩
-              apply Set.mem_iUnion.mpr
-              refine ⟨productionTriangle τ triangle, Set.mem_iUnion.mpr ⟨?_, hxs⟩⟩
-              exact Finset.mem_map.mpr ⟨triangle, by simp, rfl⟩
-      _ = Ω := τ.sUnion_eq
-
-/-! ## Rational vertices -/
+/-! ## Polygonal geometry and rational vertices -/
 
 /-- A displayed rational-vertex presentation of one bundled triangle. -/
 private structure RationalVertices (t : Triangle) where
@@ -232,15 +119,207 @@ private structure RationalVertices (t : Triangle) where
   rational_a : IsRationalPoint a
   rational_b : IsRationalPoint b
   rational_c : IsRationalPoint c
-  nondegenerate : twiceSignedArea a b c ≠ 0
   carrier_eq : (t : Set Plane) = convexHull ℝ {a, b, c}
 
 /-- Choose the three rational vertices certified by a rational triangulation. -/
 private noncomputable def chosenRationalVertices {Ω : Set Plane}
     (τ : RationalTriangulation Ω) (t : {t // t ∈ τ.pieces}) : RationalVertices t.1 :=
   Classical.choice (by
-    obtain ⟨a, b, c, ha, hb, hc, hnondegenerate, hcarrier⟩ := τ.rational t.1 t.2
-    exact ⟨⟨a, b, c, ha, hb, hc, hnondegenerate, hcarrier⟩⟩)
+    obtain ⟨a, b, c, ha, hb, hc, hcarrier⟩ := τ.rational t.1 t.2
+    exact ⟨⟨a, b, c, ha, hb, hc, hcarrier⟩⟩)
+
+/-- Two planar vectors are linearly independent exactly when their coordinate determinant is
+nonzero. This coordinate lemma belongs to the production bridge, not the challenge statement. -/
+private theorem linearIndependent_pair_iff_det_ne_zero (u v : Plane) :
+    LinearIndependent ℝ ![u, v] ↔ u.re * v.im - u.im * v.re ≠ 0 := by
+  constructor
+  · intro hlinear
+    rw [linearIndependent_fin2] at hlinear
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one] at hlinear
+    obtain ⟨hv, hnotMultiple⟩ := hlinear
+    intro hdet
+    by_cases hre : v.re = 0
+    · have him : v.im ≠ 0 := by
+        intro him
+        apply hv
+        apply Complex.ext <;> simp [hre, him]
+      have hure : u.re = 0 := by
+        have hdet' := hdet
+        rw [hre, mul_zero, sub_zero] at hdet'
+        exact (mul_eq_zero.mp hdet').resolve_right him
+      apply hnotMultiple (u.im / v.im)
+      apply Complex.ext
+      · simp [hre, hure]
+      · simp [div_mul_cancel₀ _ him]
+    · apply hnotMultiple (u.re / v.re)
+      apply Complex.ext
+      · simp [div_mul_cancel₀ _ hre]
+      · simp only [Complex.smul_im, smul_eq_mul]
+        rw [div_mul_eq_mul_div, div_eq_iff hre]
+        exact sub_eq_zero.mp hdet
+  · intro hdet
+    rw [linearIndependent_fin2]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one]
+    constructor
+    · intro hv
+      subst v
+      exact hdet (by simp)
+    · intro r hur
+      apply hdet
+      rw [← hur]
+      simp only [Complex.smul_re, Complex.smul_im, smul_eq_mul]
+      ring
+
+/-- The invariant and coordinate formulations of nondegeneracy agree. -/
+private theorem linearIndependent_pair_iff_production_area_ne_zero (a b c : Plane) :
+    LinearIndependent ℝ ![b - a, c - a] ↔
+      Tiling.twiceSignedArea a b c ≠ 0 := by
+  simpa only [Tiling.twiceSignedArea, Complex.sub_re, Complex.sub_im] using
+    linearIndependent_pair_iff_det_ne_zero (b - a) (c - a)
+
+/-- The genuinely two-dimensional pieces of a rational triangulation. -/
+private noncomputable def nondegeneratePieces {Ω : Set Plane} (τ : RationalTriangulation Ω) :
+    Finset {t // t ∈ τ.pieces} := by
+  classical
+  exact τ.pieces.attach.filter fun t ↦
+    LinearIndependent ℝ
+      ![(chosenRationalVertices τ t).b - (chosenRationalVertices τ t).a,
+        (chosenRationalVertices τ t).c - (chosenRationalVertices τ t).a]
+
+/-- The union of the two-dimensional pieces; degenerate pieces have been discarded. -/
+private noncomputable def essentialSupport {Ω : Set Plane} (τ : RationalTriangulation Ω) :
+    Set Plane :=
+  ⋃ t ∈ nondegeneratePieces τ, (t.1 : Set Plane)
+
+/-- Forget both proof layers and retain the carrier of a triangulation piece. -/
+private def attachedTriangleCarrierEmbedding {Ω : Set Plane} (τ : RationalTriangulation Ω) :
+    {t // t ∈ τ.pieces} ↪ Set Plane where
+  toFun t := (t.1 : Set Plane)
+  inj' := by
+    intro s t hst
+    apply Subtype.ext
+    apply Subtype.ext
+    exact hst
+
+/-- The nondegenerate pieces form a production-library triangulation of the essential support. -/
+private noncomputable def essentialProductionTriangulation {Ω : Set Plane}
+    (τ : RationalTriangulation Ω) : Tiling.Triangulation (essentialSupport τ) := by
+  classical
+  refine
+    { pieces := (nondegeneratePieces τ).map (attachedTriangleCarrierEmbedding τ)
+      isTriangle := ?_
+      pairwiseAEDisjoint := ?_
+      sUnion_eq := ?_ }
+  · intro s hs
+    rw [Finset.mem_map] at hs
+    obtain ⟨t, ht, rfl⟩ := hs
+    have hlinear : LinearIndependent ℝ
+        ![(chosenRationalVertices τ t).b - (chosenRationalVertices τ t).a,
+          (chosenRationalVertices τ t).c - (chosenRationalVertices τ t).a] :=
+      (Finset.mem_filter.mp ht).2
+    refine ⟨(chosenRationalVertices τ t).a, (chosenRationalVertices τ t).b,
+      (chosenRationalVertices τ t).c,
+      (linearIndependent_pair_iff_production_area_ne_zero _ _ _).mp hlinear, ?_⟩
+    exact (chosenRationalVertices τ t).carrier_eq
+  · intro s hs t ht hst
+    change s ∈ (nondegeneratePieces τ).map (attachedTriangleCarrierEmbedding τ) at hs
+    change t ∈ (nondegeneratePieces τ).map (attachedTriangleCarrierEmbedding τ) at ht
+    rw [Finset.mem_map] at hs ht
+    obtain ⟨s', hs', rfl⟩ := hs
+    obtain ⟨t', ht', rfl⟩ := ht
+    apply τ.nullOverlap s'.1 s'.2 t'.1 t'.2
+    intro hst'
+    apply hst
+    exact congrArg (fun triangle : Triangle ↦ (triangle : Set Plane)) hst'
+  · apply Set.Subset.antisymm
+    · intro x hx
+      obtain ⟨s, hs, hxs⟩ := Set.mem_sUnion.mp hx
+      change s ∈ (nondegeneratePieces τ).map (attachedTriangleCarrierEmbedding τ) at hs
+      obtain ⟨t, ht, rfl⟩ := Finset.mem_map.mp hs
+      exact Set.mem_iUnion.mpr ⟨t, Set.mem_iUnion.mpr ⟨ht, hxs⟩⟩
+    · intro x hx
+      obtain ⟨t, hx⟩ := Set.mem_iUnion.mp hx
+      obtain ⟨ht, hx⟩ := Set.mem_iUnion.mp hx
+      apply Set.mem_sUnion.mpr
+      refine ⟨(t.1 : Set Plane), ?_, hx⟩
+      change (t.1 : Set Plane) ∈
+        (nondegeneratePieces τ).map (attachedTriangleCarrierEmbedding τ)
+      exact Finset.mem_map.mpr ⟨t, ht, rfl⟩
+
+/-- Three points are affinely independent exactly when the two differences based at the first
+point are linearly independent. -/
+private theorem affineIndependent_three_iff_linearIndependent_pair (a b c : Plane) :
+    AffineIndependent ℝ ![a, b, c] ↔ LinearIndependent ℝ ![b - a, c - a] := by
+  rw [affineIndependent_iff_linearIndependent_vsub ℝ ![a, b, c] 0]
+  exact (linearIndependent_equiv' (R := ℝ)
+    (finSuccAboveEquiv (0 : Fin 3)) (by
+      funext i
+      fin_cases i <;> rfl)).symm
+
+/-- A degenerate displayed triangle is null.  This is why the expository `Triangle` type may
+allow collinear vertices: such pieces do not affect any almost-everywhere tiling statement. -/
+private theorem volume_triangle_eq_zero_of_degenerate {Ω : Set Plane}
+    (τ : RationalTriangulation Ω) (t : {t // t ∈ τ.pieces})
+    (hdegenerate : ¬ LinearIndependent ℝ
+      ![(chosenRationalVertices τ t).b - (chosenRationalVertices τ t).a,
+        (chosenRationalVertices τ t).c - (chosenRationalVertices τ t).a]) :
+    volume (t.1 : Set Plane) = 0 := by
+  rw [(chosenRationalVertices τ t).carrier_eq]
+  have haffine : ¬ AffineIndependent ℝ
+      ![(chosenRationalVertices τ t).a, (chosenRationalVertices τ t).b,
+        (chosenRationalVertices τ t).c] := fun hindependent ↦
+    hdegenerate ((affineIndependent_three_iff_linearIndependent_pair _ _ _).mp hindependent)
+  have hcollinear : Collinear ℝ
+      ({(chosenRationalVertices τ t).a, (chosenRationalVertices τ t).b,
+        (chosenRationalVertices τ t).c} : Set Plane) :=
+    collinear_iff_not_affineIndependent_set.mpr haffine
+  apply measure_mono_null (convexHull_subset_affineSpan _)
+  apply Measure.addHaar_affineSubspace
+  intro hspan
+  have hdim := hcollinear.finrank_le_one
+  rw [← direction_affineSpan, hspan, AffineSubspace.direction_top, finrank_top,
+    Complex.finrank_real_complex] at hdim
+  omega
+
+/-- Discarding degenerate pieces changes a rational polygon only on a null set. -/
+private theorem support_ae_eq_essentialSupport {Ω : Set Plane}
+    (τ : RationalTriangulation Ω) :
+    Ω =ᵐ[volume] essentialSupport τ := by
+  classical
+  have hdegenerateAbsent : ∀ᵐ x ∂volume, ∀ t : {t // t ∈ τ.pieces},
+      ¬ LinearIndependent ℝ
+          ![(chosenRationalVertices τ t).b - (chosenRationalVertices τ t).a,
+            (chosenRationalVertices τ t).c - (chosenRationalVertices τ t).a] →
+        x ∉ (t.1 : Set Plane) := by
+    apply ae_all_iff.mpr
+    intro t
+    by_cases hlinear : LinearIndependent ℝ
+        ![(chosenRationalVertices τ t).b - (chosenRationalVertices τ t).a,
+          (chosenRationalVertices τ t).c - (chosenRationalVertices τ t).a]
+    · exact Filter.Eventually.of_forall fun _x hnotLinear ↦ (hnotLinear hlinear).elim
+    · filter_upwards [measure_eq_zero_iff_ae_notMem.mp
+        (volume_triangle_eq_zero_of_degenerate τ t hlinear)] with x hx
+      exact fun _hnotLinear ↦ hx
+  filter_upwards [hdegenerateAbsent] with x hx
+  apply propext
+  constructor
+  · intro hxΩ
+    rw [← τ.sUnion_eq] at hxΩ
+    obtain ⟨t, hxΩ⟩ := Set.mem_iUnion.mp hxΩ
+    obtain ⟨ht, hxt⟩ := Set.mem_iUnion.mp hxΩ
+    let t' : {t // t ∈ τ.pieces} := ⟨t, ht⟩
+    by_cases hlinear : LinearIndependent ℝ
+        ![(chosenRationalVertices τ t').b - (chosenRationalVertices τ t').a,
+          (chosenRationalVertices τ t').c - (chosenRationalVertices τ t').a]
+    · apply Set.mem_iUnion.mpr
+      refine ⟨t', Set.mem_iUnion.mpr ⟨?_, hxt⟩⟩
+      exact Finset.mem_filter.mpr ⟨Finset.mem_attach _ _, hlinear⟩
+    · exact (hx t' hlinear hxt).elim
+  · intro hxEssential
+    rw [← τ.sUnion_eq]
+    obtain ⟨t, hxEssential⟩ := Set.mem_iUnion.mp hxEssential
+    obtain ⟨_ht, hxt⟩ := Set.mem_iUnion.mp hxEssential
+    exact Set.mem_iUnion.mpr ⟨t.1, Set.mem_iUnion.mpr ⟨t.2, hxt⟩⟩
 
 /-- The finite set of all displayed vertices in a rational triangulation. -/
 private noncomputable def vertexCandidates {Ω : Set Plane} (τ : RationalTriangulation Ω) :
@@ -267,22 +346,21 @@ private theorem rationalPoint_of_mem_vertexCandidates {Ω : Set Plane}
 of any rational triangulation. -/
 private theorem vertexSet_subset_vertexCandidates {Ω : Set Plane}
     (τ : RationalTriangulation Ω) :
-    Tiling.vertexSet Ω ⊆ vertexCandidates τ := by
+    Tiling.vertexSet (essentialSupport τ) ⊆ vertexCandidates τ := by
   classical
   intro x hx
-  obtain ⟨s, hs, hxs⟩ := hx (toProductionTriangulation τ.toTriangulation)
-  change s ∈ τ.pieces.map triangleEmbedding at hs
-  obtain ⟨t, ht, rfl⟩ := Finset.mem_map.mp hs
-  let t' : {t // t ∈ τ.pieces} := ⟨t, ht⟩
+  obtain ⟨s, hs, hxs⟩ := hx (essentialProductionTriangulation τ)
+  change s ∈ (nondegeneratePieces τ).map (attachedTriangleCarrierEmbedding τ) at hs
+  obtain ⟨t, _ht, rfl⟩ := Finset.mem_map.mp hs
   have hxvertices :
-      x ∈ ({(chosenRationalVertices τ t').a, (chosenRationalVertices τ t').b,
-        (chosenRationalVertices τ t').c} : Set Plane) := by
+      x ∈ ({(chosenRationalVertices τ t).a, (chosenRationalVertices τ t).b,
+        (chosenRationalVertices τ t).c} : Set Plane) := by
     apply extremePoints_convexHull_subset (𝕜 := ℝ)
-    rw [← (chosenRationalVertices τ t').carrier_eq]
+    rw [← (chosenRationalVertices τ t).carrier_eq]
     exact hxs
   change x ∈ vertexCandidates τ
   rw [vertexCandidates, Finset.mem_biUnion]
-  refine ⟨t', by simp [t'], ?_⟩
+  refine ⟨t, by simp, ?_⟩
   simpa only [Finset.mem_insert, Finset.mem_singleton, Set.mem_insert_iff,
     Set.mem_singleton_iff] using hxvertices
 
@@ -325,18 +403,15 @@ private theorem exists_commonDenominator (V : Finset Plane)
 
 /-- Every bundled triangle is compact. -/
 private theorem isCompact_triangle (t : Triangle) : IsCompact (t : Set Plane) := by
-  obtain ⟨a, b, c, -, hcarrier⟩ := t.property
+  obtain ⟨a, b, c, hcarrier⟩ := t.property
   rw [hcarrier]
   exact (by simp : ({a, b, c} : Set Plane).Finite).isCompact_convexHull ℝ
 
-/-- Every nonempty finitely triangulated planar set has a vertex which appears in every
+/-- Every nonempty compact planar set has a vertex which appears in every production-library
 triangulation. A global extreme point supplies such a vertex. -/
-private theorem vertexSet_nonempty_of_triangulation {Ω : Set Plane}
-    (τ : Triangulation Ω) (hΩ : Ω.Nonempty) :
+private theorem vertexSet_nonempty_of_compact {Ω : Set Plane}
+    (hcompact : IsCompact Ω) (hΩ : Ω.Nonempty) :
     (Tiling.vertexSet Ω).Nonempty := by
-  have hcompact : IsCompact Ω := by
-    rw [← τ.sUnion_eq]
-    exact τ.pieces.isCompact_biUnion fun t _ht ↦ isCompact_triangle t
   obtain ⟨anchor, hanchorExtreme⟩ := hcompact.extremePoints_nonempty hΩ
   refine ⟨anchor, ?_⟩
   intro σ
@@ -353,6 +428,38 @@ private theorem vertexSet_nonempty_of_triangulation {Ω : Set Plane}
   · simpa only [Set.singleton_subset_iff] using hanchorS
 
 /-! ## Monotile tilings -/
+
+/-- Translating two almost-everywhere equal tiles by the same vector preserves their
+almost-everywhere equality. -/
+private theorem translate_ae_eq_translate {Ω Ω' : Set Plane}
+    (hΩ : Ω =ᵐ[volume] Ω') (t : Plane) :
+    t +ᵥ Ω =ᵐ[volume] t +ᵥ Ω' :=
+  (quasiMeasurePreserving_add_left volume (-t)).vadd_ae_eq_of_ae_eq t hΩ
+
+/-- Replacing a tile by an almost-everywhere equal set preserves a direct monotile tiling. -/
+private theorem tiling_of_ae_eq {Ω Ω' T : Set Plane}
+    (hΩ : Ω =ᵐ[volume] Ω') : Tiling Ω T → Tiling Ω' T := by
+  intro hT
+  refine ⟨hT.1, ?_, ?_⟩
+  · intro t₁ ht₁ t₂ ht₂ hne
+    have hinter :=
+      ae_eq_set_inter (translate_ae_eq_translate hΩ t₁)
+        (translate_ae_eq_translate hΩ t₂)
+    exact (measure_congr hinter).symm.trans (hT.2.1 t₁ ht₁ t₂ ht₂ hne)
+  · have htranslations : ∀ᵐ x ∂volume, ∀ t ∈ T,
+        x ∈ t +ᵥ Ω ↔ x ∈ t +ᵥ Ω' := by
+      apply (ae_ball_iff hT.1).mpr
+      intro t _ht
+      filter_upwards [translate_ae_eq_translate hΩ t] with x hx
+      exact iff_of_eq hx
+    filter_upwards [hT.2.2, htranslations] with x hxCover hxTranslations
+    obtain ⟨t, ht, hxt⟩ := hxCover
+    exact ⟨t, ht, (hxTranslations t ht).mp hxt⟩
+
+/-- The direct monotile tiling relation depends only on the tile up to a null set. -/
+private theorem tiling_congr_of_ae_eq {Ω Ω' T : Set Plane}
+    (hΩ : Ω =ᵐ[volume] Ω') : Tiling Ω T ↔ Tiling Ω' T :=
+  ⟨tiling_of_ae_eq hΩ, tiling_of_ae_eq hΩ.symm⟩
 
 /-- Convert the comparator's direct monotile tiling relation to the unit-labelled production
 relation. -/
@@ -407,20 +514,35 @@ theorem periodic_of_production {A : Set Plane}
 presentation. The common denominator and intrinsic anchor are derived here rather than exposed in
 the challenge statement. -/
 theorem exists_productionRegion {Ω : Set Plane} (hΩ : RationalPolygon Ω) :
-    ∃ K : Tiling.RationalPolygonal.RationalPolygonalRegion, K.support = Ω := by
+    ∃ K : Tiling.RationalPolygonal.RationalPolygonalRegion,
+      Ω =ᵐ[volume] K.support := by
   classical
-  obtain ⟨hnonempty, ⟨τ⟩⟩ := hΩ
+  obtain ⟨⟨hvolume, _htriangulated⟩, ⟨τ⟩⟩ := hΩ
+  have hsupportAE : Ω =ᵐ[volume] essentialSupport τ :=
+    support_ae_eq_essentialSupport τ
+  have hessentialVolume : volume (essentialSupport τ) ≠ 0 := by
+    intro hzero
+    apply hvolume
+    exact (measure_congr hsupportAE).trans hzero
+  have hessentialNonempty : (essentialSupport τ).Nonempty := by
+    rw [Set.nonempty_iff_ne_empty]
+    intro hempty
+    apply hessentialVolume
+    rw [hempty, measure_empty]
+  have hessentialCompact : IsCompact (essentialSupport τ) := by
+    rw [essentialSupport]
+    exact (nondegeneratePieces τ).isCompact_biUnion fun t _ht ↦ isCompact_triangle t.1
   have hvertexSubset := vertexSet_subset_vertexCandidates τ
   have hcandidateRational : ∀ v ∈ vertexCandidates τ, IsRationalPoint v :=
     fun _v hv ↦ rationalPoint_of_mem_vertexCandidates τ hv
   obtain ⟨denominator, hdenominator, hclears⟩ :=
     exists_commonDenominator (vertexCandidates τ) hcandidateRational
   obtain ⟨anchor, hanchor⟩ :=
-    vertexSet_nonempty_of_triangulation τ.toTriangulation hnonempty
+    vertexSet_nonempty_of_compact hessentialCompact hessentialNonempty
   refine ⟨
-    { support := Ω
-      isPolygonal := ⟨toProductionTriangulation τ.toTriangulation⟩
-      nonempty := hnonempty
+    { support := essentialSupport τ
+      isPolygonal := ⟨essentialProductionTriangulation τ⟩
+      nonempty := hessentialNonempty
       anchor := anchor
       anchor_mem_vertex := hanchor
       denominator := denominator
@@ -432,7 +554,7 @@ theorem exists_productionRegion {Ω : Set Plane} (hΩ : RationalPolygon Ω) :
         rw [smul_sub]
         exact Tiling.RationalPolygonal.integerLattice.sub_mem
           (hclears w (hvertexSubset hw))
-          (hclears anchor (hvertexSubset hanchor)) }, rfl⟩
+          (hclears anchor (hvertexSubset hanchor)) }, hsupportAE⟩
 
 end ProductionBridge
 
@@ -450,8 +572,7 @@ theorem periodic_tiling_of_rational_polygon
   intro htileable
   obtain ⟨K, hK⟩ := exists_productionRegion hΩ
   obtain ⟨T, hT⟩ := htileable
-  have hT' : Tiling K.support T := by
-    simpa only [hK] using hT
+  have hT' : Tiling K.support T := (tiling_congr_of_ae_eq hK).mp hT
   have hproductionTileable :
       ∃ T : Set Plane, K.toPolygonalRegion.Tiles T :=
     ⟨T, toProductionTiling K.toPolygonalRegion hT'⟩
@@ -459,6 +580,7 @@ theorem periodic_tiling_of_rational_polygon
     (Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1 K).mp
       hproductionTileable
   refine ⟨S, periodic_of_production hSperiodic, ?_⟩
-  simpa only [hK] using ofProductionTiling K.toPolygonalRegion hStiles
+  exact (tiling_congr_of_ae_eq hK).mpr
+    (ofProductionTiling K.toPolygonalRegion hStiles)
 
 end DeDiosPontGrebikGreenfeldMadridComparator
