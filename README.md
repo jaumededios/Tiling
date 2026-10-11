@@ -3,22 +3,18 @@
 [![Build and verify](https://github.com/jaumededios/Tiling/actions/workflows/lean_action_ci.yml/badge.svg?branch=main)](https://github.com/jaumededios/Tiling/actions/workflows/lean_action_ci.yml)
 
 A Lean 4 / Mathlib formalization of periodicity, structure, and decidability
-results for translational tilings. The development connects finite tiles in
-$\mathbb{Z}^2$ with polygonal tiles in $\mathbb{R}^2$, including rational
-polygons, axis-parallel polygons with arbitrary real coordinates, and polygons
-whose boundary edges have rational slopes.
+results for translational tilings. Formalizes the main results of 
+*Translaitonal tilings by axis-parallel polygonal sets*
+by Jaume de Dios Pont, Jan Grebik, Rachel Greenfeld and Jose Madrid.
+In doing so, we provide an formalization of the previous work on
+*Periodicity and decidability of translational tilings by rational polygonal sets* by the same authors.
 
 A set of translation centres $T$ tiles the plane by a tile $\Omega$ when the
 translates $t+\Omega$, for $t\in T$, cover the plane and distinct translates
 overlap only on sets of area zero. Only translations are allowed. Tiles may
 have holes or disconnected components.
 
-The most direct way to read the claims is through the
-[comparator statements](#reading-the-statements): each challenge defines its
-mathematical objects using Mathlib alone. The accompanying pages place the
-paper statements beside the Lean declarations.
-
-## What is proved
+## What we prove proved
 
 A set is **periodic** if it has two linearly independent periods. It is
 **weakly periodic** if it is a finite disjoint union of sets each having a
@@ -80,6 +76,12 @@ boundary-segment description; its passage to rectangles is proved in
 
 ## Reading the statements
 
+The statements in the [Comparator](https://github.com/leanprover/comparator) style 
+"(i.e. providing `Mathlib`-dependent only files containing only the statements, but not the proofs, and separate statements with the proofs) 
+in the [comparator](comparator/) folder.
+
+They are separated as follows.
+
 | Subject | Mathematical exposition | Independent Lean challenge |
 | --- | --- | --- |
 | Rational polygons | [README](comparator/rational-polygonal/README.md) | [Challenge](comparator/rational-polygonal/Challenge.lean) |
@@ -87,17 +89,8 @@ boundary-segment description; its passage to rectangles is proved in
 | Axis-parallel computability | [README](comparator/axis-parallel-computability/README.md) | [Challenge](comparator/axis-parallel-computability/AxisParallelComputabilityComparator/Challenge.lean) |
 | Rational slopes | [README](comparator/rational-slopes/README.md) | [Challenge](comparator/rational-slopes/RationalSlopesComparator/Challenge.lean) |
 
-Challenges deliberately leave their theorem proofs as `sorry`. Each solution
-is compiled independently and proves the same statements from the library;
-it never imports its challenge. These specification placeholders are the only
-intended proof holes. The proof dependencies are checked against the allow-list
-`propext`, `Classical.choice`, and `Quot.sound`.
 
-[Comparator](https://github.com/leanprover/comparator) checks the independently
-elaborated statements and the definitions they depend on, then replays the
-solution through Lean's kernel. This checks correspondence with the written
-Lean challenge; assessing correspondence with the informal mathematics still
-requires reading the definitions and source statements.
+
 
 ## Build and verify
 
@@ -151,9 +144,11 @@ python3 comparator/rational-slopes/render_readme.py --check
 
 ## Formalization and license
 
-The formalization was developed with OpenAI Codex agents under Jaume de Dios
-Pont's direction. The mathematical statements and presentation were iteratively
-reviewed separately from the proofs. [formalization.yaml](formalization.yaml)
+The formalization was developed with OpenAI Codex agents under the Authors' direction, 
+using the final versions of the manuscripts as a starting points. 
+The mathematical statements and their presentation were iteratively
+reviewed and rewritten independently from the proofs, and the proofs were later adapted to these statements. 
+The file [formalization.yaml](formalization.yaml)
 records the sources, scope, known automation details, and verification limits;
 unknown costs and development times are not estimated.
 
