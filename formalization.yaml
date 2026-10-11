@@ -573,6 +573,11 @@ automation:
   methods:
   - method: agent
     models:
+    - GPT-5.6 Luna
+    - GPT-5.6 Sol
+    - GPT-6 Astra
+    - GPT-6 Luna
+    - GPT-6 Sol
     - GPT-6.1 Sol
     framework: OpenAI Codex
     tool_setup: Lean and Lake builds against the pinned Mathlib environment; bounded proof and blueprint
@@ -584,8 +589,86 @@ automation:
     cost:
       wall_time: Not recorded for the complete development.
       spend_usd: Not available.
-    notes: The listed model is confirmed for the recent proof and adapter work; the complete historical
-      model inventory is not available.
+      token_usage:
+        unit: KTok = 1,000 tokens; rounded to the nearest 0.1 KTok.
+        status: Estimate reconstructed from available local usage records, not a billing report.
+        period_start: '2026-08-24'
+        period_end: '2026-10-11'
+        cutoff_utc: '2026-10-11T14:30:00Z'
+        scope: 'The two Tiling development task trees, including their orchestrators and all recorded
+          descendants: blueprinting, proof attempts, review, comparator design, and release cleanup. Excludes
+          this accounting task and any earlier or otherwise unavailable development history.'
+        sessions: 1225
+        rollout_files: 1226
+        unique_response_records: 147380
+        legacy_usage_events: 22355
+        method: Sum per-response usage, deduplicated by response ID. For older logs without response records,
+          sum last-request usage from distinct cumulative/last-usage snapshots, deduplicated across inherited
+          histories and resumed logs. Never sum cumulative thread counters. Attribute usage by turn model,
+          falling back to session metadata when unavailable. Prefer response records to event summaries
+          where they disagree.
+        counting: Input includes cached input; output includes reasoning output. The cached and reasoning
+          columns are subsets, not additional tokens. Total is input plus output. Sessions using multiple
+          models appear in multiple model rows. Counts include repeated attempts and abandoned approaches,
+          not just the final accepted proofs.
+        by_model:
+        - model: gpt-5.6-luna
+          sessions_using_model: 128
+          input_ktok: 4838020.6
+          cached_input_ktok: 4743382.8
+          uncached_input_ktok: 94637.9
+          output_ktok: 15878.0
+          reasoning_output_ktok: 5785.3
+          total_ktok: 4853898.6
+        - model: gpt-5.6-sol
+          sessions_using_model: 246
+          input_ktok: 7794980.2
+          cached_input_ktok: 7684123.8
+          uncached_input_ktok: 110856.4
+          output_ktok: 16495.5
+          reasoning_output_ktok: 5034.2
+          total_ktok: 7811475.7
+        - model: gpt-6-astra
+          sessions_using_model: 8
+          input_ktok: 967100.7
+          cached_input_ktok: 950188.7
+          uncached_input_ktok: 16912.0
+          output_ktok: 2972.9
+          reasoning_output_ktok: 755.7
+          total_ktok: 970073.5
+        - model: gpt-6-luna
+          sessions_using_model: 423
+          input_ktok: 2917349.7
+          cached_input_ktok: 2845072.9
+          uncached_input_ktok: 72276.8
+          output_ktok: 12864.5
+          reasoning_output_ktok: 6070.2
+          total_ktok: 2930214.2
+        - model: gpt-6-sol
+          sessions_using_model: 42
+          input_ktok: 269615.0
+          cached_input_ktok: 264241.2
+          uncached_input_ktok: 5373.8
+          output_ktok: 995.5
+          reasoning_output_ktok: 314.7
+          total_ktok: 270610.5
+        - model: gpt-6.1-sol
+          sessions_using_model: 379
+          input_ktok: 3190599.6
+          cached_input_ktok: 3108102.7
+          uncached_input_ktok: 82496.9
+          output_ktok: 15310.8
+          reasoning_output_ktok: 4288.0
+          total_ktok: 3205910.3
+        total:
+          input_ktok: 19977665.8
+          cached_input_ktok: 19595111.9
+          uncached_input_ktok: 382553.8
+          output_ktok: 64517.1
+          reasoning_output_ktok: 22248.1
+          total_ktok: 20042182.9
+    notes: Model names and token estimates are reconstructed from the available local task logs. They
+      document observed usage, not a complete historical model inventory or monetary cost.
   notes: Jaume de Dios Pont directed the mathematical scope and iteratively reviewed the theorem statements
     and exposition. Agent review and kernel checking are distinguished from independent human peer review.
 fidelity:
