@@ -1,0 +1,12 @@
+{
+  "challenge_module": "RationalSlopesComparator.Challenge",
+  "solution_module": "RationalSlopesComparator.Solution",
+  "theorem_names": [
+    "RationalSlopesComparator.minimal_finite_local_complexity_tiling_is_weakly_periodic",
+    "RationalSlopesComparator.finite_local_complexity_tiling_has_periodic_replacement",
+    "RationalSlopesComparator.minimal_plane_tiling_has_structure",
+    "RationalSlopesComparator.minimal_plane_tiling_is_weakly_periodic",
+    "RationalSlopesComparator.tileable_rational_slopes_has_quasi_periodic_tiling"
+  ],
+  "permitted_axioms": ["propext", "Classical.choice", "Quot.sound"]
+}

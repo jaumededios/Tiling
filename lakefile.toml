@@ -1,0 +1,59 @@
+name = "Tiling"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Tiling", "TranslationalTilings"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.33.0"
+
+[[lean_lib]]
+name = "Tiling"
+
+[[lean_lib]]
+name = "TranslationalTilings"
+
+# The two bare module names below follow the directory convention used by
+# leanprover/comparator: the trusted challenge and submitted solution are
+# compiled in separate environments.
+[[lean_lib]]
+name = "Challenge"
+srcDir = "comparator/rational-polygonal"
+
+[[lean_lib]]
+name = "Solution"
+srcDir = "comparator/rational-polygonal"
+
+# The axis-parallel challenge and solution declare the same vocabulary in
+# independent module environments. There is deliberately no umbrella module
+# importing both; the audit module imports the solution alone.
+[[lean_lib]]
+name = "AxisParallelComparator"
+srcDir = "comparator/axis-parallel"
+roots = ["AxisParallelComparator.Challenge", "AxisParallelComparator.Solution", "AxisParallelComparator.PrintAxioms"]
+globs = ["AxisParallelComparator.+"]
+
+# Independent computational statements; each challenge imports only Mathlib.
+[[lean_lib]]
+name = "AxisParallelComputabilityComparator"
+srcDir = "comparator/axis-parallel-computability"
+roots = ["AxisParallelComputabilityComparator.Challenge", "AxisParallelComputabilityComparator.Solution", "AxisParallelComputabilityComparator.PrintAxioms"]
+globs = ["AxisParallelComputabilityComparator.+"]
+
+# Independent rational-slopes statements and their production-API solution.
+# Never import the challenge and solution together; the audit imports only the latter.
+[[lean_lib]]
+name = "RationalSlopesComparator"
+srcDir = "comparator/rational-slopes"
+roots = ["RationalSlopesComparator.Challenge", "RationalSlopesComparator.Solution", "RationalSlopesComparator.PrintAxioms"]
+
+# Audits the public theorem dependencies, without importing any challenge.
+[[lean_lib]]
+name = "Verification"

@@ -1,0 +1,15 @@
+{
+  "challenge_module": "AxisParallelComputabilityComparator.Challenge",
+  "solution_module": "AxisParallelComputabilityComparator.Solution",
+  "theorem_names": [
+    "AxisParallelComputabilityComparator.rational_tiling_computable",
+    "AxisParallelComputabilityComparator.tiling_computable_relative"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false,
+  "definition_names": []
+}

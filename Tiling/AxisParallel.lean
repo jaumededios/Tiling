@@ -1,0 +1,103 @@
+import Tiling.AxisParallel.Core
+import Tiling.AxisParallel.OneDimensional.Core
+import Tiling.AxisParallel.OneDimensional.PeriodicPointEnumeration
+import Tiling.AxisParallel.Topology.FellCore
+import Tiling.AxisParallel.Topology.LocallyFellMatching
+import Tiling.AxisParallel.Topology.HullCore
+import Tiling.AxisParallel.Foundations.ExternalInputs
+import Tiling.AxisParallel.Foundations.PositiveSimilarityTransport
+import Tiling.AxisParallel.Foundations.RegularOpenAxisParallelTilings
+import Tiling.AxisParallel.Foundations.IntrinsicVertices
+import Tiling.AxisParallel.Foundations.NoProperVertexStabilizer
+import Tiling.AxisParallel.Foundations.GenericSlices
+import Tiling.AxisParallel.Foundations.FilledSliceChains
+import Tiling.AxisParallel.Foundations.RationalMeshRaster
+import Tiling.AxisParallel.Foundations.OneDimensionalTilings
+import Tiling.AxisParallel.OneDimensional.FiniteInterval.PeriodicTarget
+import Tiling.AxisParallel.OneDimensional.FiniteInterval.PeriodConsequences
+import Tiling.AxisParallel.OneDimensional.ColumnSlices
+import Tiling.AxisParallel.Approximation.Core
+import Tiling.AxisParallel.Approximation.DeformationCore
+import Tiling.AxisParallel.Approximation.AnchoredRationalApproximation
+import Tiling.AxisParallel.Approximation.CoordinateExtension
+import Tiling.AxisParallel.Approximation.RectangularRegionImage
+import Tiling.AxisParallel.Approximation.RationalPolygonDeformation
+import Tiling.AxisParallel.Approximation.GoodApproximationPreservesTilings
+import Tiling.AxisParallel.Approximation.PeriodicBandDeformation
+import Tiling.AxisParallel.Approximation.FiniteLocalComplexityControl
+import Tiling.AxisParallel.Approximation.FLCIncidenceGermsAndColumns
+import Tiling.AxisParallel.Approximation.FLCMetricAndRelationRigidity
+import Tiling.AxisParallel.Approximation.ControlledPeriodLifting
+import Tiling.AxisParallel.Continuous.PlateCore
+import Tiling.AxisParallel.Continuous.IntrinsicHorizontalContact
+import Tiling.AxisParallel.Continuous.PositiveSimilarityPlates
+import Tiling.AxisParallel.Continuous.EarthquakePlates
+import Tiling.AxisParallel.Continuous.HorizontalComplexityCore
+import Tiling.AxisParallel.Continuous.HorizontalFLCAlphabet
+import Tiling.AxisParallel.Continuous.ApproximationPreservesEarthquakes
+import Tiling.AxisParallel.Continuous.RationalSlabPeriodicity
+import Tiling.AxisParallel.Continuous.ContinuousSlabPeriodicity
+import Tiling.AxisParallel.Continuous.WeakTilingTopology
+import Tiling.AxisParallel.Continuous.CoordinateSwapTilings
+import Tiling.AxisParallel.Continuous.LocalizingNonFLC
+import Tiling.AxisParallel.Continuous.PersistentTransientSlabs
+import Tiling.AxisParallel.Continuous.NontrivialEarthquakeLimit
+import Tiling.AxisParallel.Discrete.Core
+import Tiling.AxisParallel.Discrete.DiscreteTilingsAndPlates
+import Tiling.AxisParallel.Discrete.EarthquakeWeakPeriodicity
+import Tiling.AxisParallel.Discrete.PeriodicDirectionalLayers
+import Tiling.AxisParallel.Discrete.VerticalSliceTransport
+import Tiling.AxisParallel.Discrete.NonverticalPlatePeriodicity
+import Tiling.AxisParallel.Discrete.DiscretePlatePeriodicity
+import Tiling.AxisParallel.Discrete.DiscreteBandTilings
+import Tiling.AxisParallel.Structure.AlignedEarthquakeLimits
+import Tiling.AxisParallel.Structure.CrossAxisLimit
+import Tiling.AxisParallel.Structure.FiniteHorizontalComplexityTrichotomy
+import Tiling.AxisParallel.Structure.HorizontalBoundaryChains
+import Tiling.AxisParallel.Structure.OneSidedPlates
+import Tiling.AxisParallel.Structure.HorizontalComplexityCharacterization
+import Tiling.AxisParallel.Structure.HorizontalComplexityCharacterization.FiniteContactTransport
+import Tiling.AxisParallel.Structure.HorizontalComplexityUnderWeakLimits
+import Tiling.AxisParallel.Structure.MinimalTilingStructure
+import Tiling.AxisParallel.Structure.PlateThickness
+import Tiling.AxisParallel.Structure.ProductRigidity
+import Tiling.AxisParallel.Structure.SimultaneousColumns
+import Tiling.AxisParallel.Terminal.AssemblyCore
+import Tiling.AxisParallel.Terminal.BoundaryCore
+import Tiling.AxisParallel.Terminal.BoundaryReconstruction
+import Tiling.AxisParallel.Terminal.ObliqueSliceTransport
+import Tiling.AxisParallel.Terminal.CommonPeriodAssembly
+import Tiling.AxisParallel.Terminal.DirectionalCore
+import Tiling.AxisParallel.Terminal.DiscreteFinerStructure
+import Tiling.AxisParallel.Terminal.LatticeIntersection
+import Tiling.AxisParallel.Terminal.OracleProgramCore
+import Tiling.AxisParallel.Terminal.ExecutableInput
+import Tiling.AxisParallel.Terminal.ExecutableInputSemantics
+import Tiling.AxisParallel.Terminal.AffineCompiler
+import Tiling.AxisParallel.Terminal.AffineCompilerCorrectness
+import Tiling.AxisParallel.Terminal.ExecutableRegionNormalization
+import Tiling.AxisParallel.Terminal.CertificateCoding
+import Tiling.AxisParallel.Terminal.LocalPackingCompactness
+import Tiling.AxisParallel.Terminal.LocalCoverSearch
+import Tiling.AxisParallel.Terminal.PositiveCertificateVerification
+import Tiling.AxisParallel.Terminal.DecidabilityCertificates
+import Tiling.AxisParallel.Terminal.PositiveCertificateCompleteness
+import Tiling.AxisParallel.Terminal.MainCorollaries
+import Tiling.AxisParallel.Terminal.RationalSliceCore
+import Tiling.AxisParallel.Terminal.NoGapSliceGeometry
+import Tiling.AxisParallel.Terminal.RationalFinerStructure
+import Tiling.AxisParallel.Terminal.GappedSlices
+import Tiling.AxisParallel.Terminal.VerticalPackingsNoColumn
+import Tiling.AxisParallel.Terminal.VerticalPackingsWithColumn
+import Tiling.AxisParallel.Terminal.HorizontalSliceTransport
+import Tiling.AxisParallel.Terminal.FiniteLocalComplexityPeriodicity
+
+set_option linter.style.header false
+
+/-!
+# Axis-parallel polygonal tilings
+
+This umbrella imports the currently formalized, placeholder-free portion of the axis-parallel
+development.  The import list grows only when a module elaborates against its reviewed public
+contract; missing deep endpoints remain absent rather than being represented by axioms.
+-/

@@ -1,0 +1,24 @@
+name: Build and verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: leanprover/lean-action@v1
+        with:
+          build-args: "Tiling TranslationalTilings Tiling.RationalSlopes.Main Challenge Solution AxisParallelComparator AxisParallelComputabilityComparator RationalSlopesComparator Verification"
+      - name: Check rendered theorem statements
+        run: |
+          python3 comparator/axis-parallel/render_readme.py --check
+          python3 comparator/axis-parallel-computability/render_readme.py --check
+          python3 comparator/rational-slopes/render_readme.py --check

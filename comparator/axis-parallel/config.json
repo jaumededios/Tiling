@@ -1,0 +1,26 @@
+{
+  "challenge_module": "AxisParallelComparator.Challenge",
+  "solution_module": "AxisParallelComparator.Solution",
+  "theorem_names": [
+    "AxisParallelComparator.flc_tiling_weakly_periodic",
+    "AxisParallelComparator.periodic_tiling_of_flc",
+    "AxisParallelComparator.exists_minimal_tiling_in_hull",
+    "AxisParallelComparator.earthquake_decomposition",
+    "AxisParallelComparator.minimal_tiling_structure",
+    "AxisParallelComparator.minimal_tiling_weakly_periodic",
+    "AxisParallelComparator.quasi_periodic_tiling_with_common_period",
+    "AxisParallelComparator.finitely_many_tectonic_plates",
+    "AxisParallelComparator.earthquake_slabs_periodic",
+    "AxisParallelComparator.proper_cylinder_finite_horizontal_complexity",
+    "AxisParallelComparator.non_flc_earthquake_limit",
+    "AxisParallelComparator.non_flc_earthquake_limit_in_lattice",
+    "AxisParallelComparator.non_flc_finite_horizontal_complexity_limit"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false,
+  "definition_names": []
+}

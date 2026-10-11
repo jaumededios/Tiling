@@ -1,0 +1,324 @@
+import Mathlib
+
+/-!
+# Tilings by rational-slope tiles
+
+We identify the plane with ℂ. Throughout, Ω is the tile, T is its set of
+translation centres, and E is the region being tiled. The notation t +ᵥ Ω
+means a translate of Ω; T +ᵥ Ω is the union of all these translates for t ∈ T.
+
+Tiles are nonempty bounded open sets with finitely many rational-direction
+boundary segments. Packing and coverage are understood up to sets of area zero.
+Periods and partitions are exact.
+
+The five theorems distinguish properties of the given tiling (RS1, RS3, RS4)
+from the existence of a replacement tiling (RS2, RS5). Each theorem is accompanied
+by the exact corresponding statement from the supplied Part I or Part II paper;
+the source files and presentation conventions are recorded at the end.
+-/
+
+set_option autoImplicit false
+
+open Bornology MeasureTheory Set Submodule TopologicalSpace
+open scoped Pointwise Topology
+
+namespace RationalSlopesComparator
+
+/-- The Euclidean plane with its usual area measure. -/
+abbrev Plane := ℂ
+
+/-! ## Packing, covering, and tiling -/
+
+/-- Distinct translates of the tile overlap only on a set of area zero. -/
+def Packing (Ω T : Set Plane) : Prop :=
+  T.Pairwise fun s t ↦ volume ((s +ᵥ Ω) ∩ (t +ᵥ Ω)) = 0
+
+/-- The union of the translates equals E almost everywhere. -/
+def CoversExactly (E Ω T : Set Plane) : Prop := E =ᵐ[volume] T +ᵥ Ω
+
+/-- The translates of Ω with centres in T form a countable packing covering E
+almost everywhere. -/
+def TilingOn (E Ω T : Set Plane) : Prop :=
+  T.Countable ∧ Packing Ω T ∧ CoversExactly E Ω T
+
+/-- A translational tiling of the whole plane. -/
+def Tiling (Ω T : Set Plane) : Prop := TilingOn univ Ω T
+
+/-- The region covered by the translates, with missing seams filled in.
+For example, adjacent open squares omit their shared edge from their union;
+taking the interior of the closure restores that edge. -/
+def coveredRegion (Ω T : Set Plane) : Set Plane :=
+  interior (closure (T +ᵥ Ω))
+
+/-- A set equal to the interior of its closure. -/
+def IsRegularOpen (E : Set Plane) : Prop := interior (closure E) = E
+
+/-! ## Periods and finite partitions -/
+
+/-- Translation by p leaves the set unchanged; p = 0 is allowed. -/
+def IsPeriod (A : Set Plane) (p : Plane) : Prop := p +ᵥ A = A
+
+/-- Two real-linearly independent periods.
+The paper calls this simply *periodic*: the symmetry group
+$\Gamma(A)=\{p:A+p=A\}$ contains a rank-two lattice. -/
+def IsDoublyPeriodic (A : Set Plane) : Prop :=
+  ∃ p q, LinearIndependent ℝ ![p, q] ∧ IsPeriod A p ∧ IsPeriod A q
+
+/-!
+Mathlib's `Finpartition A` is a finite partition of A into nonempty,
+pairwise disjoint sets. Its parts, `P.parts`, may themselves be infinite.
+-/
+
+/-- A finite partition into sets each having a nonzero period.
+Different pieces may have different periods. -/
+def WeaklyPeriodic (A : Set Plane) : Prop :=
+  ∃ P : Finpartition A, ∀ S ∈ P.parts, ∃ p, p ≠ 0 ∧ IsPeriod S p
+
+/-- A finite partition into doubly periodic sets.
+Different pieces may have different period lattices. The paper calls this
+*weakly doubly periodic*. -/
+def QuasiPeriodic (A : Set Plane) : Prop :=
+  ∃ P : Finpartition A, ∀ S ∈ P.parts, IsDoublyPeriodic S
+
+/-! ## Rational-slope tiles -/
+
+/-- The line ℝv contains a nonzero integer vector.
+This includes vertical directions and excludes v = 0. -/
+def IsRationalDirection (v : Plane) : Prop :=
+  ∃ m n : ℤ, (m, n) ≠ 0 ∧ ⟨m, n⟩ ∈ span ℝ {v}
+
+/-- A nonempty bounded open tile whose boundary is a finite union of
+nondegenerate segments in rational directions. Vertices may have arbitrary
+real coordinates; holes, disconnected components, and boundary slits are allowed.
+The paper uses closed polygonal tiles; here we use open tiles and ignore null
+boundaries in packing and coverage. -/
+def IsRationalSlopeTile (Ω : Set Plane) : Prop :=
+  Ω.Nonempty ∧ IsOpen Ω ∧ IsBounded Ω ∧
+    ∃ edges : Set (Plane × Plane), edges.Finite ∧
+      (∀ e ∈ edges, e.1 ≠ e.2 ∧ IsRationalDirection (e.2 - e.1)) ∧
+        frontier Ω = ⋃ e ∈ edges, segment ℝ e.1 e.2
+
+/-! ## Local complexity and minimality -/
+
+/-- The difference set T - T meets every bounded set in finitely many points.
+This is the paper's *finite local complexity*, also called *locally finite*
+there; it is stronger than merely having finitely many centres in each bounded set. -/
+def HasFiniteLocalComplexity (T : Set Plane) : Prop :=
+  ∀ B, IsBounded B → ((T - T) ∩ B).Finite
+
+/-!
+The hull consists of limits of translated centre sets. Only translations
+preserving E are allowed. We use the Fell topology on closed subsets of the
+plane: its subbasic open sets specify that a configuration meets a given open
+set or avoids a given compact set. Points may escape to infinity.
+-/
+
+/-- Closed sets meeting U. -/
+def hit (U : Set Plane) : Set (Closeds Plane) :=
+  {F | ((F : Set Plane) ∩ U).Nonempty}
+
+/-- Closed sets avoiding K. -/
+def miss (K : Set Plane) : Set (Closeds Plane) :=
+  {F | Disjoint (F : Set Plane) K}
+
+/-- The topology generated by the hit-open and miss-compact conditions. -/
+abbrev fellTopology : TopologicalSpace (Closeds Plane) :=
+  TopologicalSpace.generateFrom
+    ((hit '' {U : Set Plane | IsOpen U}) ∪ (miss '' {K : Set Plane | IsCompact K}))
+
+/-- The closure of the translation orbit under periods of E. -/
+def orbitHull (E T : Set Plane) : Set (Closeds Plane) :=
+  closure[fellTopology]
+    {S | ∃ p, IsPeriod E p ∧ (S : Set Plane) = p +ᵥ T}
+
+/-- A closed centre set is minimal if every configuration in its hull
+generates the same hull under translations preserving E. -/
+def IsMinimal (E T : Set Plane) : Prop :=
+  IsClosed T ∧ ∀ S ∈ orbitHull E T, orbitHull E (S : Set Plane) = orbitHull E T
+
+/-! ## FLC tilings of periodic regions -/
+
+/-- ### RS1. Minimal FLC tilings are weakly periodic
+
+**Paper statement — Part I, `thm:MainLocallyFin`.**
+Quoted from its restatement in `Main/main2_LocalFin.tex`, lines 2233–2236,
+which has no editorial annotation.
+
+> Let $\Omega$ be a polygonal set with rational slopes, $T\subseteq \mathbb{R}^2$ be locally
+> finite and minimal, and $E=\Omega\oplus T$ be periodic. Then $T$ is *weakly periodic*, that
+> is, we can write $T=T_1\sqcup\dots\sqcup T_m$ such that $\Gamma(T_j)$ is non-trivial for
+> every $1\le j\le m$, and there is $S\subseteq \mathbb{R}^2$ that is periodic,
+> $\Gamma(S)\subseteq \Gamma(E)$ and $E=\Omega\oplus S$.
+
+The Lean theorem states the weak-periodicity conclusion for the original
+centres. RS2 below states the periodic-replacement conclusion without a
+minimality assumption. Both formal statements require the region E to be
+regular open explicitly.
+-/
+theorem minimal_finite_local_complexity_tiling_is_weakly_periodic
+    {Ω T E : Set Plane}
+    (htile : IsRationalSlopeTile Ω)
+    (htiling : TilingOn E Ω T) (hflc : HasFiniteLocalComplexity T)
+    (hregular : IsRegularOpen E) (hperiodic : IsDoublyPeriodic E)
+    (hminimal : IsMinimal E T) : WeaklyPeriodic T := by
+  sorry
+
+/-- ### RS2. FLC tilings have a doubly periodic replacement
+
+**Paper statement — Part I, `thm:MainPTC`,
+`Main/main2_LocalFin.tex`, lines 266–269.**
+
+> Let $\Omega$ be a polygonal tile with rational slopes, $T\subseteq \mathbb{R}^2$ be locally
+> finite, and $E=\Omega\oplus T$ be periodic. Then there is $S\subseteq \mathbb{R}^2$ that is
+> periodic, $\Gamma(S)\subseteq \Gamma(E)$ and $E=\Omega\oplus S$.
+
+The replacement uses the same tile and the same region. The final implication
+retains the full containment $\Gamma(S)\subseteq\Gamma(E)$.
+-/
+theorem finite_local_complexity_tiling_has_periodic_replacement
+    {Ω T E : Set Plane}
+    (htile : IsRationalSlopeTile Ω)
+    (htiling : TilingOn E Ω T) (hflc : HasFiniteLocalComplexity T)
+    (hregular : IsRegularOpen E) (hperiodic : IsDoublyPeriodic E) :
+    ∃ S, TilingOn E Ω S ∧ IsDoublyPeriodic S ∧
+      ∀ p, IsPeriod S p → IsPeriod E p := by
+  sorry
+
+/-! ## Columns and the structure theorem -/
+
+/-- Invariance under all translations parallel to v. -/
+def IsInvariantAlong (E : Set Plane) (v : Plane) : Prop :=
+  ∀ r : ℝ, IsPeriod E (r • v)
+
+/-- The centres on the affine line t + ℝv. -/
+def lineFibre (v : Plane) (T : Set Plane) (t : Plane) : Set Plane :=
+  T ∩ (t +ᵥ (span ℝ {v} : Set Plane))
+
+/-- A packing whose centres on each line parallel to v cover a region
+invariant under all translations parallel to v. -/
+def IsUnionOfColumns (Ω : Set Plane) (v : Plane) (T : Set Plane) : Prop :=
+  Packing Ω T ∧
+    ∀ t ∈ T, IsInvariantAlong (coveredRegion Ω (lineFibre v T t)) v
+
+/-- ### RS3. The structure of a minimal plane tiling
+
+**Paper statement — Part II, `thm:MainMinimal`,
+`Main/main1_Earth.tex`, lines 227–230.**
+
+> Let $\Omega$ be a polygonal tile with rational slopes, $T\subseteq \mathbb{R}^2$ be minimal
+> such that $\mathbb{R}^2=\Omega\oplus T$. Then there is a one-dimensional linear subspace
+> $\delta\subseteq \mathbb{R}^2$ and we can write $T=T_0\sqcup\dots\sqcup T_m$ such that $T_0$
+> is a union of $\delta$-columns, $T_j$ is locally finite and minimal for every $1\le j\le m$,
+> and $\Omega\oplus T_j$ is a periodic set that is a union of cosets of $\delta$ for every
+> $0\le j\le m$.
+
+In the Lean statement, C is the column part $T_0$, and P partitions the
+remaining centres. Its parts are the nonempty minimal FLC pieces:
+
+$$
+T=C\sqcup S_1\sqcup\cdots\sqcup S_m.
+$$
+
+The formal conclusion additionally records a rational direction vector v,
+with $\delta=\mathbb{R}v$. Each covered region is represented by its
+regularization `coveredRegion`. The column part C may be empty and need not
+have finite local complexity.
+-/
+theorem minimal_plane_tiling_has_structure
+    {Ω T : Set Plane}
+    (htile : IsRationalSlopeTile Ω)
+    (htiling : Tiling Ω T) (hminimal : IsMinimal univ T) :
+    ∃ v C, ∃ P : Finpartition (T \ C),
+      IsRationalDirection v ∧ C ⊆ T ∧
+      IsUnionOfColumns Ω v C ∧
+      IsInvariantAlong (coveredRegion Ω C) v ∧
+      IsDoublyPeriodic (coveredRegion Ω C) ∧
+      ∀ S ∈ P.parts,
+        let E := coveredRegion Ω S
+        HasFiniteLocalComplexity S ∧
+        TilingOn E Ω S ∧ IsMinimal E S ∧
+        IsInvariantAlong E v ∧ IsDoublyPeriodic E := by
+  sorry
+
+/-! ## Consequences for plane tilings -/
+
+/-- ### RS4. Minimal plane tilings are weakly periodic
+
+**Paper statement — Part II, the unlabelled theorem in
+`Main/main1_Earth.tex`, lines 235–238.**
+
+> Let $\Omega$ be a polygonal set with rational slopes, $T\subseteq \mathbb{R}^2$ be minimal
+> such that $\mathbb{R}^2=\Omega\oplus T$. Then $T$ is weakly periodic.
+
+This is a conclusion about the original centre set T.
+-/
+theorem minimal_plane_tiling_is_weakly_periodic
+    {Ω T : Set Plane}
+    (htile : IsRationalSlopeTile Ω)
+    (htiling : Tiling Ω T) (hminimal : IsMinimal univ T) : WeaklyPeriodic T := by
+  sorry
+
+/-- ### RS5. A quasi-periodic replacement exists
+
+**Paper statement — Part II, `thm:WeaklyDoublyPeriodic`,
+`Main/main1_Earth.tex`, lines 248–251.**
+
+> Let $\Omega$ be a polygonal set with rational slopes and $T\subseteq \mathbb{R}^2$ be such
+> that $\mathbb{R}^2=\Omega\oplus T$. Then there is $S\subseteq \mathbb{R}^2$ that is weakly
+> doubly periodic and $\mathbb{R}^2=\Omega\oplus S$.
+
+The paper's “weakly doubly periodic” is `QuasiPeriodic` here. Different
+pieces may have different period lattices; a common lattice is not asserted.
+-/
+theorem tileable_rational_slopes_has_quasi_periodic_tiling
+    {Ω T : Set Plane}
+    (htile : IsRationalSlopeTile Ω)
+    (htiling : Tiling Ω T) :
+    ∃ S, Tiling Ω S ∧ QuasiPeriodic S := by
+  sorry
+
+end RationalSlopesComparator
+
+/-!
+## Paper sources and conventions
+
+The quotations are from the supplied archive `Tiling_polygons-2.zip`:
+
+- **Part I:** *Tilings by polygonal sets with rational slopes I: Locally finite
+  tilings and PTC*, `Tiling_polygons-2/Main/main2_LocalFin.tex`.
+- **Part II:** *Tilings by polygonal sets with rational slopes II: Minimal
+  tilings of $\mathbb{R}^2$ are weakly periodic*,
+  `Tiling_polygons-2/Main/main1_Earth.tex`.
+
+The theorem quotations preserve the paper's words and mathematical notation;
+only line wrapping and emphasis markup are adapted for Markdown.
+The Lean statements use the conventions defined in this file: open tiles,
+almost-everywhere coverage, exact periods and centre partitions, and
+regularized covered regions. RS1–RS2 explicitly assume a regular-open region;
+RS3–RS5 concern the whole plane.
+
+<details>
+<summary>Source identification and local verification</summary>
+
+SHA-256 of the archive members:
+
+- Part I: `1cb10dc4f0e54e04eb9483717b316cee620bdaf68b273e11f0bea02a081b877c`.
+- Part II: `39e90b1bb5621abc3fe64d3e73e92153ff9f6323c06c40252321cfa4b2e3cea9`.
+
+This Challenge imports only Mathlib and has exactly five intentional proof
+holes. The independent solution proves all five statements; its axiom audit
+allows only `propext`, `Classical.choice`, and `Quot.sound`.
+
+From the repository root:
+
+```bash
+lake build RationalSlopesComparator.Challenge RationalSlopesComparator.Solution RationalSlopesComparator.PrintAxioms
+python3 comparator/rational-slopes/render_readme.py --check
+```
+
+The Lean command should report only the five intended `sorry` warnings.
+To regenerate the README after editing this file, run
+`python3 comparator/rational-slopes/render_readme.py`.
+
+</details>
+-/

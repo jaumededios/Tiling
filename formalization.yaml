@@ -1,0 +1,625 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/v0.4.schema.json
+version: v0.4
+project:
+  name: Tiling
+  description: Periodicity, structure, and decidability of translational tilings by finite lattice tiles
+    and polygonal planar tiles, formalized in Lean 4 and Mathlib.
+  authors:
+  - Jaume de Dios Pont
+  - OpenAI Codex
+  responsible_maintainers:
+  - Jaume de Dios Pont
+  license: Apache-2.0
+classification:
+  arxiv:
+  - math.CO
+sources:
+- title: Periodicity and decidability of translational tilings by rational polygonal sets
+  authors:
+  - Jaume de Dios Pont
+  - Jan Grebík
+  - Rachel Greenfeld
+  - José Madrid
+  id: arXiv:2408.02151v2
+  type: paper
+  relationship: formalizes
+  location: Theorem 1.1, Corollary 1.1, Theorem 1.2
+  note: Periodic tilings, decidability, and weak periodicity for rational polygonal sets.
+- title: The structure of translational tilings in Z^d
+  authors:
+  - Rachel Greenfeld
+  - Terence Tao
+  id: arXiv:2010.03254v3
+  type: paper
+  relationship: formalizes
+  note: Paper-facing declarations are exported by TranslationalTilings/Main.lean; this discrete theory
+    supports the continuous tiling proofs.
+- title: Translational tilings by axes-parallel polygonal sets
+  type: supplied manuscript
+  relationship: formalizes
+  note: The thirteen geometry and two computational comparator targets state the public scope. The comparator
+    documentation identifies the manuscript theorem numbers and formulation changes. No public manuscript
+    URL is recorded.
+- title: 'Tilings by polygonal sets with rational slopes I: Locally finite tilings and PTC'
+  type: supplied manuscript
+  relationship: formalizes
+  id: Tiling_polygons-2/Main/main2_LocalFin.tex
+  note: 'Source member SHA-256: 1cb10dc4f0e54e04eb9483717b316cee620bdaf68b273e11f0bea02a081b877c. This
+    source archive is not bundled with the public repository.'
+- title: 'Tilings by polygonal sets with rational slopes II: Minimal tilings of R^2 are weakly periodic'
+  type: supplied manuscript
+  relationship: formalizes
+  id: Tiling_polygons-2/Main/main1_Earth.tex
+  note: 'Source member SHA-256: 39e90b1bb5621abc3fe64d3e73e92153ff9f6323c06c40252321cfa4b2e3cea9. The
+    rational-slopes comparator states the five public results across Parts I and II.'
+status:
+  scope: The four independent comparator tracks and their supporting discrete, rational-polygonal, axis-parallel,
+    and rational-slopes library developments. Comparator coverage consists of one rational-polygonal periodicity
+    theorem, thirteen axis-parallel geometric results, two axis-parallel computability results, and five
+    rational-slopes results. Additional paper-facing library theorems are audited by Verification.lean.
+    This does not assert that every statement in every source manuscript is formalized.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+  - propext
+  - Classical.choice
+  - Quot.sound
+  notes: The 21 deliberate challenge placeholders are excluded from sorry_count, following schema v0.4.
+    They are specifications and are not imported by any solution. Verification.lean audits 60 public theorem
+    dependency closures.
+  main_results:
+  - declaration: DeDiosPontGrebikGreenfeldMadridComparator.periodic_tiling_of_rational_polygon
+    file: comparator/rational-polygonal/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/rational-polygonal/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.flc_tiling_weakly_periodic
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.periodic_tiling_of_flc
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.exists_minimal_tiling_in_hull
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.earthquake_decomposition
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.minimal_tiling_structure
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.minimal_tiling_weakly_periodic
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.quasi_periodic_tiling_with_common_period
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.finitely_many_tectonic_plates
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.earthquake_slabs_periodic
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.proper_cylinder_finite_horizontal_complexity
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.non_flc_earthquake_limit
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.non_flc_earthquake_limit_in_lattice
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComparator.non_flc_finite_horizontal_complexity_limit
+    file: comparator/axis-parallel/AxisParallelComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComputabilityComparator.rational_tiling_computable
+    file: comparator/axis-parallel-computability/AxisParallelComputabilityComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel-computability/config.json
+    literature_dependencies: []
+  - declaration: AxisParallelComputabilityComparator.tiling_computable_relative
+    file: comparator/axis-parallel-computability/AxisParallelComputabilityComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/axis-parallel-computability/config.json
+    literature_dependencies: []
+  - declaration: RationalSlopesComparator.minimal_finite_local_complexity_tiling_is_weakly_periodic
+    file: comparator/rational-slopes/RationalSlopesComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/rational-slopes/config.json
+    literature_dependencies: []
+  - declaration: RationalSlopesComparator.finite_local_complexity_tiling_has_periodic_replacement
+    file: comparator/rational-slopes/RationalSlopesComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/rational-slopes/config.json
+    literature_dependencies: []
+  - declaration: RationalSlopesComparator.minimal_plane_tiling_has_structure
+    file: comparator/rational-slopes/RationalSlopesComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/rational-slopes/config.json
+    literature_dependencies: []
+  - declaration: RationalSlopesComparator.minimal_plane_tiling_is_weakly_periodic
+    file: comparator/rational-slopes/RationalSlopesComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/rational-slopes/config.json
+    literature_dependencies: []
+  - declaration: RationalSlopesComparator.tileable_rational_slopes_has_quasi_periodic_tiling
+    file: comparator/rational-slopes/RationalSlopesComparator/Solution.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    comparator_config: comparator/rational-slopes/config.json
+    literature_dependencies: []
+  - declaration: Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_1
+    file: Tiling/RationalPolygonal/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalPolygonal.RationalPolygonalRegion.theorem_1_2
+    file: Tiling/RationalPolygonal/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1
+    file: Tiling/RationalPolygonal/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalPolygonal.RationalPolygonalRegion.corollary_1_1_spec
+    file: Tiling/RationalPolygonal/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_3_i
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_3_ii
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_4_uniform
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_4_l1
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_4
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_5_l1
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_5
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.corollary_1_6
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_2_1
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_1_7
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_3_1_i
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_3_1_ii
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_3_1_iii
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_3_4
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.corollary_3_5
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.proposition_4_1_i
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.proposition_4_1_ii
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.proposition_4_1_iii
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_4_2
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_4_2_bigO
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_4_3
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_4_3_halfCircle
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.proposition_4_4
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.lemma_5_1
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.corollary_5_3
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_5_4
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_5_4_exact
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_5_4_structural
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_6_2
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: TranslationalTilings.theorem_6_2_lattice_input
+    file: TranslationalTilings/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalSlopes.minimal_flc_weaklyPeriodic
+    file: Tiling/RationalSlopes/FLCMain.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalSlopes.flc_exists_periodic_replacement
+    file: Tiling/RationalSlopes/FLCMain.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalSlopes.minimal_wholePlane_structure
+    file: Tiling/RationalSlopes/MinimalStructure.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalSlopes.minimal_wholePlane_weaklyPeriodic
+    file: Tiling/RationalSlopes/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+  - declaration: Tiling.RationalSlopes.exists_weaklyDoublyPeriodic_tiling
+    file: Tiling/RationalSlopes/Main.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies: []
+automation:
+  methods:
+  - method: agent
+    models:
+    - GPT-6.1 Sol
+    framework: OpenAI Codex
+    tool_setup: Lean and Lake builds against the pinned Mathlib environment; bounded proof and blueprint
+      agents; standalone challenges; theorem axiom audits; leanprover/comparator with lean4export and
+      independent Lean kernel replay.
+    prompting_notes: Human review emphasized mathematically readable statements, Mathlib-only challenges,
+      explicit correspondence to source statements, a uniform computational claim, and completing proofs
+      after the statement interface was settled.
+    cost:
+      wall_time: Not recorded for the complete development.
+      spend_usd: Not available.
+    notes: The listed model is confirmed for the recent proof and adapter work; the complete historical
+      model inventory is not available.
+  notes: Jaume de Dios Pont directed the mathematical scope and iteratively reviewed the theorem statements
+    and exposition. Agent review and kernel checking are distinguished from independent human peer review.
+fidelity:
+  divergences: Continuous tilings use countable centres and almost-everywhere packing and coverage. Periods
+    and partitions of centres are exact. Rational polygonal sets are represented by finite triangulations,
+    with null boundaries allowing open and closed representatives to be compared. Axis-parallel geometry
+    uses intrinsic finite boundary segments; a proved bridge supplies finite rectangle presentations.
+    The computational interface uses finite rectangle families and a uniform algorithm querying signs
+    of integer combinations of corner coordinates. Different quasiperiodic pieces may have different lattices.
+    Exact carrier, regular-openness, FLC, and minimality hypotheses are stated in the challenges; paper-to-Lean
+    differences are explained beside the statements.
+review:
+  status: agent-reviewed
+  reviewers:
+  - OpenAI Codex agents
+  notes: Release validation includes the library build, independent challenge builds, public theorem axiom
+    audits, and Comparator statement checking and Lean kernel replay. The local Comparator runs use its
+    development launcher without OS sandboxing and do not claim a hardened sandbox or an additional external
+    kernel. No independent human peer-review claim is made.
+environment:
+  lean: 4.33.0
+  mathlib: v4.33.0
+  mathlib_revision: db584cd6d46c92f209a44c0f1c829460d327499d
+  manifest: lake-manifest.json
+verification:
+  date: '2026-10-11'
+  axiom_audit: Verification.lean
+  comparator_configs:
+  - comparator/rational-polygonal/config.json
+  - comparator/axis-parallel/config.json
+  - comparator/axis-parallel-computability/config.json
+  - comparator/rational-slopes/config.json
+  comparator_revision: ca04cfc72b550331658ec314bf47685281bfd4bf
+  tool_compatibility: Comparator Main.lean imports Lean.Replay and calls Lean.Environment.replay for the
+    pinned Lean 4.33 API; the comparison and axiom rules are unchanged.
+  os_sandbox: false
+  external_kernel: false
